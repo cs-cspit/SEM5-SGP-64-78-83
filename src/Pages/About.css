@@ -1,0 +1,174 @@
+.about-wrapper {
+  font-family: 'Inter', Arial, sans-serif;
+  color: #23272f;
+  background: #fafafc;
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* Hero */
+.about-hero {
+  background: linear-gradient(90deg, #3C88EF 75%, #222831 100%);
+  color: #fff;
+  text-align: center;
+  padding: 5.5rem 2rem 3rem 2rem;
+  border-radius: 0 0 1.7rem 1.7rem;
+  margin-bottom: 2.3rem;
+  box-shadow: 0 12px 40px -12px #3C88EF22;
+}
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.about-tagline {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+}
+
+.section-heading {
+  font-size: 1.6rem;
+  color: #3C88EF;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+/* Story & Mission */
+.about-section-1 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: #fff;
+  box-shadow: 0 3px 16px #3c88ef08;
+  border-radius: 1.3rem;
+  padding: 2.7rem 1.3rem;
+  gap: 2.5rem;
+  margin-bottom: 2.7rem;
+  align-items: flex-start;
+}
+.about-history, .about-mission {
+  flex: 1 1 260px;
+  min-width: 240px;
+  max-width: 450px;
+}
+.about-history p, .about-mission p {
+  font-size: 1.06rem;
+  color: #222831ee;
+  margin-bottom: 1.6rem;
+}
+.about-timeline {
+  display: flex;
+  gap: 2.1rem;
+  margin-top: 1.7rem;
+}
+.timeline-years {
+  font-size: 2rem;
+  color: #3C88EF;
+  font-weight: 700;
+  background: #fbfbfe;
+  border-radius: 0.7em;
+  padding: 0.41em 1.1em;
+  display: inline-block;
+  margin-bottom: 0.35em;
+}
+.timeline-label {
+  font-size: 1rem;
+  color: #324268BB;
+  font-weight: 600;
+}
+
+/* Team */
+.about-team-section {
+  background: #f6faff;
+  border-radius: 1.2rem;
+  padding: 3.3rem 1.3rem 2.2rem 1.3rem;
+  margin-bottom: 2.6rem;
+  box-shadow: 0 3px 16px #3c88ef09;
+  text-align: center;
+}
+.team-grid {
+  display: flex;
+  gap: 2.3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2.4rem;
+}
+.team-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 3px 18px #3c88ef13;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1.1rem 1.4rem 1.1rem;
+  width: 190px;
+  transition: box-shadow .23s, transform .22s cubic-bezier(.4,0,.2,1);
+}
+.team-card:hover { box-shadow: 0 8px 32px #183ea918; transform: translateY(-5px) scale(1.046); }
+.team-card img {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1em;
+  box-shadow: 0 3px 14px #a8c3de2b;
+}
+.team-card h4 {
+  font-size: 1.09rem;
+  color: #23272f;
+  margin-bottom: 0.32em;
+}
+.team-role {
+  font-size: 0.96rem;
+  color: #3C88EFcc;
+  font-weight: 600;
+}
+
+/* CTA */
+.about-cta {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2.2rem 0 2.9rem;
+}
+.about-cta h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.5em;
+}
+.btn.big-btn {
+  padding: 0.92rem 2.2rem;
+  font-size: 1.08rem;
+  border-radius: 1.8em;
+  font-weight: 700;
+  background: #3C88EF;
+  color: #fff;
+  text-decoration: none;
+  transition: background .19s, transform .21s;
+}
+.btn.big-btn:hover {
+  background: #2563eb;
+  transform: scale(1.035) translateY(-2.5px);
+}
+
+/* Animations: Re-use from home.css or define here as needed */
+.fade-in { animation: fadeIn 1.1s cubic-bezier(.4,0,.2,1) both; }
+.fade-down { animation: fadeDown 1.2s .2s cubic-bezier(.4,0,.2,1) both; }
+.fade-left { animation: fadeLeft 1.2s both;}
+.fade-up { animation: fadeUp 1.2s both;}
+@keyframes fadeIn { 0%{opacity:0} 100%{opacity:1} }
+@keyframes fadeDown { 0%{opacity:0;transform:translateY(-40px)} 100%{opacity:1;transform:none} }
+@keyframes fadeUp { 0%{opacity:0;transform:translateY(30px)} 100%{opacity:1;transform:none} }
+@keyframes fadeLeft { 0%{opacity:0;transform:translateX(-50px)} 100%{opacity:1;transform:none} }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .about-section-1 {
+    flex-direction: column;
+    gap: 2.3rem;
+    padding: 2.2rem 0.5rem;
+  }
+  .team-grid { flex-direction: column; gap: 1.3rem; }
+  .team-card { width: 100%; max-width: 340px;}
+}

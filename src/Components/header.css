@@ -1,0 +1,64 @@
+/* header.css */
+
+/* Header container */
+header {
+  box-shadow: 0 4px 14px rgba(60, 136, 239, 0.07);
+  background: linear-gradient(90deg, #3C88EF 80%, #222831 100%);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Company Logo/Title */
+header h1 {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(60,136,239,0.07);
+}
+
+/* Navigation Links */
+header nav a {
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.07rem;
+  margin-left: 2rem;
+  text-decoration: none;
+  border-radius: 0.28rem;
+  padding: 0.45rem 0.8rem;
+  transition: background 0.18s, color 0.18s;
+  position: relative;
+}
+
+header nav a:hover,
+header nav a:focus {
+  background: rgba(255,255,255,0.13);
+  color: #3C88EF;
+}
+
+header nav a.active {
+  background: #fff;
+  color: #3C88EF;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 0.7rem 1rem;
+    align-items: flex-start;
+  }
+  header nav {
+    margin-top: 0.7rem;
+    width: 100%;
+  }
+  header nav a {
+    display: block;
+    margin: 0.2rem 0;
+    width: 100%;
+    padding: 0.63rem 1rem;
+  }
+}
