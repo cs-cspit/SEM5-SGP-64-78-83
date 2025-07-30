@@ -1,0 +1,117 @@
+/* Main container - Centers the login form vertically and horizontally */
+.login-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e3e7 100%);
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Form card with shadow and smooth transitions */
+.login-form {
+  background: white;
+  padding: 3rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 420px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Form title styling */
+.login-title {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Input group spacing */
+.login-input-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Form label styling */
+.login-label {
+  display: block;
+  color: #4a658a;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+/* Input field styling with focus effects */
+.login-input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #3C88EF;
+  box-shadow: 0 0 0 3px rgba(60, 136, 239, 0.2);
+}
+
+/* Submit button with hover and active states */
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(90deg, #3C88EF 0%, #2f6fd8 100%);
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(60, 136, 239, 0.3);
+  background: linear-gradient(90deg, #2f6fd8 0%, #3C88EF 100%);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(60, 136, 239, 0.15);
+}
+
+/* Error message display */
+.login-error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: -0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Footer section with registration link */
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #7a8a9e;
+  font-size: 0.9rem;
+}
+
+/* Registration link styling */
+.login-link {
+  color: #3C88EF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+  color: #2f6fd8;
+}

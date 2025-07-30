@@ -1,6 +1,4 @@
-/* header.css */
-
-/* Header container */
+/* Main navigation header */
 header {
   box-shadow: 0 4px 14px rgba(60, 136, 239, 0.07);
   background: linear-gradient(90deg, #3C88EF 80%, #222831 100%);
@@ -8,9 +6,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1000;
 }
 
-/* Company Logo/Title */
+/* Brand logo text */
 header h1 {
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   font-size: 2rem;
@@ -21,7 +21,13 @@ header h1 {
   text-shadow: 0 2px 8px rgba(60,136,239,0.07);
 }
 
-/* Navigation Links */
+/* Desktop navigation menu */
+header nav {
+  display: flex;
+  align-items: center;
+}
+
+/* Navigation links */
 header nav a {
   color: #fff;
   font-weight: 500;
@@ -34,31 +40,148 @@ header nav a {
   position: relative;
 }
 
+/* Link hover and focus states */
 header nav a:hover,
 header nav a:focus {
   background: rgba(255,255,255,0.13);
   color: #3C88EF;
 }
 
+/* Active link style */
 header nav a.active {
   background: #fff;
   color: #3C88EF;
 }
 
+/* Hamburger Menu Icon */
+.menu-toggle {
+  display: none; /* Hidden by default on desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001; /* Ensure toggle is above nav on mobile */
+}
+
+.hamburger {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: '';
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  transition: transform 0.3s ease, top 0.3s ease, background-color 0.3s ease;
+}
+
+.hamburger::before {
+  top: -8px;
+}
+
+.hamburger::after {
+  top: 8px;
+}
+
+/* Animation for active hamburger menu */
+.menu-toggle.active .hamburger {
+  background-color: transparent; /* Hide middle bar */
+}
+
+.menu-toggle.active .hamburger::before {
+  transform: translateY(8px) rotate(45deg);
+  background-color: #fff; /* Keep color consistent */
+}
+
+.menu-toggle.active .hamburger::after {
+  transform: translateY(-8px) rotate(-45deg);
+  background-color: #fff; /* Keep color consistent */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
-    padding: 0.7rem 1rem;
-    align-items: flex-start;
+    flex-direction: row; /* Keep logo and toggle on one row */
+    justify-content: space-between; /* Space between logo and toggle */
+    padding: 0.8rem 1.2rem; /* Adjusted padding */
+    align-items: center;
+  }
+
+  header h1 {
+    font-size: 1.7rem; /* Smaller font size for mobile logo */
+  }
+
+  .menu-toggle {
+    display: block; /* Show hamburger on mobile */
+  }
+
+  header nav {
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #3C88EF 80%, #222831 100%); /* Same background as header */
+    flex-direction: column; /* Stack links vertically */
+    align-items: flex-start; /* Align links to the left */
+    padding: 0.5rem 1.2rem; /* Reduced padding for a more compact look */
+    box-shadow: 0 4px 14px rgba(60, 136, 239, 0.07);
+    transform: translateY(-100%); /* Start off-screen above */
+    opacity: 0;
+    pointer-events: none; /* Disable interaction when hidden */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  }
+
+  header nav.open {
+    transform: translateY(0); /* Slide down into view */
+    opacity: 1;
+    pointer-events: all; /* Enable interaction when open */
+  }
+
+  header nav a {
+    margin: 0.2rem 0; /* Reduced vertical margin for stacked links */
+    width: calc(100% - 2rem); /* Full width minus padding */
+    padding: 0.5rem 1rem; /* Reduced padding for a more compact look */
+    text-align: left; /* Align text to the left */
+    font-size: 0.95rem; /* Slightly smaller font for mobile links */
+  }
+
+  header nav a:hover,
+  header nav a:focus {
+    background: rgba(255,255,255,0.18); /* Slightly more opaque hover for mobile */
+  }
+
+  header nav a.active {
+    background: #fff;
+    color: #3C88EF;
+  }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 480px) {
+  header {
+    padding: 0.6rem 1rem;
+  }
+  header h1 {
+    font-size: 1.5rem;
   }
   header nav {
-    margin-top: 0.7rem;
-    width: 100%;
+    padding: 0.4rem 1rem; /* Further reduced padding */
   }
   header nav a {
-    display: block;
-    margin: 0.2rem 0;
-    width: 100%;
-    padding: 0.63rem 1rem;
+    margin: 0.15rem 0; /* Further reduced vertical margin */
+    width: calc(100% - 1.6rem); /* Adjust width for smaller padding */
+    padding: 0.5rem 0.8rem; /* Further reduced padding */
+    font-size: 0.9rem; /* Even smaller font size */
   }
 }
