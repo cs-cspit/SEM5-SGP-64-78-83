@@ -48,7 +48,7 @@
   box-shadow: 0 3px 10px rgba(60, 136, 239, 0.08);
   border-radius: 1rem;
   padding: 2rem 20rem;
-  gap: 2rem;
+  gap: 15rem;
   margin: 0 2rem 2rem; /* Add horizontal margin to the section itself */
 }
 .about-history,
