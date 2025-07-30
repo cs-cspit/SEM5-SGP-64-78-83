@@ -80,9 +80,9 @@ const About = () => (
       </div>
     </section>
 
-    {/* Call to Action */}
+    {/* Call to Action */}s
     <section className="about-cta fade-in">
-      <h3>Want to work with industry leaders?</h3>
+      <h3>Want to work with industry leaders of JJE?</h3>
       <a href="/contact" className="btn big-btn">Let’s Connect</a>
     </section>
 
