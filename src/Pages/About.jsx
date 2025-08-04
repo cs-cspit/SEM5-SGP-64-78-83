@@ -82,7 +82,9 @@ const About = () => (
 
     {/* Call to Action */}
     <section className="about-cta fade-in">
+
       <h3>Want to work with industry leaders?</h3>
+
       <a href="/contact" className="btn big-btn">Let’s Connect</a>
     </section>
 
