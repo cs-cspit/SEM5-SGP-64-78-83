@@ -42,13 +42,13 @@ const Header = () => {
         >
           About
         </Link>
-        <Link
+        {/* <Link
           to="/Contact"
           className={location.pathname === '/Contact' ? 'active' : ''}
           onClick={closeMenu}
         >
           Contact
-        </Link>
+        </Link> */}
         <Link
           to="/login"
           className={location.pathname === '/login' ? 'active' : ''}

@@ -14,7 +14,9 @@
   --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
   --shadow-dark: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
-
+a{
+  text-decoration: none;
+}
 /* Base Body Styles (ensure consistency with home.css) */
 body {
   font-family: -apple-system, BlinkMacMacFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

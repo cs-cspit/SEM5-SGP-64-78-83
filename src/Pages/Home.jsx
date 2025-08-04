@@ -1,15 +1,29 @@
 // src/pages/Home.jsx
 
-import React from 'react';
-import './home.css'; // Use the full Apple-inspired and animated UI CSS
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './home.css';
 
-const Home = () => (
+const Home = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsVisible(scrollPosition > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
   <div className="home-wrapper">
 
     {/* Hero Section with Electrical Background */}
     <section className="hero-section apple-hero">
       <img
-        src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1500&q=80"
+        src="/Images/Homepage-Background.avif"
         alt="Modern electrical cables cityscape"
         className="hero-bg-img"
       />
@@ -27,7 +41,7 @@ const Home = () => (
     <section className="pro-section" id="services">
       <h3 className="section-title fade-in">Our Signature Services</h3>
       <div className="service-showcase-grid">
-        <div className="pro-card fade-left">
+        <Link to="/services/wiring" className="pro-card fade-left">
           <img
             src="/Images/IMG_1.jpg"
             alt="Electrician working on high-voltage wires"
@@ -36,8 +50,8 @@ const Home = () => (
             <h4>Wiring Excellence</h4>
             <p>Dependable, modern wiring—precision installed with digital diagnostics for peak safety.</p>
           </div>
-        </div>
-        <div className="pro-card fade-up">
+        </Link>
+        <Link to="/services/maintenance" className="pro-card fade-up">
           <img
             src="/Images/IMG_2.jpg"
             alt="Technician testing electrical panel"
@@ -46,8 +60,8 @@ const Home = () => (
             <h4>Proactive Maintenance</h4>
             <p>Preventive checks, smart analysis, and expert fixes to keep your power uninterrupted.</p>
           </div>
-        </div>
-        <div className="pro-card fade-down">
+        </Link>
+        <Link to="/services/havells" className="pro-card fade-down">
           <img
             src="/Images/IMG_3.jpg"
             alt="Modern electrical installation"
@@ -56,8 +70,8 @@ const Home = () => (
             <h4>Havells Service Center</h4>
             <p>Complete solutions for homes, offices, and industry—energy efficient and future-ready.</p>
           </div>
-        </div>
-        <div className="pro-card fade-right">
+        </Link>
+        <Link to="/services/industrial" className="pro-card fade-right">
           <img
             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
             alt="Industrial electrical setup"
@@ -66,7 +80,7 @@ const Home = () => (
             <h4>Industrial Setup</h4>
             <p>Design and commissioning of scalable, robust systems for modern industry demands.</p>
           </div>
-        </div>
+        </Link>
       </div>
     </section>
 
@@ -105,19 +119,23 @@ const Home = () => (
 
     {/* Contact Call-to-Action */}
     <section className="contact-teaser fade-in">
-      <h3 className="section-title">Ready to Go Further?</h3>
+      <h3 className="section-title">Ready to Connect?</h3>
       <p className="contact-description">
-        Let's build the future of electrical safety and efficiency together. Contact us for a consultation or request a callback below.
+        Let's build the future of electrical safety and efficiency together. Reach out to us for expert consultation and solutions.
       </p>
-      <form className="contact-form-apple">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Email Address" required />
-        <textarea name="message" placeholder="How can we help you?" required />
-        <button type="submit" className="btn big-btn">Send Message</button>
-      </form>
+      <Link to="/contact" className="btn">Get in Touch</Link>
     </section>
 
+    {/* Scroll To Top Button */}
+    <button 
+      className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Scroll to top"
+    >
+      ↑
+    </button>
   </div>
-);
+  );
+};
 
 export default Home;
