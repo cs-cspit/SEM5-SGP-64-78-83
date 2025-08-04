@@ -17,7 +17,7 @@ const About = () => (
       <div className="about-history">
         <h3 className="section-heading">Our Story</h3>
         <p>
-          Since our founding in 2008, <strong>Jay Jalaram Electricals</strong> has empowered businesses and homes
+          Since our founding in 2009, <strong>Jay Jalaram Electricals</strong> has empowered businesses and homes
           across the region with professional, reliable, and safe electrical solutions. Our passion for
           cutting-edge technology and customer satisfaction drives every project, big or small.
         </p>
@@ -50,31 +50,31 @@ const About = () => (
       <h3 className="section-heading">Meet the Team</h3>
       <div className="team-grid">
         <div className="team-card">
-          <img src="https://randomuser.me/api/portraits/men/31.jpg" alt="Rajesh Parmar, Founder" />
+          <img src="/Images/Jayesh_Sailor.jpg" alt="Rajesh Parmar, Founder" />
           <div>
-            <h4>Rajesh Parmar</h4>
+            <h4>Jayesh Sailor</h4>
             <span className="team-role">Founder & Master Electrician</span>
           </div>
         </div>
         <div className="team-card">
-          <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Viral Patel, Operations Lead" />
+          {/* <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Viral Patel, Operations Lead" /> */}
           <div>
-            <h4>Viral Patel</h4>
-            <span className="team-role">Operations Lead</span>
+            <h4>Kurnal Sailor</h4>
+            <span className="team-role">Site Engineer</span>
           </div>
         </div>
         <div className="team-card">
-          <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="Megha Shah, Senior Engineer" />
+          {/* <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="Megha Shah, Senior Engineer" /> */}
           <div>
-            <h4>Megha Shah</h4>
-            <span className="team-role">Senior Engineer</span>
+            <h4>Rohit Patil</h4>
+            <span className="team-role">Senior Electrician</span>
           </div>
         </div>
         <div className="team-card">
-          <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Jatin Mehta, Support Manager" />
+          {/* <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Jatin Mehta, Support Manager" /> */}
           <div>
-            <h4>Jatin Mehta</h4>
-            <span className="team-role">Customer Support Manager</span>
+            <h4>Kevin Sailor</h4>
+            <span className="team-role">Jr. Engineer</span>
           </div>
         </div>
       </div>

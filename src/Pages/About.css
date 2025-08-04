@@ -1,174 +1,329 @@
+/* Main container */
 .about-wrapper {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   color: #23272f;
-  background: #fafafc;
-  min-height: 100vh;
+  background-color: #fafafc;
   padding-bottom: 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-/* Hero */
+/* Hero banner */
 .about-hero {
-  background: linear-gradient(90deg, #3C88EF 75%, #222831 100%);
+  background: linear-gradient(90deg, #3C88EF 75%, #1e1e2f 100%);
   color: #fff;
   text-align: center;
-  padding: 5.5rem 2rem 3rem 2rem;
-  border-radius: 0 0 1.7rem 1.7rem;
-  margin-bottom: 2.3rem;
-  box-shadow: 0 12px 40px -12px #3C88EF22;
-}
-.about-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-.about-tagline {
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: 0.07em;
+  padding: 5rem 1.5rem 3rem;
+  border-radius: 0 0 1.5rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.15);
+  margin-bottom: 2rem;
 }
 
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+}
+
+.about-tagline {
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Section titles */
 .section-heading {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #3C88EF;
   font-weight: 700;
-  margin-bottom: 0.7rem;
-  margin-top: 0.4rem;
+  margin: 0.5rem 0 1rem;
+  text-align: center;
 }
 
-/* Story & Mission */
+/* Content section */
 .about-section-1 {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  background: #fff;
-  box-shadow: 0 3px 16px #3c88ef08;
-  border-radius: 1.3rem;
-  padding: 2.7rem 1.3rem;
-  gap: 2.5rem;
-  margin-bottom: 2.7rem;
-  align-items: flex-start;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: 0 3px 10px rgba(60, 136, 239, 0.08);
+  border-radius: 1rem;
+  padding: 2rem 20rem;
+  gap: 15rem;
+  margin: 0 2rem 2rem; /* Add horizontal margin to the section itself */
 }
-.about-history, .about-mission {
-  flex: 1 1 260px;
-  min-width: 240px;
-  max-width: 450px;
+.about-history,
+.about-mission {
+  flex: 1 1 280px; /* Allow items to grow and shrink, with a base of 280px */
+  max-width: 450px; /* Max width for individual columns */
 }
-.about-history p, .about-mission p {
-  font-size: 1.06rem;
-  color: #222831ee;
-  margin-bottom: 1.6rem;
+.about-history p,
+.about-mission p {
+  font-size: 1.05rem;
+  color: #222831e6;
+  line-height: 1.6;
 }
 .about-timeline {
   display: flex;
-  gap: 2.1rem;
-  margin-top: 1.7rem;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap; /* Allow timeline items to wrap */
+  justify-content: center; /* Center timeline items */
 }
 .timeline-years {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  font-weight: bold;
   color: #3C88EF;
-  font-weight: 700;
-  background: #fbfbfe;
-  border-radius: 0.7em;
-  padding: 0.41em 1.1em;
-  display: inline-block;
-  margin-bottom: 0.35em;
+  background-color: #f4f6ff;
+  border-radius: 0.6rem;
+  padding: 0.4rem 1rem;
+  text-align: center; /* Center text within the year bubble */
 }
 .timeline-label {
-  font-size: 1rem;
-  color: #324268BB;
+  font-size: 0.95rem;
   font-weight: 600;
+  color: #3a4c6fbb;
+  text-align: center; /* Center label text */
 }
 
-/* Team */
+/* Team Section */
 .about-team-section {
-  background: #f6faff;
-  border-radius: 1.2rem;
-  padding: 3.3rem 1.3rem 2.2rem 1.3rem;
-  margin-bottom: 2.6rem;
-  box-shadow: 0 3px 16px #3c88ef09;
+  background-color: #f8faff;
+  border-radius: 1rem;
+  padding: 3rem 1rem 2rem;
+  box-shadow: 0 3px 10px rgba(60, 136, 239, 0.07);
   text-align: center;
+  margin: 0 2rem 2rem; /* Add horizontal margin */
 }
 .team-grid {
   display: flex;
-  gap: 2.3rem;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-top: 2.4rem;
+  justify-content: center; /* Center team cards */
+  gap: 2rem;
+  margin-top: 2rem;
 }
 .team-card {
-  background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 3px 18px #3c88ef13;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 14px rgba(60, 136, 239, 0.12);
+  padding: 1.5rem;
+  width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 1.1rem 1.4rem 1.1rem;
-  width: 190px;
-  transition: box-shadow .23s, transform .22s cubic-bezier(.4,0,.2,1);
+  transition: 0.2s ease;
 }
-.team-card:hover { box-shadow: 0 8px 32px #183ea918; transform: translateY(-5px) scale(1.046); }
+.team-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(24, 62, 169, 0.12);
+}
 .team-card img {
   width: 76px;
   height: 76px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1em;
-  box-shadow: 0 3px 14px #a8c3de2b;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 3px 14px rgba(168, 195, 222, 0.18);
 }
 .team-card h4 {
-  font-size: 1.09rem;
-  color: #23272f;
-  margin-bottom: 0.32em;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
 }
 .team-role {
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   color: #3C88EFcc;
   font-weight: 600;
 }
 
-/* CTA */
+/* Call To Action */
 .about-cta {
   text-align: center;
-  margin-top: 2rem;
-  padding: 2.2rem 0 2.9rem;
+  padding: 2rem 1rem 2.5rem;
 }
 .about-cta h3 {
   font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 1.5em;
+  margin-bottom: 1.5rem;
 }
 .btn.big-btn {
-  padding: 0.92rem 2.2rem;
-  font-size: 1.08rem;
-  border-radius: 1.8em;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  border-radius: 2rem;
   font-weight: 700;
-  background: #3C88EF;
+  background-color: #3C88EF;
   color: #fff;
   text-decoration: none;
-  transition: background .19s, transform .21s;
+  transition: 0.2s ease;
+  display: inline-block; /* Ensure padding works correctly */
 }
 .btn.big-btn:hover {
-  background: #2563eb;
-  transform: scale(1.035) translateY(-2.5px);
+  background-color: #2563eb;
+  transform: translateY(-3px) scale(1.03);
 }
 
-/* Animations: Re-use from home.css or define here as needed */
-.fade-in { animation: fadeIn 1.1s cubic-bezier(.4,0,.2,1) both; }
-.fade-down { animation: fadeDown 1.2s .2s cubic-bezier(.4,0,.2,1) both; }
-.fade-left { animation: fadeLeft 1.2s both;}
-.fade-up { animation: fadeUp 1.2s both;}
-@keyframes fadeIn { 0%{opacity:0} 100%{opacity:1} }
-@keyframes fadeDown { 0%{opacity:0;transform:translateY(-40px)} 100%{opacity:1;transform:none} }
-@keyframes fadeUp { 0%{opacity:0;transform:translateY(30px)} 100%{opacity:1;transform:none} }
-@keyframes fadeLeft { 0%{opacity:0;transform:translateX(-50px)} 100%{opacity:1;transform:none} }
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease both;
+}
+.fade-down {
+  animation: fadeDown 1.1s ease-out both;
+}
+.fade-left {
+  animation: fadeLeft 1.1s ease-out both;
+}
+.fade-up {
+  animation: fadeUp 1.1s ease-out both;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeDown {
+  0% { opacity: 0; transform: translateY(-40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeLeft {
+  0% { opacity: 0; transform: translateX(-40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
 
-/* Responsive */
-@media (max-width: 900px) {
+/* Responsive Adjustments */
+
+/* For screens smaller than 1200px (e.g., smaller desktops, large tablets) */
+@media (max-width: 1200px) {
   .about-section-1 {
-    flex-direction: column;
-    gap: 2.3rem;
-    padding: 2.2rem 0.5rem;
+    padding: 2rem 10rem; /* Reduce horizontal padding */
   }
-  .team-grid { flex-direction: column; gap: 1.3rem; }
-  .team-card { width: 100%; max-width: 340px;}
+}
+
+/* For screens smaller than 992px (e.g., tablets) */
+@media (max-width: 992px) {
+  .about-hero {
+    padding: 4rem 1rem 2.5rem; /* Reduce hero padding */
+  }
+  .about-title {
+    font-size: 2rem; /* Adjust title size */
+  }
+  .about-tagline {
+    font-size: 1.1rem; /* Adjust tagline size */
+  }
+
+  .about-section-1 {
+    flex-direction: column; /* Stack story and mission */
+    padding: 2rem 1.5rem; /* More reasonable padding */
+    margin: 0 1rem 2rem; /* Adjust horizontal margin */
+  }
+  .about-history,
+  .about-mission {
+    max-width: 100%; /* Allow them to take full width */
+    text-align: center; /* Center text for stacked sections */
+  }
+  .about-history p,
+  .about-mission p {
+    text-align: left; /* Keep paragraph text left-aligned within its container */
+  }
+  .about-timeline {
+    justify-content: center; /* Ensure timeline items are centered */
+  }
+
+  .about-team-section {
+    padding: 2.5rem 1rem 1.5rem; /* Adjust team section padding */
+    margin: 0 1rem 2rem; /* Adjust horizontal margin */
+  }
+  .team-grid {
+    gap: 1.5rem; /* Reduce gap between team cards */
+  }
+  .team-card {
+    width: 100%; /* Make cards take full width */
+    max-width: 250px; /* Limit max width for a better look on smaller tablets */
+  }
+}
+
+/* For screens smaller than 768px (e.g., larger phones) */
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 3rem 1rem 2rem; /* Further reduce hero padding */
+  }
+  .about-title {
+    font-size: 1.8rem; /* Further adjust title size */
+  }
+  .about-tagline {
+    font-size: 1rem; /* Further adjust tagline size */
+  }
+
+  .section-heading {
+    font-size: 1.3rem; /* Adjust section heading size */
+  }
+
+  .about-section-1 {
+    padding: 1.5rem 1rem; /* Even tighter padding */
+  }
+  .timeline-years {
+    font-size: 1.5rem; /* Adjust timeline year size */
+    padding: 0.3rem 0.8rem;
+  }
+  .timeline-label {
+    font-size: 0.85rem; /* Adjust timeline label size */
+  }
+
+  .about-team-section {
+    padding: 2rem 0.5rem 1rem; /* Tighter padding for team section */
+  }
+  .team-card {
+    max-width: 200px; /* Adjust max width for phones */
+  }
+}
+
+/* For screens smaller than 576px (e.g., small phones) */
+@media (max-width: 576px) {
+  .about-hero {
+    padding: 2.5rem 0.8rem 1.5rem; /* Minimal padding for hero */
+  }
+  .about-title {
+    font-size: 1.6rem;
+  }
+  .about-tagline {
+    font-size: 0.9rem;
+  }
+
+  .about-section-1,
+  .about-team-section {
+    margin: 0 0.5rem 1.5rem; /* Reduce overall horizontal margin */
+    padding: 1rem 0.8rem; /* Tighter padding within sections */
+  }
+
+  .about-history p,
+  .about-mission p {
+    font-size: 0.95rem; /* Smaller paragraph text */
+  }
+
+  .team-grid {
+    gap: 1rem; /* Smaller gap between team cards */
+  }
+  .team-card {
+    width: 100%;
+    max-width: 180px; /* Even smaller max width for very small screens */
+    padding: 1rem; /* Reduce card padding */
+  }
+  .team-card img {
+    width: 60px;
+    height: 60px;
+  }
+  .team-card h4 {
+    font-size: 1rem;
+  }
+  .team-role {
+    font-size: 0.85rem;
+  }
+
+  .about-cta h3 {
+    font-size: 1.1rem;
+  }
+  .btn.big-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
 }

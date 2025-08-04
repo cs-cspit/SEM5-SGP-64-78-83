@@ -1,0 +1,145 @@
+/* Centered form container with shadow and rounded corners */
+body{
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e3e7 100%);
+}
+.contact-form {
+  max-width: 650px;
+  margin: 3rem auto;
+  padding: 2.5rem 3rem;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Input and label wrapper */
+.form-group {
+  margin-bottom: 1.8rem;
+}
+
+/* Form field labels */
+.form-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  color: #4a658a;
+  font-size: 0.95rem;
+}
+
+/* Common input field styling */
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Input focus state with glow effect */
+.form-input:focus {
+  outline: none;
+  border-color: #3C88EF;
+  box-shadow: 0 0 0 3px rgba(60, 136, 239, 0.2);
+}
+
+/* Message textarea sizing */
+.form-textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* Error message styling */
+.error-message {
+  color: #e53e3e;
+  font-size: 0.9rem; /* Slightly larger font for readability */
+  margin-top: -0.75rem; /* Pull error message closer to input */
+  margin-bottom: 1.5rem; /* Ensure space before button */
+  text-align: center; /* Center error message */
+  font-weight: 500;
+}
+
+/* Submit button styling */
+.submit-button {
+  width: auto; /* Allow button to size based on content */
+  display: block; /* Make it a block element to center with margin auto */
+  margin: 0 auto; /* Center the button */
+  padding: 1rem 2.5rem; /* More padding for a more prominent button */
+  /* Slightly adjusted gradient for depth */
+  background: linear-gradient(90deg, #3C88EF 0%, #2f6fd8 100%);
+  color: white;
+  border: none;
+  border-radius: 0.6rem; /* Consistent border-radius with inputs */
+  font-size: 1.05rem; /* Slightly larger font size */
+  font-weight: 600;
+  cursor: pointer;
+  /* More pronounced and smoother hover/active effects */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Hover state for submit button */
+.submit-button:hover {
+  transform: translateY(-2px); /* Slightly more lift on hover */
+  box-shadow: 0 8px 20px rgba(60, 136, 239, 0.3); /* Stronger shadow on hover */
+  background: linear-gradient(90deg, #2f6fd8 0%, #3C88EF 100%); /* Slight gradient shift on hover */
+}
+
+/* Active state for submit button */
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(60, 136, 239, 0.15); /* Softer shadow on active */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .contact-form {
+    margin: 1.5rem 1rem; /* Adjust margin for smaller screens */
+    padding: 1.5rem; /* Reduce padding */
+    border-radius: 1rem; /* Slightly smaller border-radius */
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem; /* Reduce space between form groups */
+  }
+
+  .form-label {
+    font-size: 0.9rem; /* Smaller label font */
+  }
+
+  .form-input {
+    padding: 0.75rem 1rem; /* Reduce input padding */
+    font-size: 0.95rem; /* Smaller input font */
+  }
+
+  .form-textarea {
+    min-height: 100px; /* Reduce min-height for mobile */
+  }
+
+  .submit-button {
+    padding: 0.9rem 2rem; /* Adjust button padding */
+    font-size: 1rem; /* Adjust button font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form {
+    margin: 1rem 0.5rem; /* Even tighter margin for very small screens */
+    padding: 1rem; /* Even tighter padding */
+    border-radius: 0.8rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem; /* Further reduce space */
+  }
+
+  .form-input {
+    padding: 0.6rem 0.8rem; /* Further reduce input padding */
+    font-size: 0.9rem; /* Further reduce input font size */
+  }
+
+  .submit-button {
+    padding: 0.8rem 1.8rem; /* Further adjust button padding */
+    font-size: 0.95rem; /* Further adjust button font size */
+  }
+}

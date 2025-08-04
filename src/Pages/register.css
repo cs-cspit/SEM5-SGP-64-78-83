@@ -1,0 +1,205 @@
+/* Centered container for registration page */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e3e7 100%);
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Form card with shadow */
+.register-form {
+  background: white;
+  padding: 2.5rem 3rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 450px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Form heading */
+.register-title {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Form field wrapper */
+.register-input-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Form labels */
+.register-label {
+  display: block;
+  color: #4a658a;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+/* Input fields */
+.register-input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Input focus effect */
+.register-input:focus {
+  outline: none;
+  border-color: #3C88EF;
+  box-shadow: 0 0 0 3px rgba(60, 136, 239, 0.2);
+}
+
+/* Submit button */
+.register-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(90deg, #3C88EF 0%, #2f6fd8 100%);
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Button hover state */
+.register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(60, 136, 239, 0.3);
+  background: linear-gradient(90deg, #2f6fd8 0%, #3C88EF 100%);
+}
+
+/* Button active state */
+.register-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(60, 136, 239, 0.15);
+}
+
+/* Form validation error */
+.register-error {
+  color: #e53e3e;
+  font-size: 0.9rem;
+  margin-top: -0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Form footer section */
+.register-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #7a8a9e;
+  font-size: 0.9rem;
+}
+
+/* Footer link styling */
+.register-link {
+  color: #3C88EF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  color: #2f6fd8;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 1.5rem; /* Reduce padding for smaller screens */
+  }
+
+  .register-form {
+    padding: 2rem; /* Reduce form padding */
+    border-radius: 1rem; /* Slightly smaller border-radius */
+  }
+
+  .register-title {
+    font-size: 1.8rem; /* Adjust title size */
+    margin-bottom: 1.5rem;
+  }
+
+  .register-input-group {
+    margin-bottom: 1.2rem; /* Reduce space between groups */
+  }
+
+  .register-label {
+    font-size: 0.85rem; /* Smaller label font */
+  }
+
+  .register-input {
+    padding: 0.75rem 1rem; /* Reduce input padding */
+    font-size: 0.95rem; /* Smaller input font */
+  }
+
+  .register-button {
+    padding: 0.9rem; /* Adjust button padding */
+    font-size: 1rem; /* Adjust button font size */
+  }
+
+  .register-error {
+    font-size: 0.8rem; /* Smaller error font */
+    margin-bottom: 1rem;
+  }
+
+  .register-footer {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 1rem; /* Even tighter padding for very small screens */
+  }
+
+  .register-form {
+    padding: 1.5rem; /* Even tighter form padding */
+    border-radius: 0.8rem;
+  }
+
+  .register-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .register-input-group {
+    margin-bottom: 1rem;
+  }
+
+  .register-input {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .register-button {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .register-error {
+    font-size: 0.75rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .register-footer {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
+}
