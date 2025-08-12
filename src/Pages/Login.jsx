@@ -1,21 +1,36 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { login as apiLogin } from '../services/api';
+import { useAuth } from '../context/auth-context.jsx';
 import './login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.email || !form.password) {
       setError("All fields are required.");
       return;
     }
-    // Auth logic here
-    setError("");
-    console.log("Login attempt:", form.email);
+    
+    try {
+      setLoading(true);
+      setError("");
+      const userData = await apiLogin(form);
+      login(userData); // Store user data in context
+      navigate('/'); // Redirect to home page after successful login
+    } catch (err) {
+      setError(err.toString());
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,8 +66,8 @@ const Login = () => {
 
         {error && <div className="login-error">{error}</div>}
         
-        <button type="submit" className="login-button">
-          Sign In
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
 
         <div className="login-footer">

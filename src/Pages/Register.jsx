@@ -1,9 +1,11 @@
 // src/components/Register.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
-import './register.css'; // Import the CSS file
+import { Link, useNavigate } from "react-router-dom";
+import { register } from '../services/api';
+import './register.css';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -11,6 +13,7 @@ const Register = () => {
     confirmPassword: ""
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Handles changes to input fields and updates the form state
   const handleChange = (e) => {
@@ -18,10 +21,9 @@ const Register = () => {
   };
 
   // Handles form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    // Basic form validation
     if (!form.name || !form.email || !form.password || !form.confirmPassword) {
       setError("All fields are required.");
       return;
@@ -37,20 +39,21 @@ const Register = () => {
       return;
     }
 
-    // If validation passes, clear any existing errors
-    setError("");
-
-    // Placeholder for actual registration logic (e.g., API call)
-    console.log("Registration attempt:", {
-      name: form.name,
-      email: form.email,
-      // In a real app, you would hash the password before sending it
-      // For demonstration, we'll just log it.
-      password: form.password
-    });
-
-    // You might want to redirect the user after successful registration
-    // For example: history.push('/login');
+    try {
+      setLoading(true);
+      setError("");
+      const userData = await register({
+        name: form.name,
+        email: form.email,
+        password: form.password
+      });
+      console.log('Registration successful:', userData);
+      navigate('/'); // Redirect to home page after successful registration
+    } catch (err) {
+      setError(err.toString());
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,8 +121,8 @@ const Register = () => {
         {error && <div className="register-error">{error}</div>}
 
         {/* Submit Button */}
-        <button type="submit" className="register-button">
-          Register
+        <button type="submit" className="register-button" disabled={loading}>
+          {loading ? 'Registering...' : 'Register'}
         </button>
 
         {/* Footer with Login Link */}

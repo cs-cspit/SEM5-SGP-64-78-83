@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from '../context/auth-context.jsx';
+import UserMenu from './UserMenu';
 import './header.css';
 
 const Header = () => {
-  // State for mobile menu toggle
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -15,6 +17,22 @@ const Header = () => {
   // Close mobile menu when a link is clicked
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const renderAuthButton = () => {
+    console.log('Rendering auth button, user:', user);
+    if (user && user.name) {
+      return <UserMenu />;
+    }
+    return (
+      <Link
+        to="/login"
+        className={location.pathname === '/login' ? 'active' : ''}
+        onClick={closeMenu}
+      >
+        Login
+      </Link>
+    );
   };
 
   return (
@@ -42,20 +60,7 @@ const Header = () => {
         >
           About
         </Link>
-        {/* <Link
-          to="/Contact"
-          className={location.pathname === '/Contact' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          Contact
-        </Link> */}
-        <Link
-          to="/login"
-          className={location.pathname === '/login' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          Login
-        </Link>
+        {renderAuthButton()}
       </nav>
     </header>
   );

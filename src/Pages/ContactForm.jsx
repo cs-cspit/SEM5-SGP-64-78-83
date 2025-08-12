@@ -1,24 +1,37 @@
 import React, { useState } from "react";
+import { submitContactForm } from '../services/api';
 import './contact-form.css';
 
 const ContactForm = () => {
-  // Form state management
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   
   // Update form fields
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
   
   // Form submission handler with validation
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.email || !form.message) {
       setError("Email and message are required.");
       return;
     }
-    setError("");
-    console.log("Form submitted:", form);
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+      await submitContactForm(form);
+      setSuccess("Message sent successfully!");
+      setForm({ name: "", email: "", phone: "", message: "" }); // Reset form
+    } catch (err) {
+      setError(err.toString());
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,9 +88,10 @@ const ContactForm = () => {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
       
-      <button type="submit" className="submit-button">
-        Send Message
+      <button type="submit" className="submit-button" disabled={loading}>
+        {loading ? 'Sending...' : 'Send Message'}
       </button>
     </form>
   );
