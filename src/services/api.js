@@ -67,3 +67,22 @@ export const submitContactForm = async (contactData) => {
     throw error.response?.data?.message || 'Something went wrong';
   }
 };
+
+// Client APIs
+export const createClient = async (clientData) => {
+  try {
+    const response = await api.post('/clients', clientData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Something went wrong';
+  }
+};
+
+export const getClientDetails = async (userId) => {
+  try {
+    const response = await api.get(`/clients/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Something went wrong';
+  }
+};

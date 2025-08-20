@@ -27,12 +27,16 @@ const AdminPanel = () => {
           <p>Here you can manage users and system settings.</p>
         </div>
         <div className="admin-stats">
+          <div className="stat-card" onClick={() => navigate('/admin/user-roles')} style={{ cursor: 'pointer' }}>
+            <h3>User Management</h3>
+            <div className="stat-value">Manage Roles</div>
+            <p>Control user access levels</p>
+          </div>
           <div className="stat-card">
             <h3>Your Role</h3>
             <div className="stat-value">Administrator</div>
             <p>Full system access</p>
           </div>
-          {/* Add more admin features here */}
         </div>
       </div>
     </div>

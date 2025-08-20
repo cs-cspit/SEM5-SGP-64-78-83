@@ -1,8 +1,22 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/auth-context.jsx';
-import { useAuth } from './context/auth-context.jsx';
+import { AuthProvider, useAuth } from './context/auth-context.jsx';
 import Header from './Components/Header';
+
+// Protected Route Component
+const ProtectedRoute = ({ children, adminOnly = false }) => {
+  const { user, isAdmin } = useAuth();
+  
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (adminOnly && !isAdmin()) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
+};
 
 // Page components
 import Home from './Pages/Home';
@@ -15,6 +29,7 @@ import ProactiveMaintenancePage from './Pages/ProactiveMaintenancePage';
 import HavellsServiceCenterPage from './Pages/HavellsServiceCenterPage';
 import IndustrialSetupPage from './Pages/IndustrialSetupPage';
 import AdminPanel from './Pages/Admin/AdminPanel';
+import UserRoleManagement from './Pages/Admin/UserRoleManagement';
 
 function App() {
   return (
@@ -31,7 +46,22 @@ function App() {
           <Route path="/services/maintenance" element={<ProactiveMaintenancePage />} />
           <Route path="/services/havells" element={<HavellsServiceCenterPage />} />
           <Route path="/services/industrial" element={<IndustrialSetupPage />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute adminOnly>
+                <AdminPanel />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/user-roles" 
+            element={
+              <ProtectedRoute adminOnly>
+                <UserRoleManagement />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </main>
     </AuthProvider>
