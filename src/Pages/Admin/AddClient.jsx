@@ -24,13 +24,13 @@ const AddClient = ({ onClose, onSuccess }) => {
   };
 
   const validateForm = () => {
-    if (!formData.name || !formData.email || !formData.password || 
-        !formData.companyName || !formData.gstNumber || 
-        !formData.mobileNumber || !formData.address) {
+    if (!formData.name || !formData.email || !formData.password ||
+      !formData.companyName || !formData.gstNumber ||
+      !formData.mobileNumber || !formData.address) {
       setError('All fields are required');
       return false;
     }
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
@@ -56,7 +56,7 @@ const AddClient = ({ onClose, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -65,21 +65,35 @@ const AddClient = ({ onClose, onSuccess }) => {
     setError('');
 
     try {
+      const token = localStorage.getItem('userToken');
+      if (!token) {
+        setError('You must be logged in to perform this action');
+        return;
+      }
+
       const response = await axios.post(
         'http://localhost:5000/api/clients',
         formData,
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('userToken')}`
+            'Authorization': `Bearer ${token}`
           }
         }
       );
 
+      console.log('Client created successfully:', response.data);
       onSuccess(response.data);
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      console.error('Error creating client:', err);
+      if (err.response?.status === 401) {
+        setError('You are not authorized to perform this action');
+      } else if (err.response?.status === 400) {
+        setError(err.response.data.message || 'Invalid input data');
+      } else {
+        setError('Server error. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
@@ -92,7 +106,7 @@ const AddClient = ({ onClose, onSuccess }) => {
           <h2>Add New Client</h2>
           <button className="close-button" onClick={onClose}>&times;</button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="add-client-form">
           <div className="form-group">
             <label htmlFor="name">Client Name *</label>

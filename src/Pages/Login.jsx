@@ -12,22 +12,53 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Reset error state
+    setError("");
+
+    // Validate form
     if (!form.email || !form.password) {
       setError("All fields are required.");
       return;
     }
-    
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     try {
       setLoading(true);
-      setError("");
+      console.log('Attempting login with email:', form.email);
       const userData = await apiLogin(form);
+      console.log('Login successful:', userData);
+
+      if (!userData || !userData.token) {
+        throw new Error('Invalid response from server');
+      }
+
       login(userData); // Store user data in context
-      navigate('/'); // Redirect to home page after successful login
+
+      // Redirect based on role
+      if (userData.role === 'admin') {
+        navigate('/admin');
+      } else if (userData.role === 'client') {
+        navigate('/client-dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
-      setError(err.toString());
+      console.error('Login error:', err);
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Failed to login. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -37,7 +68,7 @@ const Login = () => {
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
         <h2 className="login-title">Welcome Back</h2>
-        
+
         <div className="login-input-group">
           <label htmlFor="email" className="login-label">Email Address</label>
           <input
@@ -65,7 +96,7 @@ const Login = () => {
         </div>
 
         {error && <div className="login-error">{error}</div>}
-        
+
         <button type="submit" className="login-button" disabled={loading}>
           {loading ? 'Signing in...' : 'Sign In'}
         </button>

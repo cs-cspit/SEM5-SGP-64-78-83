@@ -48,9 +48,14 @@ const Register = () => {
         password: form.password
       });
       console.log('Registration successful:', userData);
-      navigate('/'); // Redirect to home page after successful registration
+      // Store user data in localStorage if needed
+      if (userData.token) {
+        localStorage.setItem('userToken', userData.token);
+      }
+      navigate('/login'); // Redirect to login page after successful registration
     } catch (err) {
-      setError(err.toString());
+      console.error('Registration error:', err);
+      setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
