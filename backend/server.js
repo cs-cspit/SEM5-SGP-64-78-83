@@ -24,12 +24,9 @@ app.use(cors({
   credentials: true
 }));
 
-const clientRoutes = require('./routes/clientRoutes');
-
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/clients', clientRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/jje')
