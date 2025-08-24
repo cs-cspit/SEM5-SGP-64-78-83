@@ -15,54 +15,54 @@ const AdminLayout = ({ children }) => {
   };
 
   const sidebarItems = [
-    { 
-      id: 'dashboard', 
-      name: 'Dashboard', 
+    {
+      id: 'dashboard',
+      name: 'Dashboard',
       icon: '📊',
       path: '/admin',
-      active: true 
+      active: true
     },
-    { 
-      id: 'clients', 
-      name: 'Clients', 
+    {
+      id: 'clients',
+      name: 'Clients',
       icon: '👥',
       path: '/admin/user-roles',
-      active: true 
+      active: true
     },
-    { 
-      id: 'invoices', 
-      name: 'Invoices', 
+    {
+      id: 'invoices',
+      name: 'Invoices',
       icon: '📄',
       path: '/admin/invoices',
-      active: true 
+      active: true
     },
-    { 
-      id: 'payments', 
-      name: 'Payments', 
+    {
+      id: 'payments',
+      name: 'Payments',
       icon: '💳',
       path: '/admin/payments',
-      active: false 
+      active: true
     },
-    { 
-      id: 'reports', 
-      name: 'Reports', 
+    {
+      id: 'reports',
+      name: 'Reports',
       icon: '📈',
       path: '/admin/reports',
-      active: false 
+      active: false
     },
-    { 
-      id: 'admin', 
-      name: 'Admin', 
+    {
+      id: 'admin',
+      name: 'Admin',
       icon: '⚙️',
       path: '/admin/settings',
-      active: false 
+      active: false
     },
-    { 
-      id: 'settings', 
-      name: 'Settings', 
+    {
+      id: 'settings',
+      name: 'Settings',
       icon: '🔧',
       path: '/admin/general-settings',
-      active: false 
+      active: false
     }
   ];
 
@@ -106,15 +106,17 @@ const AdminLayout = ({ children }) => {
                   navigate('/admin/user-roles');
                 } else if (item.id === 'invoices') {
                   navigate('/admin/invoices');
+                } else if (item.id === 'payments') {
+                  navigate('/admin/payments');
                 } else {
-                  // For now, only dashboard, clients, and invoices are functional
+                  // For now, only dashboard, clients, invoices, and payments are functional
                   // Future functionality can be added here
                   console.log(`${item.name} clicked - Coming soon!`);
                 }
               }}
-              style={{ 
-                cursor: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices') ? 'pointer' : 'not-allowed',
-                opacity: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices') ? 1 : 0.5 
+              style={{
+                cursor: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments') ? 'pointer' : 'not-allowed',
+                opacity: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments') ? 1 : 0.5
               }}
             >
               <span className="nav-icon">{item.icon}</span>
