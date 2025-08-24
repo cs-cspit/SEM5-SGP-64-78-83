@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/auth-context.jsx';
 import Header from './Components/Header';
+import Footer from './Components/Footer';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -30,6 +31,9 @@ import HavellsServiceCenterPage from './Pages/HavellsServiceCenterPage';
 import IndustrialSetupPage from './Pages/IndustrialSetupPage';
 import AdminPanel from './Pages/Admin/AdminPanel';
 import UserRoleManagement from './Pages/Admin/UserRoleManagement';
+import BillGeneration from './Pages/Admin/BillGeneration';
+import AddClient from './Pages/Admin/AddClient';
+import InvoiceList from './Pages/Admin/InvoiceList';
 
 function App() {
   return (
@@ -62,8 +66,33 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/admin/bill" 
+            element={
+              <ProtectedRoute adminOnly>
+                <BillGeneration />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/add-client" 
+            element={
+              <ProtectedRoute adminOnly>
+                <AddClient />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/invoices" 
+            element={
+              <ProtectedRoute adminOnly>
+                <InvoiceList />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </main>
+      <Footer />
     </AuthProvider>
   )
 }

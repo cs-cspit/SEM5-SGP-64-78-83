@@ -6,31 +6,30 @@ const bcrypt = require("bcryptjs");
 exports.createClient = async (req, res) => {
   try {
     const {
-      name,
-      email,
-      password,
       companyName,
       gstNumber,
-      mobileNumber,
+      email,
+      phone,
+      contactPerson,
+      panNumber,
       address,
+      bankDetails
     } = req.body;
 
     // Validate required fields
     if (
-      !name ||
-      !email ||
-      !password ||
       !companyName ||
       !gstNumber ||
-      !mobileNumber ||
+      !email ||
+      !phone ||
       !address
     ) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "Required fields: Company Name, GST Number, Email, Phone, and Address" });
     }
 
     // Check if email already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
+    const emailExists = await ClientDetails.findOne({ email });
+    if (emailExists) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
@@ -40,13 +39,13 @@ exports.createClient = async (req, res) => {
       return res.status(400).json({ message: "GST number already registered" });
     }
 
-    // Create user with client role
+    // Create a basic user account for the client
     let user;
     try {
       user = await User.create({
-        name,
+        name: contactPerson || companyName,
         email,
-        password,
+        password: "temp123", // Default password - client should change this
         role: "client",
       });
       console.log("Client user created:", {
@@ -64,8 +63,12 @@ exports.createClient = async (req, res) => {
       userId: user._id,
       companyName,
       gstNumber,
-      mobileNumber,
+      email,
+      phone,
+      contactPerson,
+      panNumber,
       address,
+      bankDetails,
     });
 
     res.status(201).json({
@@ -102,5 +105,24 @@ exports.getClientDetails = async (req, res) => {
     res.json(clientDetails);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all clients
+exports.getAllClients = async (req, res) => {
+  try {
+    const clients = await ClientDetails.find()
+      .populate('userId', 'name email')
+      .sort({ companyName: 1 });
+
+    res.json({
+      success: true,
+      data: clients
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };

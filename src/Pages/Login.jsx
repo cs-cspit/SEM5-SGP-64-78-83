@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login as apiLogin } from '../services/api';
 import { useAuth } from '../context/auth-context.jsx';
 import './login.css';
@@ -48,7 +48,7 @@ const Login = () => {
       if (userData.role === 'admin') {
         navigate('/admin');
       } else if (userData.role === 'client') {
-        navigate('/client-dashboard');
+        navigate('/ ');
       } else {
         navigate('/');
       }
@@ -66,45 +66,57 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2 className="login-title">Welcome Back</h2>
-
-        <div className="login-input-group">
-          <label htmlFor="email" className="login-label">Email Address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            className="login-input"
-            required
-          />
+      <div className="login-card">
+        <div className="login-header">
+          <h1 className="login-main-title">Welcome to JJE</h1>
+          <p className="login-subtitle"></p>
         </div>
+        
+        <div className="login-form-container">
+          <h2 className="login-form-title">Login In</h2>
+          <p className="login-description">Enter your credentials to access system</p>
+          
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="login-input-group">
+              <label htmlFor="email" className="login-label">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                className="login-input"
+                placeholder="admin@company.com"
+                required
+              />
+            </div>
 
-        <div className="login-input-group">
-          <label htmlFor="password" className="login-label">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            className="login-input"
-            required
-          />
+            <div className="login-input-group">
+              <label htmlFor="password" className="login-label">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                className="login-input"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            {error && <div className="login-error">{error}</div>}
+
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="login-footer">
+            <p>Don't have an account? <Link to="/register" className="login-link">Create Account</Link></p>
+          </div>
         </div>
-
-        {error && <div className="login-error">{error}</div>}
-
-        <button type="submit" className="login-button" disabled={loading}>
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-
-        <div className="login-footer">
-          Don't have an account? <a href="/register" className="login-link">Register here</a>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

@@ -25,20 +25,53 @@ const clientDetailsSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid GST number!`
     }
   },
-  mobileNumber: {
+  email: {
     type: String,
     required: true,
     trim: true,
     validate: {
       validator: function(v) {
-        return /^\d{10}$/.test(v);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       },
-      message: props => `${props.value} is not a valid mobile number!`
+      message: props => `${props.value} is not a valid email address!`
+    }
+  },
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        return /^\+?[\d\s-()]+$/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    }
+  },
+  contactPerson: {
+    type: String,
+    required: false,
+    trim: true
+  },
+  panNumber: {
+    type: String,
+    required: false,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        if (!v) return true; // Optional field
+        return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(v);
+      },
+      message: props => `${props.value} is not a valid PAN number!`
     }
   },
   address: {
     type: String,
     required: true,
+    trim: true
+  },
+  bankDetails: {
+    type: String,
+    required: false,
     trim: true
   }
 }, {

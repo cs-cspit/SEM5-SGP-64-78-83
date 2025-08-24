@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Main container */
 .about-wrapper {
   font-family: 'Inter', sans-serif;
-  color: #23272f;
-  background-color: #fafafc;
+  color: #1a202c;
+  background-color: #f7fafc;
   padding-bottom: 2rem;
   min-height: 100vh;
   box-sizing: border-box;
@@ -10,12 +12,12 @@
 
 /* Hero banner */
 .about-hero {
-  background: linear-gradient(90deg, #3C88EF 75%, #1e1e2f 100%);
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
   color: #fff;
   text-align: center;
   padding: 5rem 1.5rem 3rem;
   border-radius: 0 0 1.5rem 1.5rem;
-  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.15);
+  box-shadow: 0 10px 30px rgba(45, 55, 72, 0.15);
   margin-bottom: 2rem;
 }
 
@@ -33,7 +35,7 @@
 /* Section titles */
 .section-heading {
   font-size: 1.5rem;
-  color: #3C88EF;
+  color: #2d3748;
   font-weight: 700;
   margin: 0.5rem 0 1rem;
   text-align: center;
@@ -72,8 +74,8 @@
 .timeline-years {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #3C88EF;
-  background-color: #f4f6ff;
+  color: #2d3748;
+  background-color: #edf2f7;
   border-radius: 0.6rem;
   padding: 0.4rem 1rem;
   text-align: center; /* Center text within the year bubble */
@@ -130,7 +132,7 @@
 }
 .team-role {
   font-size: 0.95rem;
-  color: #3C88EFcc;
+  color: #718096;
   font-weight: 600;
 }
 
@@ -149,7 +151,7 @@
   font-size: 1rem;
   border-radius: 2rem;
   font-weight: 700;
-  background-color: #3C88EF;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
   color: #fff;
   text-decoration: none;
   transition: 0.2s ease;

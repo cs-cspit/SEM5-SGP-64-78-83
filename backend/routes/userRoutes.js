@@ -5,7 +5,8 @@ const {
   login, 
   getAllUsers, 
   updateUserRole,
-  getProfile 
+  getProfile,
+  deleteUser 
 } = require('../controllers/userController');
 const { auth, adminAuth } = require('../middleware/auth');
 
@@ -19,5 +20,6 @@ router.get('/profile', auth, getProfile);
 // Admin routes
 router.get('/all', adminAuth, getAllUsers);
 router.patch('/role', adminAuth, updateUserRole);
+router.delete('/:userId', adminAuth, deleteUser);
 
 module.exports = router;

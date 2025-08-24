@@ -23,7 +23,7 @@ const Home = () => {
     {/* Hero Section with Electrical Background */}
     <section className="hero-section apple-hero">
       <img
-        src="/Images/Homepage-Background.avif"
+        src="/Images/home1.jpg"
         alt="Modern electrical cables cityscape"
         className="hero-bg-img"
       />

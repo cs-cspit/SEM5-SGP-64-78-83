@@ -1,5 +1,7 @@
 const User = require("../models/User");
+const ClientDetails = require("../models/ClientDetails");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 // Generate JWT token
 const generateToken = (id) => {
@@ -161,6 +163,68 @@ exports.getProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete user (admin only)
+exports.deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prevent deleting the last admin
+    if (user.role === "admin") {
+      const adminCount = await User.countDocuments({ role: "admin" });
+      if (adminCount <= 1) {
+        return res.status(400).json({ 
+          message: "Cannot delete the last admin user" 
+        });
+      }
+    }
+
+    // Prevent users from deleting themselves
+    if (req.user._id.toString() === userId) {
+      return res.status(400).json({ 
+        message: "You cannot delete your own account" 
+      });
+    }
+
+    // If user is a client, also delete their client details
+    if (user.role === "client") {
+      console.log(`Deleting client details for user: ${userId}`);
+      try {
+        // Convert userId to ObjectId for proper matching
+        const objectId = new mongoose.Types.ObjectId(userId);
+        const deletedClientDetails = await ClientDetails.findOneAndDelete({ userId: objectId });
+        console.log('Client details found and deleted:', deletedClientDetails ? 'Yes' : 'No');
+        if (deletedClientDetails) {
+          console.log('Deleted client details for company:', deletedClientDetails.companyName);
+        } else {
+          console.log('No client details found for userId:', userId);
+        }
+      } catch (clientDeleteError) {
+        console.error('Error deleting client details:', clientDeleteError);
+      }
+    }
+
+    await User.findByIdAndDelete(userId);
+    console.log(`User deleted: ${userId}`);
+
+    res.json({ 
+      message: "User deleted successfully",
+      deletedUser: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

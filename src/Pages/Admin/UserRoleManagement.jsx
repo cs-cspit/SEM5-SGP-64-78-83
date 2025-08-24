@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import axios from 'axios';
-import AddClient from './AddClient';
+import AdminLayout from '../../Components/AdminLayout.jsx';
 import './UserRoleManagement.css';
 
 const UserRoleManagement = () => {
@@ -10,14 +10,35 @@ const UserRoleManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [showAddClient, setShowAddClient] = useState(false);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
-4
-  const handleAddClientSuccess = (data) => {
-    setUsers([...users, data.user]);
-    setSuccessMessage('Client added successfully');
-    setTimeout(() => setSuccessMessage(''), 3000);
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (!window.confirm(`Are you sure you want to delete user "${userName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('userToken');
+      await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // Remove user from local state
+      setUsers(users.filter(user => user._id !== userId));
+      setSuccessMessage('User deleted successfully');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err) {
+      console.error('Error deleting user:', err);
+      if (err.response?.status === 400) {
+        setError(err.response.data.message);
+      } else {
+        setError('Failed to delete user. Please try again.');
+      }
+      setTimeout(() => setError(''), 5000);
+    }
   };
 
   useEffect(() => {
@@ -72,63 +93,104 @@ const UserRoleManagement = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="user-role-management">
-      <div className="page-header">
-        <button onClick={() => navigate('/admin')} className="back-button">
-          ← Back to Admin Panel
-        </button>
-        <h2>User Role Management</h2>
-        <button 
-          onClick={() => setShowAddClient(true)} 
-          className="add-client-button"
-        >
-          + Add Client
-        </button>
+    <AdminLayout>
+      <div className="user-role-management">
+        <div className="page-header">
+          <div className="header-content">
+            <h1>Client Management</h1>
+            <p>Manage clients and user permissions across the system</p>
+          </div>
+          <button 
+            onClick={() => navigate('/admin/add-client')} 
+            className="add-client-button"
+          >
+            <span className="button-icon">+</span>
+            Add New User
+          </button>
+        </div>
+        
+        {successMessage && (
+          <div className="alert alert-success">
+            <span className="alert-icon">✓</span>
+            {successMessage}
+          </div>
+        )}
+        
+        {error && (
+          <div className="alert alert-error">
+            <span className="alert-icon">⚠</span>
+            {error}
+          </div>
+        )}
+        
+        <div className="users-table-container">
+          <div className="table-header">
+            <h3>All Users</h3>
+            <div className="table-stats">
+              <span>{users.length} total users</span>
+            </div>
+          </div>
+          
+          <div className="users-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>User Information</th>
+                  <th>Email Address</th>
+                  <th>Current Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user._id}>
+                    <td>
+                      <div className="user-info">
+                        <div className="user-avatar">
+                          {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                        </div>
+                        <div className="user-details">
+                          <div className="user-name">{user.name}</div>
+                          <div className="user-id">ID: {user._id?.slice(-8)}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="email-cell">{user.email}</div>
+                    </td>
+                    <td>
+                      <span className={`role-badge role-${user.role}`}>
+                        {user.role?.charAt(0)?.toUpperCase() + user.role?.slice(1)}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <select
+                          value={user.role}
+                          onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                          className="role-select"
+                        >
+                          <option value="user">User</option>
+                          <option value="client">Client</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                        <button
+                          onClick={() => handleDeleteUser(user._id, user.name)}
+                          className="delete-button"
+                          title={`Delete ${user.name}`}
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {error && <div className="error-message">{error}</div>}
-      
-      {showAddClient && (
-        <AddClient
-          onClose={() => setShowAddClient(false)}
-          onSuccess={handleAddClientSuccess}
-        />
-      )}
-      
-      <div className="users-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Current Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
-                  <select
-                    value={user.role}
-                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                    className="role-select"
-                  >
-                    <option value="user">User</option>
-                    <option value="client">Client</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    </AdminLayout>
   );
 };
 

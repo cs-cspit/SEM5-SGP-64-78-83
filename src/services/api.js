@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 // Create axios instance
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -66,4 +66,36 @@ export const submitContactForm = async (contactData) => {
   } catch (error) {
     throw error.response?.data?.message || 'Something went wrong';
   }
+};
+
+// Billing APIs (admin)
+export const getNextInvoiceNumber = async () => {
+  const response = await api.get('/bills/next-invoice');
+  return response.data;
+};
+
+export const createBill = async (billData) => {
+  const response = await api.post('/bills', billData);
+  return response.data;
+};
+
+export const getAllBills = async () => {
+  const response = await api.get('/bills');
+  return response.data;
+};
+
+export const updateBillStatus = async (billId, status) => {
+  const response = await api.patch(`/bills/${billId}/status`, { status });
+  return response.data;
+};
+
+// Client APIs (admin)
+export const getAllClients = async () => {
+  const response = await api.get('/clients');
+  return response.data;
+};
+
+export const getClientDetails = async (userId) => {
+  const response = await api.get(`/clients/${userId}`);
+  return response.data;
 };

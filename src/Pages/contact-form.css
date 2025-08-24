@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Centered form container with shadow and rounded corners */
 body{
-  background: linear-gradient(135deg, #f0f2f5 0%, #e0e3e7 100%);
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
 }
 .contact-form {
   max-width: 650px;
@@ -8,7 +10,7 @@ body{
   padding: 2.5rem 3rem;
   background: #ffffff;
   border-radius: 1.25rem;
-  box-shadow: 0 10px 30px rgba(60, 136, 239, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(45, 55, 72, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
   font-family: 'Inter', sans-serif;
 }
 
@@ -22,7 +24,7 @@ body{
   display: block;
   margin-bottom: 0.6rem;
   font-weight: 600;
-  color: #4a658a;
+  color: #4a5568;
   font-size: 0.95rem;
 }
 
@@ -40,8 +42,8 @@ body{
 /* Input focus state with glow effect */
 .form-input:focus {
   outline: none;
-  border-color: #3C88EF;
-  box-shadow: 0 0 0 3px rgba(60, 136, 239, 0.2);
+  border-color: #2d3748;
+  box-shadow: 0 0 0 3px rgba(45, 55, 72, 0.2);
 }
 
 /* Message textarea sizing */
@@ -66,8 +68,8 @@ body{
   display: block; /* Make it a block element to center with margin auto */
   margin: 0 auto; /* Center the button */
   padding: 1rem 2.5rem; /* More padding for a more prominent button */
-  /* Slightly adjusted gradient for depth */
-  background: linear-gradient(90deg, #3C88EF 0%, #2f6fd8 100%);
+  /* Admin theme gradient for consistency */
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
   color: white;
   border: none;
   border-radius: 0.6rem; /* Consistent border-radius with inputs */
@@ -81,14 +83,14 @@ body{
 /* Hover state for submit button */
 .submit-button:hover {
   transform: translateY(-2px); /* Slightly more lift on hover */
-  box-shadow: 0 8px 20px rgba(60, 136, 239, 0.3); /* Stronger shadow on hover */
-  background: linear-gradient(90deg, #2f6fd8 0%, #3C88EF 100%); /* Slight gradient shift on hover */
+  box-shadow: 0 8px 20px rgba(45, 55, 72, 0.3); /* Stronger shadow on hover */
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); /* Slight gradient shift on hover */
 }
 
 /* Active state for submit button */
 .submit-button:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(60, 136, 239, 0.15); /* Softer shadow on active */
+  box-shadow: 0 4px 12px rgba(45, 55, 72, 0.15); /* Softer shadow on active */
 }
 
 /* Responsive adjustments */
