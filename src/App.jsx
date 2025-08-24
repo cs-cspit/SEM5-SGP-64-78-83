@@ -7,7 +7,7 @@ import Footer from './Components/Footer';
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, isAdmin } = useAuth();
-  
+
   if (!user) {
     return <Navigate to="/login" />;
   }
@@ -34,6 +34,7 @@ import UserRoleManagement from './Pages/Admin/UserRoleManagement';
 import BillGeneration from './Pages/Admin/BillGeneration';
 import AddClient from './Pages/Admin/AddClient';
 import InvoiceList from './Pages/Admin/InvoiceList';
+import PaymentManagement from './Pages/Admin/PaymentManagement';
 
 function App() {
   return (
@@ -45,50 +46,58 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<ContactForm />} />
-          <Route path="/register" element={<Register/>}/>
+          <Route path="/register" element={<Register />} />
           <Route path="/services/wiring" element={<WiringExcellencePage />} />
           <Route path="/services/maintenance" element={<ProactiveMaintenancePage />} />
           <Route path="/services/havells" element={<HavellsServiceCenterPage />} />
           <Route path="/services/industrial" element={<IndustrialSetupPage />} />
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
               <ProtectedRoute adminOnly>
                 <AdminPanel />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/user-roles" 
+          <Route
+            path="/admin/user-roles"
             element={
               <ProtectedRoute adminOnly>
                 <UserRoleManagement />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/bill" 
+          <Route
+            path="/admin/bill"
             element={
               <ProtectedRoute adminOnly>
                 <BillGeneration />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/add-client" 
+          <Route
+            path="/admin/add-client"
             element={
               <ProtectedRoute adminOnly>
                 <AddClient />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/invoices" 
+          <Route
+            path="/admin/invoices"
             element={
               <ProtectedRoute adminOnly>
                 <InvoiceList />
               </ProtectedRoute>
-            } 
+            }
+          />
+          <Route
+            path="/admin/payments"
+            element={
+              <ProtectedRoute adminOnly>
+                <PaymentManagement />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </main>
