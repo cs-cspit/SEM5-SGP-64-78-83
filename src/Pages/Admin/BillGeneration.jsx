@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createBill, getNextInvoiceNumber, getAllClients } from '../../services/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createBill, getNextInvoiceNumber, getAllClients, getBillById, updateBill } from '../../services/api';
 import AdminLayout from '../../Components/AdminLayout.jsx';
 import './BillGeneration.css';
 
 const BillGeneration = () => {
     const navigate = useNavigate();
+    const { billId } = useParams();
+    const isEditMode = Boolean(billId);
+    
     const [loading, setLoading] = useState(false);
     const [nextInvoiceNo, setNextInvoiceNo] = useState(null);
     const [clients, setClients] = useState([]);
     const [selectedClient, setSelectedClient] = useState(null);
+    const [editingBill, setEditingBill] = useState(null);
     
     const [formData, setFormData] = useState({
         companyName: '',
@@ -34,19 +38,28 @@ const BillGeneration = () => {
     });
 
     useEffect(() => {
-        fetchNextInvoiceNumber();
+        if (isEditMode && billId) {
+            // Load bill data for editing
+            loadBillForEdit();
+        } else {
+            // Create mode - get next invoice number
+            fetchNextInvoiceNumber();
+        }
+        
         fetchClients();
         
-        // Set default due date to 30 days from today
-        const today = new Date();
-        const defaultDueDate = new Date(today);
-        defaultDueDate.setDate(defaultDueDate.getDate() + 30);
-        
-        setFormData(prev => ({
-            ...prev,
-            paymentDueDate: defaultDueDate.toISOString().split('T')[0]
-        }));
-    }, []);
+        // Set default due date to 30 days from today (only for create mode)
+        if (!isEditMode) {
+            const today = new Date();
+            const defaultDueDate = new Date(today);
+            defaultDueDate.setDate(defaultDueDate.getDate() + 30);
+            
+            setFormData(prev => ({
+                ...prev,
+                paymentDueDate: defaultDueDate.toISOString().split('T')[0]
+            }));
+        }
+    }, [billId, isEditMode]);
 
     const fetchNextInvoiceNumber = async () => {
         try {
@@ -65,6 +78,49 @@ const BillGeneration = () => {
             console.error('Error fetching clients:', error);
         }
     };
+
+    const loadBillForEdit = async () => {
+        try {
+            setLoading(true);
+            const response = await getBillById(billId);
+            const bill = response.data;
+            setEditingBill(bill);
+
+            // Pre-fill the form with bill data
+            setFormData({
+                companyName: bill.companyName || '',
+                address: bill.address || '',
+                workingSite: bill.workingSite || '',
+                clientName: bill.clientName || '',
+                orderNumber: bill.orderNumber || '',
+                date: bill.date ? new Date(bill.date).toISOString().split('T')[0] : '',
+                paymentDueDate: bill.paymentDueDate ? new Date(bill.paymentDueDate).toISOString().split('T')[0] : '',
+                companyGst: bill.companyGst || '',
+                status: bill.status || 'pending',
+                products: bill.products || []
+            });
+
+            setLoading(false);
+        } catch (error) {
+            console.error('Error loading bill for edit:', error);
+            setLoading(false);
+            // Navigate back to invoice list if bill not found
+            navigate('/admin/invoices');
+        }
+    };
+
+    // Effect to handle client selection after clients are loaded in edit mode
+    useEffect(() => {
+        if (isEditMode && editingBill && clients.length > 0) {
+            const matchingClient = clients.find(client => 
+                client.companyName === editingBill.companyName && 
+                client.gstNumber === editingBill.companyGst
+            );
+            if (matchingClient) {
+                setSelectedClient(matchingClient);
+            }
+        }
+    }, [clients, editingBill, isEditMode]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -197,14 +253,21 @@ const BillGeneration = () => {
             const totals = calculateTotals();
             const billData = {
                 ...formData,
-                ...totals,
-                status: 'pending' // Default status for new bills
+                ...totals
             };
 
-            await createBill(billData);
-            navigate('/admin');
+            if (isEditMode) {
+                // Update existing bill
+                await updateBill(billId, billData);
+                navigate('/admin/invoices');
+            } else {
+                // Create new bill with default pending status
+                billData.status = 'pending';
+                await createBill(billData);
+                navigate('/admin/invoices');
+            }
         } catch (error) {
-            console.error('Error creating bill:', error);
+            console.error('Error saving bill:', error);
         } finally {
             setLoading(false);
         }
@@ -215,7 +278,19 @@ const BillGeneration = () => {
     return (
         <AdminLayout>
             <div className="bill-generation-container">
-                <h2>Generate New Invoice</h2>
+                <h2>{isEditMode ? 'Edit Invoice' : 'Generate New Invoice'}</h2>
+                {isEditMode && editingBill && (
+                    <div className="edit-mode-indicator">
+                        <span className="edit-badge">Editing Invoice #{editingBill.invoiceNo}</span>
+                    </div>
+                )}
+                
+                {loading && isEditMode ? (
+                    <div className="loading-state">
+                        <div className="loading-spinner"></div>
+                        <p>Loading invoice data...</p>
+                    </div>
+                ) : (
                 <div className="bill-form">
                     <form onSubmit={handleSubmit}>
                     <div className="form-grid">
@@ -515,10 +590,11 @@ const BillGeneration = () => {
                     </div>
 
                     <button type="submit" className="submit-btn" disabled={loading || formData.products.length === 0}>
-                        {loading ? 'Creating Invoice...' : 'Generate Invoice'}
+                        {loading ? (isEditMode ? 'Updating Invoice...' : 'Creating Invoice...') : (isEditMode ? 'Update Invoice' : 'Generate Invoice')}
                     </button>
                 </form>
             </div>
+                )}
         </div>
         </AdminLayout>
     );

@@ -72,6 +72,10 @@ const InvoiceList = () => {
     return 'paid';
   };
 
+  const handleEditInvoice = (invoiceId) => {
+    navigate(`/admin/bill/edit/${invoiceId}`);
+  };
+
   const getInvoiceStatus = (invoice) => {
     const currentDate = new Date();
     const dueDate = invoice.paymentDueDate 
@@ -299,7 +303,7 @@ const InvoiceList = () => {
                           </button>
                           <button 
                             className="action-button edit"
-                            onClick={() => console.log('Edit invoice:', invoice._id)}
+                            onClick={() => handleEditInvoice(invoice._id)}
                             title="Edit Invoice"
                           >
                             ✏️

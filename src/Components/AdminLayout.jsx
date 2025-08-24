@@ -78,11 +78,18 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <div className={`admin-sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <div className="logo-icon">📋</div>
+          
+          <button 
+              className="sidebar-toggle"
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            >
+              ☰
+            </button>
+            <div className="sidebar-logo">
+            {/* <div className="logo-icon">📋</div> */}
             <div className="logo-text">
-              <h3>Invoice Pro</h3>
-              <p>Management System</p>
+              <h3>Admin</h3>
+              {/* <p>Management System</p> */}
             </div>
           </div>
         </div>
@@ -130,13 +137,13 @@ const AdminLayout = ({ children }) => {
       <div className="admin-main">
         <header className="admin-header">
           <div className="header-left">
-            <button 
+            {/* <button 
               className="sidebar-toggle"
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             >
               ☰
-            </button>
-            <h1>Invoice Management System</h1>
+            </button> */}
+            {/* <h1>Invoice Management System</h1> */}
           </div>
           <div className="header-right">
             <div className="user-info">

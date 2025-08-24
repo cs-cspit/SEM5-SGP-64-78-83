@@ -45,6 +45,38 @@ exports.getNextInvoiceNumber = async (req, res) => {
     }
 };
 
+// Update bill
+exports.updateBill = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Validate status if provided
+        if (req.body.status) {
+            const validStatuses = ['draft', 'pending', 'sent', 'viewed', 'paid', 'partially_paid', 'overdue', 'cancelled', 'refunded'];
+            if (!validStatuses.includes(req.body.status)) {
+                return res.status(400).json({ 
+                    success: false, 
+                    error: 'Invalid status. Must be one of: ' + validStatuses.join(', ') 
+                });
+            }
+        }
+
+        const bill = await Bill.findByIdAndUpdate(
+            id, 
+            req.body, 
+            { new: true, runValidators: true }
+        );
+
+        if (!bill) {
+            return res.status(404).json({ success: false, error: 'Bill not found' });
+        }
+
+        res.status(200).json({ success: true, data: bill });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};
+
 // Update bill status
 exports.updateBillStatus = async (req, res) => {
     try {

@@ -84,6 +84,16 @@ export const getAllBills = async () => {
   return response.data;
 };
 
+export const getBillById = async (billId) => {
+  const response = await api.get(`/bills/${billId}`);
+  return response.data;
+};
+
+export const updateBill = async (billId, billData) => {
+  const response = await api.put(`/bills/${billId}`, billData);
+  return response.data;
+};
+
 export const updateBillStatus = async (billId, status) => {
   const response = await api.patch(`/bills/${billId}/status`, { status });
   return response.data;

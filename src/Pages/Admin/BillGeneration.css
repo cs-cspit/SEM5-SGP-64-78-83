@@ -40,7 +40,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 3rem 0;
+  margin: 0 0 1rem 0;
   line-height: 1.1;
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
@@ -49,6 +49,25 @@
   background-clip: text;
   text-align: center;
   position: relative;
+}
+
+/* Edit Mode Indicator */
+.edit-mode-indicator {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.edit-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #fef5e7 0%, #fbd38d 100%);
+  color: #744210;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: 2px solid #d69e2e;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.025em;
+  box-shadow: var(--shadow-md);
 }
 
 .bill-generation-container h2::after {

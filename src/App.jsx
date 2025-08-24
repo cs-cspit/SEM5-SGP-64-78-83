@@ -75,6 +75,14 @@ function App() {
             } 
           />
           <Route 
+            path="/admin/bill/edit/:billId" 
+            element={
+              <ProtectedRoute adminOnly>
+                <BillGeneration />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/admin/add-client" 
             element={
               <ProtectedRoute adminOnly>
