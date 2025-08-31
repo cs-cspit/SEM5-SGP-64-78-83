@@ -107,26 +107,26 @@ const ContactForm = () => {
               </p>
               
               {/* Contact Info */}
-              <div className="contact-info">
-                <div className="contact-item">
-                  <div className="contact-icon">📍</div>
-                  <div className="contact-details">
+              <div className="contact-page-info">
+                <div className="contact-page-item">
+                  <div className="contact-page-icon">📍</div>
+                  <div className="contact-page-details">
                     <h4>Location</h4>
                     <p>Jay Jalaram Electrical, 43, Junajin Hanuman Tekri Opp ramji temple, Rander, Surat-395005. </p>
                   </div>
                 </div>
                 
-                <div className="contact-item">
-                  <div className="contact-icon">✉️</div>
-                  <div className="contact-details">
+                <div className="contact-page-item">
+                  <div className="contact-page-icon">✉️</div>
+                  <div className="contact-page-details">
                     <h4>Email us</h4>
                     <p>jayjalaram@gmail.com<br/>info@jayjalaram-electric.com</p>
                   </div>
                 </div>
                 
-                <div className="contact-item">
-                  <div className="contact-icon">📞</div>
-                  <div className="contact-details">
+                <div className="contact-page-item">
+                  <div className="contact-page-icon">📞</div>
+                  <div className="contact-page-details">
                     <h4>Call us</h4>
                     <p>General Information : +91 79030 89305<br/>
                     Emergency Services : +91 93275 84221<br/>
