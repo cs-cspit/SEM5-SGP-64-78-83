@@ -54,6 +54,13 @@ const Header = () => {
           Home
         </Link>
         <Link
+          to="/works"
+          className={location.pathname === '/works' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          Works
+        </Link>
+        <Link
           to="/about"
           className={location.pathname === '/about' ? 'active' : ''}
           onClick={closeMenu}

@@ -2,9 +2,9 @@
 
 /* Main container */
 .about-wrapper {
-  font-family: 'Inter', sans-serif;
-  color: #1a202c;
-  background-color: #f7fafc;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #ffffff;
+  background-color: #1a1a1a;
   padding-bottom: 2rem;
   min-height: 100vh;
   box-sizing: border-box;
@@ -12,57 +12,115 @@
 
 /* Hero banner */
 .about-hero {
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-  color: #fff;
+  background: #ffffff;
+  color: #1a1a1a;
   text-align: center;
   padding: 5rem 1.5rem 3rem;
   border-radius: 0 0 1.5rem 1.5rem;
-  box-shadow: 0 10px 30px rgba(45, 55, 72, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .about-title {
-  font-size: 2.3rem;
+  font-size: 2.5rem;
   font-weight: 800;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .about-tagline {
   font-size: 1.2rem;
   font-weight: 500;
   letter-spacing: 0.05em;
+  color: #ccc;
+  position: relative;
+  z-index: 2;
 }
 
 /* Section titles */
 .section-heading {
-  font-size: 1.5rem;
-  color: #2d3748;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
-  margin: 0.5rem 0 1rem;
+  margin: 0.5rem 0 1.5rem;
   text-align: center;
+  position: relative;
 }
 
 /* Content section */
 .about-section-1 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: #fff;
-  box-shadow: 0 3px 10px rgba(60, 136, 239, 0.08);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 3px 20px rgba(255, 107, 0, 0.1);
   border-radius: 1rem;
-  padding: 2rem 20rem;
-  gap: 15rem;
-  margin: 0 2rem 2rem; /* Add horizontal margin to the section itself */
+  padding: 3rem;
+  margin: 0 2rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
+
 .about-history,
 .about-mission {
-  flex: 1 1 280px; /* Allow items to grow and shrink, with a base of 280px */
-  max-width: 450px; /* Max width for individual columns */
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  background: rgba(26, 26, 26, 0.7);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 107, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.about-history:hover,
+.about-mission:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.15);
+}
+
+.about-history h3,
+.about-mission h3 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-history h3::after,
+.about-mission h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b00, #ff8c00);
+  border-radius: 2px;
+}
+
 .about-history p,
 .about-mission p {
   font-size: 1.05rem;
-  color: #222831e6;
-  line-height: 1.6;
+  color: #ccc;
+  line-height: 1.8;
+  text-align: justify;
+  letter-spacing: 0.01em;
+  margin-bottom: 1rem;
 }
 .about-timeline {
   display: flex;
@@ -72,68 +130,106 @@
   justify-content: center; /* Center timeline items */
 }
 .timeline-years {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #2d3748;
-  background-color: #edf2f7;
-  border-radius: 0.6rem;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   padding: 0.4rem 1rem;
-  text-align: center; /* Center text within the year bubble */
+  text-align: center;
+  position: relative;
 }
+
+.timeline-years::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b00, #ff8c00);
+  border-radius: 2px;
+}
+
 .timeline-label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #3a4c6fbb;
-  text-align: center; /* Center label text */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ccc;
+  text-align: center;
+  margin-top: 0.5rem;
+  letter-spacing: 0.02em;
 }
 
 /* Team Section */
 .about-team-section {
-  background-color: #f8faff;
+  background: #ffffff;
   border-radius: 1rem;
   padding: 3rem 1rem 2rem;
-  box-shadow: 0 3px 10px rgba(60, 136, 239, 0.07);
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin: 0 2rem 2rem; /* Add horizontal margin */
+  margin: 0 2rem 2rem;
 }
+
 .team-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center team cards */
-  gap: 2rem;
+  justify-content: center;
+  gap: 2.5rem;
   margin-top: 2rem;
 }
+
 .team-card {
-  background-color: #fff;
+  background: rgba(26, 26, 26, 0.95);
   border-radius: 1rem;
-  box-shadow: 0 4px 14px rgba(60, 136, 239, 0.12);
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
   padding: 1.5rem;
-  width: 200px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 107, 0, 0.1);
 }
+
 .team-card:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 8px 28px rgba(24, 62, 169, 0.12);
+  transform: translateY(-10px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 107, 0, 0.2),
+    0 0 30px rgba(255, 107, 0, 0.15);
 }
+
 .team-card img {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 15px;
   object-fit: cover;
-  margin-bottom: 0.8rem;
-  box-shadow: 0 3px 14px rgba(168, 195, 222, 0.18);
+  margin-bottom: 1.2rem;
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
+  transition: transform 0.3s ease;
 }
+
+.team-card:hover img {
+  transform: scale(1.05);
+}
+
 .team-card h4 {
-  font-size: 1.1rem;
-  margin-bottom: 0.3rem;
-}
-.team-role {
-  font-size: 0.95rem;
-  color: #718096;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 600;
+}
+
+.team-role {
+  font-size: 1rem;
+  color: #ccc;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 /* Call To Action */
@@ -147,19 +243,21 @@
   margin-bottom: 1.5rem;
 }
 .btn.big-btn {
-  padding: 0.9rem 2rem;
-  font-size: 1rem;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
   border-radius: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  font-weight: 600;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
   color: #fff;
   text-decoration: none;
-  transition: 0.2s ease;
-  display: inline-block; /* Ensure padding works correctly */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
 }
+
 .btn.big-btn:hover {
-  background-color: #2563eb;
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
 }
 
 /* Animations */
@@ -214,18 +312,24 @@
   }
 
   .about-section-1 {
-    flex-direction: column; /* Stack story and mission */
-    padding: 2rem 1.5rem; /* More reasonable padding */
-    margin: 0 1rem 2rem; /* Adjust horizontal margin */
+    grid-template-columns: 1fr; /* Stack story and mission */
+    padding: 2rem 1.5rem;
+    margin: 0 1rem 2rem;
+    gap: 2rem;
   }
   .about-history,
   .about-mission {
-    max-width: 100%; /* Allow them to take full width */
-    text-align: center; /* Center text for stacked sections */
+    width: 100%;
+    padding: 1.5rem;
   }
-  .about-history p,
-  .about-mission p {
-    text-align: left; /* Keep paragraph text left-aligned within its container */
+  .about-history h3,
+  .about-mission h3 {
+    text-align: center;
+  }
+  .about-history h3::after,
+  .about-mission h3::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
   .about-timeline {
     justify-content: center; /* Ensure timeline items are centered */

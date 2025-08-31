@@ -15,11 +15,12 @@ const About = () => (
     {/* Company Story & Mission */}
     <section className="about-section-1 fade-left">
       <div className="about-history">
-        <h3 className="section-heading">Our Story</h3>
+        <h3>Our Story</h3>
         <p>
-          Since our founding in 2009, <strong>Jay Jalaram Electricals</strong> has empowered businesses and homes
-          across the region with professional, reliable, and safe electrical solutions. Our passion for
-          cutting-edge technology and customer satisfaction drives every project, big or small.
+          Founded in 2009, <strong>Jay Jalaram Electricals</strong> has grown from a small local enterprise to become one of the region's most trusted names in electrical solutions. Our journey began with a simple vision: to provide exceptional electrical services that prioritize safety, reliability, and innovation.
+        </p>
+        <p>
+          Over the years, we've evolved with the industry, embracing new technologies and sustainable practices while maintaining our core values of integrity and excellence. Our team of certified professionals has successfully completed projects across residential, commercial, and industrial sectors, earning a reputation for precision and professionalism.
         </p>
         <div className="about-timeline">
           <div>
@@ -36,11 +37,20 @@ const About = () => (
           </div>
         </div>
       </div>
-      <div className="about-mission fade-in">
-        <h3 className="section-heading">Our Mission</h3>
+      <div className="about-mission">
+        <h3>Our Mission</h3>
         <p>
-          To deliver innovative, future-ready electrical solutions with uncompromising quality, safety,
-          and technical excellence—always aiming to exceed client expectations.
+          Our mission is to be the leading provider of innovative and sustainable electrical solutions, setting industry standards for quality, safety, and technical excellence. We are committed to:
+        </p>
+        <p>
+          • Delivering cutting-edge electrical solutions that meet tomorrow's challenges<br/>
+          • Maintaining the highest safety standards in every project we undertake<br/>
+          • Providing exceptional customer service and support<br/>
+          • Investing in our team's continuous professional development<br/>
+          • Contributing to a more sustainable and energy-efficient future
+        </p>
+        <p>
+          Through our dedication to these principles, we aim to not just meet but exceed our clients' expectations, ensuring their electrical systems are efficient, reliable, and future-ready.
         </p>
       </div>
     </section>
@@ -57,21 +67,21 @@ const About = () => (
           </div>
         </div>
         <div className="team-card">
-          {/* <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Viral Patel, Operations Lead" /> */}
+          <img src="/Images/Krunal.jpg" alt="krunal , Operations Lead" />
           <div>
-            <h4>Kurnal Sailor</h4>
+            <h4>Krunal Sailor</h4>
             <span className="team-role">Site Engineer</span>
           </div>
         </div>
         <div className="team-card">
-          {/* <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="Megha Shah, Senior Engineer" /> */}
+          {<img src="/Images/Rohit.jpg" alt="Rohit patil, Senior Engineer" />}
           <div>
             <h4>Rohit Patil</h4>
             <span className="team-role">Senior Electrician</span>
           </div>
         </div>
         <div className="team-card">
-          {/* <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Jatin Mehta, Support Manager" /> */}
+          {<img src="/Images/kevin.jpg" alt="kevin, Support Manager" /> }
           <div>
             <h4>Kevin Sailor</h4>
             <span className="team-role">Jr. Engineer</span>

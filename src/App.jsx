@@ -24,6 +24,7 @@ import Home from './Pages/Home';
 import About from './Pages/about';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
+import Works from './Pages/Works';
 import ContactForm from './Pages/ContactForm';
 import WiringExcellencePage from './Pages/WiringExcellencePage';
 import ProactiveMaintenancePage from './Pages/ProactiveMaintenancePage';
@@ -43,6 +44,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/works" element={<Works />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<ContactForm />} />
