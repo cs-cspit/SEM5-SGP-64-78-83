@@ -7,13 +7,14 @@
 }
 
 .modern-footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff9933' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff9933' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    repeat;
   pointer-events: none;
 }
 
@@ -123,7 +124,7 @@
 }
 
 .link-group h4::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -160,9 +161,15 @@
 }
 
 .contact-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex !important;
+  flex-direction: row !important;
+  display: flex !important;
+  flex-direction: row !important;
   gap: 30px;
+  width: 100%;
+  align-items: stretch;
+  width: 100%;
+  align-items: stretch;
 }
 
 .contact-item {
@@ -174,6 +181,10 @@
   border-radius: 15px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 153, 51, 0.05);
+  min-width: 0;
+  flex: 1;  /* Each item takes equal width */
+  min-width: 0;
+  flex: 1;
 }
 
 .contact-item:hover {
@@ -231,10 +242,16 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .footer-links {
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+  }
+
+  .contact-info {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px;
   }
 }
 
@@ -242,27 +259,28 @@
   .modern-footer {
     padding: 40px 0 20px;
   }
-  
+
   .footer-brand h3 {
     font-size: 24px;
   }
-  
+
   .footer-links {
     grid-template-columns: 1fr;
     gap: 25px;
   }
-  
+
   .contact-info {
-    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 20px;
   }
-  
+
   .footer-bottom {
     flex-direction: column;
     text-align: center;
     gap: 10px;
   }
-  
+
   .footer-contact {
     padding: 20px;
   }
@@ -272,21 +290,21 @@
   .modern-footer .container {
     padding: 0 15px;
   }
-  
+
   .footer-brand {
     text-align: center;
   }
-  
+
   .footer-brand p {
     max-width: 100%;
   }
-  
+
   .social-link {
     width: 40px;
     height: 40px;
     font-size: 16px;
   }
-  
+
   .contact-item {
     padding: 15px;
   }

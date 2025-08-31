@@ -671,6 +671,7 @@
     justify-content: center;
   }
 
+
   .unsaved-changes-section {
     flex-direction: column;
     gap: 16px;
@@ -687,3 +688,6 @@
     text-align: center;
   }
 }
+
+
+
