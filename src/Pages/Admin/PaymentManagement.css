@@ -1,7 +1,23 @@
 /* PaymentManagement.css */
+:root {
+  --primary-dark: #1a202c;
+  --secondary-dark: #2d3748;
+  --accent-grey: #718096;
+  --light-grey: #f7fafc;
+  --border-light: #e2e8f0;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .payment-management {
   padding: 24px;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -52,7 +68,113 @@
   font-weight: bold;
 }
 
-/* Payment Stats Grid */
+/* Payment Management Card */
+.payment-management-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+  transition: var(--transition);
+  margin-top: 2rem;
+}
+
+.payment-management-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--border-light);
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.02) 0%, rgba(26, 32, 44, 0.05) 100%);
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.card-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-box input {
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 280px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 4px rgba(26, 32, 44, 0.1);
+  transform: translateY(-1px);
+}
+
+.search-box input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.status-filter {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 140px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-filter:hover {
+  border-color: #cbd5e0;
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  transform: translateY(-1px);
+}
+
+.status-filter:focus {
+  outline: none;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 4px rgba(26, 32, 44, 0.1);
+}
+
+/* Payment Stats Grid (keep existing styles) */
 .payment-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

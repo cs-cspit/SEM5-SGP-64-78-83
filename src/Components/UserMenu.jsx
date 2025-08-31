@@ -10,10 +10,7 @@ const UserMenu = () => {
   const navigate = useNavigate();
 
   const getInitials = (name) => {
-    return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
+    return name[0]
       .toUpperCase();
   };
 
@@ -83,7 +80,7 @@ const UserMenu = () => {
               onClick={() => { navigate('/profile'); setIsOpen(false); }}
               title="View Profile Details"
             >
-              Profile Details
+              <span>Profile Details</span>
             </button>
             {isAdmin() ? (
               <button 
@@ -91,14 +88,14 @@ const UserMenu = () => {
                 title="Admin Dashboard"
                 className="admin-button"
               >
-                Admin Dashboard
+                <span>Admin Dashboard</span>
               </button>
             ) : (
               <button 
                 onClick={() => { navigate('/dashboard'); setIsOpen(false); }}
                 title="Go to Dashboard"
               >
-                My Dashboard
+                <span>My Dashboard</span>
               </button>
             )}
             <button 
@@ -106,7 +103,7 @@ const UserMenu = () => {
               className="logout-button"
               title="Sign Out"
             >
-              Sign Out
+              <span>Sign Out</span>
             </button>
           </div>
         </div>

@@ -254,31 +254,24 @@ const PaymentManagement = () => {
                     </div>
                 </div>
 
-                {/* Payment History Section */}
-                <div className="payment-history-section">
-                    <div className="section-header">
-                        <h3>Payment History</h3>
-                        <button className="export-btn" onClick={exportToCSV}>
-                            <span className="btn-icon">⬇</span>
-                            Export CSV
-                        </button>
-                    </div>
-
-                    <div className="filters-row">
-                        <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="Search payments..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="search-input"
-                            />
-                        </div>
-                        <div className="status-filter">
+                {/* Payment Management Card */}
+                <div className="payment-management-card">
+                    <div className="card-header">
+                        <h3>Payment Management</h3>
+                        <div className="header-controls">
+                            <div className="search-box">
+                                <span className="search-icon">🔍</span>
+                                <input
+                                    type="text"
+                                    placeholder="Search payments..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
                             <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
-                                className="status-select"
+                                className="status-filter"
                             >
                                 <option value="all">All Status</option>
                                 <option value="pending">Pending</option>
@@ -290,7 +283,6 @@ const PaymentManagement = () => {
                         </div>
                     </div>
 
-                    {/* Payment Table */}
                     <div className="payment-table-container">
                         {loading ? (
                             <div className="loading-state">Loading payments...</div>
