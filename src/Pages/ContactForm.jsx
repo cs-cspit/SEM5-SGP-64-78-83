@@ -285,13 +285,13 @@ const ContactForm = () => {
           </div>
         </div>
 
-        {/* Bottom CTA */}
+        {/* Bottom CTA
         <div className="bottom-cta">
           <div className="cta-content">
             <h3>Contact us today to discover premium electrical solutions tailored to your needs!</h3>
             <button className="cta-button">CONTACT OUR SALES</button>
           </div>
-        </div>
+        </div> */}
       </section>
     </div>
   );

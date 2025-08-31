@@ -301,27 +301,6 @@ const PaymentManagement = () => {
                     </div>
                 )}
 
-                {/* Save/Cancel Changes Section */}
-                {hasUnsavedChanges && (
-                    <div className="unsaved-changes-section">
-                        <div className="changes-info">
-                            <span className="changes-icon">⚠️</span>
-                            <div className="changes-text">
-                                <strong>You have {Object.keys(pendingChanges).length} unsaved changes</strong>
-                                <p>Click "Save Changes" to apply or "Cancel" to discard changes</p>
-                            </div>
-                        </div>
-                        <div className="changes-actions">
-                            <button className="cancel-btn" onClick={cancelChanges}>
-                                Cancel Changes
-                            </button>
-                            <button className="save-btn" onClick={saveAllChanges}>
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                )}
-
                 {/* Payment Stats Cards */}
                 <div className="payment-stats-grid">
                     <div className="stat-card total-paid">
@@ -360,6 +339,27 @@ const PaymentManagement = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Save/Cancel Changes Section - positioned between stats and history */}
+                {hasUnsavedChanges && (
+                    <div className="unsaved-changes-section">
+                        <div className="changes-info">
+                            <span className="changes-icon">⚠️</span>
+                            <div className="changes-text">
+                                <strong>You have {Object.keys(pendingChanges).length} unsaved changes</strong>
+                                <p>Click "Save Changes" to apply or "Cancel" to discard changes</p>
+                            </div>
+                        </div>
+                        <div className="changes-actions">
+                            <button className="cancel-btn" onClick={cancelChanges}>
+                                Cancel Changes
+                            </button>
+                            <button className="save-btn" onClick={saveAllChanges}>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Payment History Section */}
                 <div className="payment-history-section">
