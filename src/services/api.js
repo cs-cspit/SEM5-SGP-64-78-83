@@ -68,6 +68,36 @@ export const submitContactForm = async (contactData) => {
   }
 };
 
+// Get user's own contact submissions
+export const getUserContacts = async () => {
+  try {
+    const response = await api.get("/contact/my-contacts");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Something went wrong";
+  }
+};
+
+// Admin: Get all contact submissions
+export const getAllContactSubmissions = async () => {
+  try {
+    const response = await api.get("/contact/all");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Something went wrong";
+  }
+};
+
+// Admin: Update contact status
+export const updateContactStatus = async (contactId, status) => {
+  try {
+    const response = await api.patch(`/contact/${contactId}/status`, { status });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Something went wrong";
+  }
+};
+
 // Billing APIs (admin)
 export const getNextInvoiceNumber = async () => {
   const response = await api.get("/bills/next-invoice");

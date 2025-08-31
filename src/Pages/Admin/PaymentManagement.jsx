@@ -296,6 +296,7 @@ const PaymentManagement = () => {
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Due Date</th>
+                                        {/* <th>Method</th> */}
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -318,6 +319,11 @@ const PaymentManagement = () => {
                                                 <td>{formatCurrency(bill.totalAmount)}</td>
                                                 <td>{formatDate(bill.date)}</td>
                                                 <td>{formatDate(bill.paymentDueDate)}</td>
+                                                {/* <td>
+                                                    <span className="payment-method">
+                                                        {bill.status === 'paid' ? 'Bank Transfer' : '-'}
+                                                    </span>
+                                                </td> */}
                                                 <td>
                                                     <span className={`status-badge ${getStatusBadgeClass(bill.status)}`}>
                                                         {bill.status || 'pending'}

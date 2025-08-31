@@ -168,6 +168,8 @@
 }
 
 .contact-item {
+   min-width: 0;
+  flex: 1;  /* Each item takes equal width */
   display: flex;
   align-items: flex-start;
   gap: 15px;
@@ -176,8 +178,6 @@
   border-radius: 15px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 153, 51, 0.05);
-  min-width: 0;
-  flex: 1;  /* Each item takes equal width */
 }
 
 .contact-item:hover {
@@ -240,6 +240,12 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
   }
+  
+  /* Keep 3 columns for contact info on tablets */
+  .contact-info {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -256,6 +262,7 @@
     gap: 25px;
   }
   
+  /* Switch to single column on mobile */
   .contact-info {
     grid-template-columns: 1fr;
     gap: 20px;
