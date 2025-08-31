@@ -13,10 +13,6 @@ const PaymentManagement = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [error, setError] = useState('');
-    const [pendingChanges, setPendingChanges] = useState({});
-    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [paymentStats, setPaymentStats] = useState({
         totalPaid: 0,
         pendingPayments: 0,
@@ -39,17 +35,6 @@ const PaymentManagement = () => {
         filterAndSearchBills();
     }, [bills, searchTerm, statusFilter]);
 
-    // Auto-clear messages after 5 seconds
-    useEffect(() => {
-        if (successMessage || error) {
-            const timer = setTimeout(() => {
-                setSuccessMessage('');
-                setError('');
-            }, 5000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage, error]);
-
     const fetchBills = async () => {
         try {
             setLoading(true);
@@ -59,7 +44,6 @@ const PaymentManagement = () => {
             calculatePaymentStats(billsData);
         } catch (error) {
             console.error('Error fetching bills:', error);
-            setError('Failed to fetch payment data');
         } finally {
             setLoading(false);
         }
@@ -122,78 +106,23 @@ const PaymentManagement = () => {
         setFilteredBills(filtered);
     };
 
-    const handleStatusChange = (billId, newStatus, clientName) => {
-        setError('');
-        setSuccessMessage('');
-
-        // Store pending changes instead of immediately saving
-        setPendingChanges(prev => ({
-            ...prev,
-            [billId]: {
-                newStatus,
-                clientName,
-                originalStatus: bills.find(bill => bill._id === billId)?.status
-            }
-        }));
-
-        setHasUnsavedChanges(true);
-    };
-
-    const saveAllChanges = async () => {
+    const handleStatusChange = async (billId, newStatus) => {
         try {
-            setError('');
-            setSuccessMessage('');
+            await updateBillStatus(billId, newStatus);
 
-            const changeCount = Object.keys(pendingChanges).length;
-            if (changeCount === 0) {
-                setError('No changes to save');
-                return;
-            }
-
-            // Save all pending changes
-            const updatePromises = Object.entries(pendingChanges).map(([billId, change]) =>
-                updateBillStatus(billId, change.newStatus)
+            // Update local state
+            const updatedBills = bills.map(bill =>
+                bill._id === billId ? { ...bill, status: newStatus } : bill
             );
-
-            await Promise.all(updatePromises);
-
-            // Update local state with all changes
-            const updatedBills = bills.map(bill => {
-                if (pendingChanges[bill._id]) {
-                    return { ...bill, status: pendingChanges[bill._id].newStatus };
-                }
-                return bill;
-            });
-
             setBills(updatedBills);
             calculatePaymentStats(updatedBills);
 
-            // Clear pending changes
-            setPendingChanges({});
-            setHasUnsavedChanges(false);
-
-            // Show success notification
-            setSuccessMessage(`Successfully updated ${changeCount} payment status${changeCount > 1 ? 'es' : ''}`);
-
+            // Show success message (you can add a toast notification here)
+            console.log('Status updated successfully');
         } catch (error) {
-            console.error('Error saving changes:', error);
-            setError(error.response?.data?.message || 'Failed to save payment status changes');
+            console.error('Error updating status:', error);
+            // Show error message (you can add a toast notification here)
         }
-    };
-
-    const cancelChanges = () => {
-        setPendingChanges({});
-        setHasUnsavedChanges(false);
-        setError('');
-        setSuccessMessage('');
-    };
-
-    const getCurrentStatus = (billId) => {
-        if (pendingChanges[billId]) {
-            return pendingChanges[billId].newStatus;
-        }
-        const bill = bills.find(b => b._id === billId);
-        return bill?.status || 'pending';
     };
 
     const formatCurrency = (amount) => {
@@ -286,21 +215,6 @@ const PaymentManagement = () => {
                     </button>
                 </div>
 
-                {/* Success and Error Messages */}
-                {successMessage && (
-                    <div className="alert alert-success">
-                        <span className="alert-icon">✓</span>
-                        {successMessage}
-                    </div>
-                )}
-
-                {error && (
-                    <div className="alert alert-error">
-                        <span className="alert-icon">⚠</span>
-                        {error}
-                    </div>
-                )}
-
                 {/* Payment Stats Cards */}
                 <div className="payment-stats-grid">
                     <div className="stat-card total-paid">
@@ -340,52 +254,24 @@ const PaymentManagement = () => {
                     </div>
                 </div>
 
-                {/* Save/Cancel Changes Section - positioned between stats and history */}
-                {hasUnsavedChanges && (
-                    <div className="unsaved-changes-section">
-                        <div className="changes-info">
-                            <span className="changes-icon">⚠️</span>
-                            <div className="changes-text">
-                                <strong>You have {Object.keys(pendingChanges).length} unsaved changes</strong>
-                                <p>Click "Save Changes" to apply or "Cancel" to discard changes</p>
+                {/* Payment Management Card */}
+                <div className="payment-management-card">
+                    <div className="card-header">
+                        <h3>Payment Management</h3>
+                        <div className="header-controls">
+                            <div className="search-box">
+                                <span className="search-icon">🔍</span>
+                                <input
+                                    type="text"
+                                    placeholder="Search payments..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                             </div>
-                        </div>
-                        <div className="changes-actions">
-                            <button className="cancel-btn" onClick={cancelChanges}>
-                                Cancel Changes
-                            </button>
-                            <button className="save-btn" onClick={saveAllChanges}>
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {/* Payment History Section */}
-                <div className="payment-history-section">
-                    <div className="section-header">
-                        <h3>Payment History</h3>
-                        <button className="export-btn" onClick={exportToCSV}>
-                            <span className="btn-icon">⬇</span>
-                            Export CSV
-                        </button>
-                    </div>
-
-                    <div className="filters-row">
-                        <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="Search payments..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="search-input"
-                            />
-                        </div>
-                        <div className="status-filter">
                             <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
-                                className="status-select"
+                                className="status-filter"
                             >
                                 <option value="all">All Status</option>
                                 <option value="pending">Pending</option>
@@ -397,7 +283,6 @@ const PaymentManagement = () => {
                         </div>
                     </div>
 
-                    {/* Payment Table */}
                     <div className="payment-table-container">
                         {loading ? (
                             <div className="loading-state">Loading payments...</div>
@@ -411,7 +296,6 @@ const PaymentManagement = () => {
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Due Date</th>
-                                        <th>Method</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -435,21 +319,15 @@ const PaymentManagement = () => {
                                                 <td>{formatDate(bill.date)}</td>
                                                 <td>{formatDate(bill.paymentDueDate)}</td>
                                                 <td>
-                                                    <span className="payment-method">
-                                                        {bill.status === 'paid' ? 'Bank Transfer' : '-'}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span className={`status-badge ${getStatusBadgeClass(getCurrentStatus(bill._id))}`}>
-                                                        {getCurrentStatus(bill._id) || 'pending'}
-                                                        {pendingChanges[bill._id] && <span className="pending-indicator">*</span>}
+                                                    <span className={`status-badge ${getStatusBadgeClass(bill.status)}`}>
+                                                        {bill.status || 'pending'}
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <select
-                                                        value={getCurrentStatus(bill._id)}
-                                                        onChange={(e) => handleStatusChange(bill._id, e.target.value, bill.companyName || bill.clientName)}
-                                                        className={`status-dropdown ${pendingChanges[bill._id] ? 'has-pending-change' : ''}`}
+                                                        value={bill.status || 'pending'}
+                                                        onChange={(e) => handleStatusChange(bill._id, e.target.value)}
+                                                        className="status-dropdown"
                                                     >
                                                         <option value="pending">Pending</option>
                                                         <option value="paid">Paid</option>

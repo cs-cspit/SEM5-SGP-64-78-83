@@ -163,7 +163,11 @@
 .contact-info {
   display: flex !important;
   flex-direction: row !important;
+  display: flex !important;
+  flex-direction: row !important;
   gap: 30px;
+  width: 100%;
+  align-items: stretch;
   width: 100%;
   align-items: stretch;
 }
@@ -177,6 +181,8 @@
   border-radius: 15px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 153, 51, 0.05);
+  min-width: 0;
+  flex: 1;  /* Each item takes equal width */
   min-width: 0;
   flex: 1;
 }

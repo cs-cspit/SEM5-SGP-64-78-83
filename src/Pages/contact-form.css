@@ -43,18 +43,13 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-  color: var(--text-dark);
-  background-color: var(--light-grey);
-}
-
 /* Contact Page Container */
 .contact-page {
   min-height: 100vh;
-  background-color: var(--dark-grey);
+  background-color: #1a1a1a;
   color: var(--text-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
 }
 
 /* Hero Section */
@@ -108,7 +103,7 @@ body {
 /* Main Content Section */
 .contact-main {
   padding: 80px 20px;
-  background-color: var(--dark-grey);
+  background-color: #1a1a1a;
 }
 
 .contact-container {
