@@ -118,7 +118,7 @@ const UserRoleManagement = () => {
         
         {error && (
           <div className="alert alert-error">
-            <span className="alert-icon">⚠</span>
+            <span className="alert-icon"><i className="fas fa-exclamation-triangle"></i></span>
             {error}
           </div>
         )}
@@ -179,7 +179,7 @@ const UserRoleManagement = () => {
                           className="delete-button"
                           title={`Delete ${user.name}`}
                         >
-                          🗑️
+                          <i className="fas fa-trash"></i>
                         </button>
                       </div>
                     </td>

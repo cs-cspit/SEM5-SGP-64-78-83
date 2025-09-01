@@ -109,7 +109,7 @@ const ContactForm = () => {
               {/* Contact Info */}
               <div className="contact-page-info">
                 <div className="contact-page-item">
-                  <div className="contact-page-icon">📍</div>
+                  <div className="contact-page-icon"><i className="fas fa-map-marker-alt"></i></div>
                   <div className="contact-page-details">
                     <h4>Location</h4>
                     <p>Jay Jalaram Electrical, 43, Junajin Hanuman Tekri Opp ramji temple, Rander, Surat-395005. </p>
@@ -117,7 +117,7 @@ const ContactForm = () => {
                 </div>
                 
                 <div className="contact-page-item">
-                  <div className="contact-page-icon">✉️</div>
+                  <div className="contact-page-icon"><i className="fas fa-envelope"></i></div>
                   <div className="contact-page-details">
                     <h4>Email us</h4>
                     <p>jayjalaram@gmail.com<br/>info@jayjalaram-electric.com</p>
@@ -125,7 +125,7 @@ const ContactForm = () => {
                 </div>
                 
                 <div className="contact-page-item">
-                  <div className="contact-page-icon">📞</div>
+                  <div className="contact-page-icon"><i className="fas fa-phone"></i></div>
                   <div className="contact-page-details">
                     <h4>Call us</h4>
                     <p>General Information : +91 79030 89305<br/>
@@ -142,7 +142,7 @@ const ContactForm = () => {
               {!isAuthenticated() && (
                 <div className="login-prompt">
                   <div className="login-prompt-content">
-                    <h4>🔒 Login Required</h4>
+                    <h4><i className="fas fa-lock"></i> Login Required</h4>
                     <p>Please login to submit a contact form and track your inquiries.</p>
                     <button 
                       type="button" 
@@ -280,7 +280,7 @@ const ContactForm = () => {
               <span>in</span>
             </a>
             <a href="#" className="social-icon youtube" aria-label="YouTube">
-              <span>▶</span>
+              <span><i className="fab fa-youtube"></i></span>
             </a>
           </div>
         </div>

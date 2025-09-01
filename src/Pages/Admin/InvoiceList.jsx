@@ -215,7 +215,7 @@ const InvoiceList = () => {
 
         {error && (
           <div className="alert alert-error">
-            <span className="alert-icon">⚠</span>
+            <span className="alert-icon"><i className="fas fa-exclamation-triangle"></i></span>
             {error}
           </div>
         )}
@@ -225,7 +225,7 @@ const InvoiceList = () => {
             <h3>Invoice Management</h3>
             <div className="header-controls">
               <div className="search-box">
-                <span className="search-icon">🔍</span>
+                <span className="search-icon"><i className="fas fa-search"></i></span>
                 <input
                   type="text"
                   placeholder="Search invoices..."
@@ -318,14 +318,14 @@ const InvoiceList = () => {
                               onClick={() => handleViewInvoice(invoice)}
                               title="View Invoice"
                             >
-                              👁️
+                              <i className="fas fa-eye"></i>
                             </button>
                             <button
                               className="action-button edit"
                               onClick={() => handleEditInvoice(invoice._id)}
                               title="Edit Invoice"
                             >
-                              ✏️
+                              <i className="fas fa-edit"></i>
                             </button>
                             <button
                               className="action-button more"
@@ -343,7 +343,7 @@ const InvoiceList = () => {
                   <tr>
                     <td colSpan="7" className="no-data">
                       <div className="no-invoices">
-                        <div className="no-invoices-icon">📄</div>
+                        <div className="no-invoices-icon"><i className="fas fa-file-invoice"></i></div>
                         <h3>No invoices found</h3>
                         <p>
                           {searchTerm || statusFilter !== 'All Status'

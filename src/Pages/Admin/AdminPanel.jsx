@@ -63,7 +63,7 @@ const AdminPanel = () => {
       title: 'Total Clients',
       value: isLoading ? '...' : dashboardData.clients.toString(),
       subtitle: 'Active clients',
-      icon: '👥',
+      icon: 'fas fa-users',
       iconColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       trend: '+3 this month',
       trendPositive: true
@@ -72,7 +72,7 @@ const AdminPanel = () => {
       title: 'Total Invoices',
       value: isLoading ? '...' : dashboardData.invoices.toString(),
       subtitle: 'This month',
-      icon: '📄',
+      icon: 'fas fa-file-invoice',
       iconColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       trend: '+12% from last month',
       trendPositive: true
@@ -81,7 +81,7 @@ const AdminPanel = () => {
       title: 'Total Revenue',
       value: isLoading ? '...' : formatCurrency(dashboardData.revenue),
       subtitle: 'This month',
-      icon: '₹',
+      icon: 'fas fa-rupee-sign',
       iconColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
       trend: '+12% from last month',
       trendPositive: true
@@ -90,7 +90,7 @@ const AdminPanel = () => {
       title: 'Pending Payments',
       value: isLoading ? '...' : formatCurrency(dashboardData.pendingPayments),
       subtitle: '12 overdue invoices',
-      icon: '⚠️',
+      icon: 'fas fa-exclamation-triangle',
       iconColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
       trend: '-5% improvement',
       trendPositive: true
@@ -99,7 +99,7 @@ const AdminPanel = () => {
       title: 'Payments Received',
       value: isLoading ? '...' : formatCurrency(dashboardData.paymentsReceived),
       subtitle: 'This month',
-      icon: '💳',
+      icon: 'fas fa-credit-card',
       iconColor: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
       trend: '+8% from last month',
       trendPositive: true
@@ -108,7 +108,7 @@ const AdminPanel = () => {
       title: 'Collection Rate',
       value: isLoading ? '...' : `${dashboardData.collectionRate}%`,
       subtitle: 'Payment efficiency',
-      icon: '📈',
+      icon: 'fas fa-chart-line',
       iconColor: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
       trend: '+5% improvement',
       trendPositive: true
@@ -132,7 +132,7 @@ const AdminPanel = () => {
                   className="stat-icon" 
                   style={{ background: stat.iconColor }}
                 >
-                  {stat.icon}
+                  <i className={stat.icon}></i>
                 </div>
               </div>
               <div className="stat-value">{stat.value}</div>
@@ -151,21 +151,21 @@ const AdminPanel = () => {
         <div className="dashboard-actions">
           <div className="action-cards">
             <div className="action-card" onClick={() => navigate('/admin/user-roles')}>
-              <div className="action-icon">👥</div>
+              <div className="action-icon"><i className="fas fa-users"></i></div>
               <h3>Manage Clients</h3>
               <p>Add, edit, and manage client information and user roles</p>
-              <div className="action-arrow">→</div>
+              <div className="action-arrow"><i className="fas fa-arrow-right"></i></div>
             </div>
             
             <div className="action-card" onClick={() => navigate('/admin/add-client')}>
-              <div className="action-icon">➕</div>
+              <div className="action-icon"><i className="fas fa-plus"></i></div>
               <h3>Add New Client</h3>
               <p>Quickly add new clients to your system</p>
-              <div className="action-arrow">→</div>
+              <div className="action-arrow"><i className="fas fa-arrow-right"></i></div>
             </div>
             
             <div className="action-card coming-soon">
-              <div className="action-icon">📊</div>
+              <div className="action-icon"><i className="fas fa-chart-bar"></i></div>
               <h3>Generate Reports</h3>
               <p>Create detailed financial and performance reports</p>
               <div className="coming-soon-badge">Coming Soon</div>
