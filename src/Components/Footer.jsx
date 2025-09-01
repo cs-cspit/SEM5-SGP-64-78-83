@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-main">
             <div className="footer-brand">
-              <img src="/vite.svg" alt="Jay Jalaram Electricals" className="footer-logo" />
+              <img src="/Images/logo_1.png" alt="Jay Jalaram Electricals" className="footer-logo" />
               <h3>Jay Jalaram Electricals</h3>
               <p>Powering progress with reliable electrical services and industrial solutions tailored for your growth.</p>
               <div className="footer-social">
@@ -46,15 +46,9 @@ const Footer = () => {
               </div>
             </div>
           </div>
-{/* 
-          <div className="footer-newsletter">
-            <h4>Stay Updated</h4>
-            <p>Subscribe to get updates about services, projects and offers.</p>
-            <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" placeholder="Your email address" aria-label="Email address" />
-              <button type="submit">Subscribe</button>
-            </form>
-          </div> */}
+
+        
+         
 
           <div className="footer-contact">
             <div className="contact-info">

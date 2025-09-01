@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Works.css';
 
 const Works = () => {
@@ -83,6 +84,9 @@ const Works = () => {
                 <p className="extended-description">
                   {work.extendedDescription}
                 </p>
+                <Link to={`/works/${work.category}`} className="detail-button">
+                  View Projects <span className="arrow">→</span>
+                </Link>
               </div>
             </div>
           </div>

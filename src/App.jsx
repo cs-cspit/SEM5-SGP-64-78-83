@@ -36,6 +36,7 @@ import BillGeneration from './Pages/Admin/BillGeneration';
 import AddClient from './Pages/Admin/AddClient';
 import InvoiceList from './Pages/Admin/InvoiceList';
 import PaymentManagement from './Pages/Admin/PaymentManagement';
+import WorkDetail from './Pages/WorkDetail';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/works" element={<Works />} />
+          <Route path="/works/:category" element={<WorkDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<ContactForm />} />

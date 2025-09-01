@@ -112,7 +112,7 @@ const ContactForm = () => {
                   <div className="contact-page-icon">📍</div>
                   <div className="contact-page-details">
                     <h4>Location</h4>
-                    <p>Jay Jalaram Electrical, 43, Junajin Hanuman Tekri Opp ramji temple, Rander, Surat-395005. </p>
+                    <p>Jay Jalaram Electricals || 43, Junajin Hanuman Tekri Opp ramji temple, Rander, Surat-395005. </p>
                   </div>
                 </div>
                 
@@ -120,7 +120,7 @@ const ContactForm = () => {
                   <div className="contact-page-icon">✉️</div>
                   <div className="contact-page-details">
                     <h4>Email us</h4>
-                    <p>jayjalaram@gmail.com<br/>info@jayjalaram-electric.com</p>
+                    <p>jayjalaramelectricals@gmail.com<br/>kevinsailor.jje@gmail.com</p>
                   </div>
                 </div>
                 
@@ -128,10 +128,11 @@ const ContactForm = () => {
                   <div className="contact-page-icon">📞</div>
                   <div className="contact-page-details">
                     <h4>Call us</h4>
-                    <p>General Information : +91 79030 89305<br/>
-                    Emergency Services : +91 93275 84221<br/>
-                    Lighting Solutions : +91 81458 50777<br/>
-                    Fan & Home Appliances : +91 99250 84870</p>
+                   
+                    <p>Emergency Services : +91 70163 88853<br/>
+                    General Information : +91 95867 59411<br/>
+                    Havells Solutions : +91 95587 06034<br/>
+                    Fan & Home Appliances : +91 968796 09411</p>
                   </div>
                 </div>
               </div>

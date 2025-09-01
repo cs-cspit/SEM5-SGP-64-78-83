@@ -8,7 +8,20 @@
 
 .works-header {
   text-align: center;
-  margin-bottom: 80px;
+.description,
+.extended-description {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  font-size: 1.05em;
+  text-align: justify;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  word-wrap: break-word;
+  word-spacing: 0.05em;
+  hyphens: none;
+  letter-spacing: 0.01em;
+  font-weight: 700;
+}m: 80px;
   padding: 0 20px;
 }
 
@@ -143,7 +156,7 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 15px;
-  background: rgba(26, 26, 26, 0.95);
+  background: rgb(233, 233, 233);
 }
 
 .content-inner {
@@ -155,7 +168,7 @@
 
 .work-content h3 {
   font-size: 1.8em;
-  font-weight: 600;
+  font-weight: 700;
   padding-bottom: 12px;
   margin-bottom: 15px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -170,7 +183,7 @@
 
 .description,
 .extended-description {
-  color: #ccc;
+  color: #333;
   line-height: 1.6;
   margin-bottom: 10px;
   font-size: 1.05em;
@@ -217,6 +230,39 @@
 
 .view-details:hover {
   color: #ff8c00;
+  transform: translateX(5px);
+}
+
+.detail-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  margin-top: 20px;
+  align-self: flex-start;
+  font-weight: 500;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.detail-button:hover {
+  transform: translateX(10px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.detail-button .arrow {
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.detail-button:hover .arrow {
   transform: translateX(5px);
 }
 
