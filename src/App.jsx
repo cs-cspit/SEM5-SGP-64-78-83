@@ -26,8 +26,6 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Works from './Pages/Works';
 import ContactForm from './Pages/ContactForm';
-import Profile from './Pages/Profile';
-import ClientDashboard from './Pages/ClientDashboard';
 import WiringExcellencePage from './Pages/WiringExcellencePage';
 import ProactiveMaintenancePage from './Pages/ProactiveMaintenancePage';
 import HavellsServiceCenterPage from './Pages/HavellsServiceCenterPage';
@@ -56,22 +54,6 @@ function App() {
           <Route path="/services/maintenance" element={<ProactiveMaintenancePage />} />
           <Route path="/services/havells" element={<HavellsServiceCenterPage />} />
           <Route path="/services/industrial" element={<IndustrialSetupPage />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/client-dashboard"
-            element={
-              <ProtectedRoute>
-                <ClientDashboard />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/admin"
             element={
