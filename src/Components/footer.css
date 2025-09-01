@@ -1,19 +1,24 @@
+a {
+  color: #cccccc;
+  text-decoration: none;
+}
 .modern-footer {
   background: #1a1a1a;
   color: #ff9933;
-  padding: 60px 0 20px;
+  padding: 30px 0 10px;
   position: relative;
   overflow: hidden;
 }
 
 .modern-footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff9933' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff9933' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    repeat;
   pointer-events: none;
 }
 
@@ -27,26 +32,26 @@
 
 .footer-content {
   display: grid;
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
 .footer-main {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 50px;
+  gap: 20px;
   align-items: start;
 }
 
 .footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .footer-logo {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   filter: brightness(1.2);
   transition: transform 0.3s ease;
@@ -57,7 +62,7 @@
 }
 
 .footer-brand h3 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   margin: 0;
   color: #ff9933;
@@ -65,28 +70,28 @@
 }
 
 .footer-brand p {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.5;
   color: #cccccc;
   margin: 0;
-  max-width: 300px;
+  max-width: 280px;
 }
 
 .footer-social {
   display: flex;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .social-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   background: rgba(255, 153, 51, 0.1);
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: 10px;
+  font-size: 16px;
   text-decoration: none;
   color: #ff9933;
   transition: all 0.3s ease;
@@ -104,13 +109,13 @@
 .footer-links {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 15px;
 }
 
 .link-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .link-group h4 {
@@ -123,7 +128,7 @@
 }
 
 .link-group h4::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -153,25 +158,25 @@
 
 .footer-contact {
   background: rgba(255, 153, 51, 0.05);
-  border-radius: 20px;
-  padding: 30px;
+  border-radius: 15px;
+  padding: 20px;
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 153, 51, 0.1);
 }
 
 .contact-info {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
 
 .contact-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  padding: 20px;
+  gap: 10px;
+  padding: 12px;
   background: rgba(255, 153, 51, 0.03);
-  border-radius: 15px;
+  border-radius: 12px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 153, 51, 0.05);
 }
@@ -205,13 +210,13 @@
 }
 
 .footer-bottom {
-  padding-top: 30px;
+  padding-top: 15px;
   border-top: 1px solid rgba(255, 153, 51, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
 }
 
 .footer-bottom p {
@@ -231,7 +236,7 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .footer-links {
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
@@ -240,31 +245,31 @@
 
 @media (max-width: 768px) {
   .modern-footer {
-    padding: 40px 0 20px;
+    padding: 25px 0 10px;
   }
-  
+
   .footer-brand h3 {
-    font-size: 24px;
+    font-size: 22px;
   }
-  
+
   .footer-links {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 15px;
   }
-  
+
   .contact-info {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
   }
-  
+
   .footer-bottom {
     flex-direction: column;
     text-align: center;
-    gap: 10px;
+    gap: 8px;
   }
-  
+
   .footer-contact {
-    padding: 20px;
+    padding: 15px;
   }
 }
 
@@ -272,23 +277,23 @@
   .modern-footer .container {
     padding: 0 15px;
   }
-  
+
   .footer-brand {
     text-align: center;
   }
-  
+
   .footer-brand p {
     max-width: 100%;
   }
-  
+
   .social-link {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
   }
-  
+
   .contact-item {
-    padding: 15px;
+    padding: 10px;
   }
 }
 

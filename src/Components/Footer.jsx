@@ -46,7 +46,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-
+{/* 
           <div className="footer-newsletter">
             <h4>Stay Updated</h4>
             <p>Subscribe to get updates about services, projects and offers.</p>
@@ -54,7 +54,7 @@ const Footer = () => {
               <input type="email" placeholder="Your email address" aria-label="Email address" />
               <button type="submit">Subscribe</button>
             </form>
-          </div>
+          </div> */}
 
           <div className="footer-contact">
             <div className="contact-info">
@@ -62,21 +62,21 @@ const Footer = () => {
                 <span className="contact-icon">📍</span>
                 <div>
                   <strong>Address</strong>
-                  <p>Industrial Estate, Ahmedabad, Gujarat, India</p>
+                  <p>43, Junajin Hanuman Tekri Opp ramji temple rander surat</p>
                 </div>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">📞</span>
                 <div>
                   <strong>Phone</strong>
-                  <p>+91 98765 43210</p>
+                  <a href='tel:7016388853'>+91 70163 88853</a>
                 </div>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">✉</span>
                 <div>
                   <strong>Email</strong>
-                  <p>info@jjelectricals.com</p>
+                  <p>jayjalaramelectricals@gmail.com</p>
                 </div>
               </div>
             </div>

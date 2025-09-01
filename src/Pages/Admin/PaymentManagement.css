@@ -89,7 +89,11 @@
   align-items: center;
   padding: 2rem 2.5rem;
   border-bottom: 1px solid var(--border-light);
-  background: linear-gradient(135deg, rgba(45, 55, 72, 0.02) 0%, rgba(26, 32, 44, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 55, 72, 0.02) 0%,
+    rgba(26, 32, 44, 0.05) 100%
+  );
   flex-wrap: wrap;
   gap: 1.5rem;
 }
