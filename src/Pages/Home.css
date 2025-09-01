@@ -1610,20 +1610,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-  background: #222222;
+  padding: 15px;
+  background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(255, 107, 0, 0.1);
   position: relative;
   overflow: hidden;
   border: 2px solid rgba(255, 107, 0, 0.1);
-  min-width: 220px;
-  width: 220px;
-  height: 110px;
+  min-width: 250px;
+  width: 250px;
+  height: 150px;
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
 }
 
 .client-logo-carousel::before {
@@ -1648,10 +1647,10 @@ body {
 
 .client-logo-carousel:hover {
   transform: translateY(-12px) scale(1.02);
-  background: #1a1a1a;
+  background: #ffffff;
   border-color: #ff6b00;
-  box-shadow: 0 20px 60px rgba(26, 26, 26, 0.25),
-    0 8px 25px rgba(255, 107, 0, 0.3), 0 0 0 1px #ff6b00;
+  box-shadow: 0 20px 60px rgba(26, 26, 26, 0.15),
+    0 8px 25px rgba(255, 107, 0, 0.2);
 }
 
 .client-logo-carousel:hover::before {
@@ -1659,14 +1658,17 @@ body {
 }
 
 .client-logo-carousel img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   filter: brightness(1) invert(0) opacity(1);
   transition: transform 0.4s ease;
   position: relative;
   z-index: 1;
   border-radius: 12px;
+  background: #ffffff;
 }
 
 .client-logo-carousel:hover img {
