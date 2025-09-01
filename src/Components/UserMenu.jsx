@@ -4,7 +4,7 @@ import { useAuth } from '../context/auth-context.jsx';
 import './UserMenu.css';
 
 const UserMenu = () => {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout, isAdmin, isClient } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -76,13 +76,10 @@ const UserMenu = () => {
             </div>
           </div>
           <div className="menu-items">
-            <button 
-              onClick={() => { navigate('/profile'); setIsOpen(false); }}
-              title="View Profile Details"
-            >
-              <span>Profile Details</span>
-            </button>
-            {isAdmin() ? (
+            {(isAdmin() || isClient()) && (
+              
+            )}
+            {isAdmin() && (
               <button 
                 onClick={() => { navigate('/admin'); setIsOpen(false); }}
                 title="Admin Dashboard"
@@ -90,13 +87,24 @@ const UserMenu = () => {
               >
                 <span>Admin Dashboard</span>
               </button>
-            ) : (
+            )}
+            {isClient() && (
+              <>
               <button 
-                onClick={() => { navigate('/dashboard'); setIsOpen(false); }}
-                title="Go to Dashboard"
+                onClick={() => { navigate('/profile'); setIsOpen(false); }}
+                title="View Profile Details"
               >
-                <span>My Dashboard</span>
+                <span>Profile Details</span>
               </button>
+              <button 
+                onClick={() => { navigate('/client-dashboard'); setIsOpen(false); }}
+                title="Client Dashboard"
+                className="client-button"
+              >
+                <span>Client Dashboard</span>
+              </button>
+              </>
+              
             )}
             <button 
               onClick={handleLogout} 
