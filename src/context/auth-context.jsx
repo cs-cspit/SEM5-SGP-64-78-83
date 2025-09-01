@@ -26,6 +26,10 @@ export const AuthProvider = ({ children }) => {
     return user?.role === 'admin';
   };
 
+  const isClient = () => {
+    return user?.role === 'client';
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -33,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, isAdmin }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, isAdmin, isClient }}>
       {!loading && children}
     </AuthContext.Provider>
   );

@@ -328,6 +328,20 @@
   transform: translateX(4px);
 }
 
+.menu-items .client-button {
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.05) 0%, rgba(255, 140, 0, 0.1) 100%);
+  border-color: rgba(255, 107, 0, 0.2);
+  color: #ff6b00;
+  font-weight: 700;
+}
+
+.menu-items .client-button:hover {
+  background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+  color: white;
+  border-color: #ff6b00;
+  transform: translateX(4px);
+}
+
 .menu-items .logout-button {
   color: #dc2626;
   margin-top: 1rem;
