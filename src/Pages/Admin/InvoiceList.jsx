@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
+import { printInvoice } from '../../utils/invoiceGenerator.js';
 import axios from 'axios';
 import './InvoiceList.css';
 
@@ -34,7 +35,7 @@ const InvoiceList = () => {
           Authorization: `Bearer ${localStorage.getItem('userToken')}`
         }
       });
-      
+
       // Transform the bills data to match invoice format
       const transformedInvoices = response.data.data.map(bill => ({
         id: bill._id,
@@ -46,7 +47,7 @@ const InvoiceList = () => {
         createdDate: new Date(bill.createdAt).toLocaleDateString('en-GB'),
         ...bill
       }));
-      
+
       setInvoices(transformedInvoices);
       setLoading(false);
     } catch (err) {
@@ -62,7 +63,7 @@ const InvoiceList = () => {
     const weights = [0.4, 0.3, 0.2, 0.1]; // Higher probability for paid/pending
     const random = Math.random();
     let weightSum = 0;
-    
+
     for (let i = 0; i < statuses.length; i++) {
       weightSum += weights[i];
       if (random <= weightSum) {
@@ -76,26 +77,44 @@ const InvoiceList = () => {
     navigate(`/admin/bill/edit/${invoiceId}`);
   };
 
+  const handleViewInvoice = (invoice) => {
+    // Prepare invoice data for generation
+    const invoiceData = {
+      invoiceNumber: `INV-${String(invoice.invoiceNo).padStart(3, '0')}`,
+      date: invoice.date,
+      companyName: invoice.companyName || invoice.clientName,
+      companyAddress: invoice.companyAddress || invoice.address,
+      siteLocation: invoice.siteLocation,
+      gstNumber: invoice.gstNumber,
+      totalAmount: invoice.totalAmount,
+      items: invoice.items,
+      workDescription: invoice.workDescription
+    };
+
+    // Generate and print invoice
+    printInvoice(invoiceData);
+  };
+
   const getInvoiceStatus = (invoice) => {
     const currentDate = new Date();
-    const dueDate = invoice.paymentDueDate 
+    const dueDate = invoice.paymentDueDate
       ? new Date(invoice.paymentDueDate)
       : (() => {
-          const fallbackDate = new Date(invoice.date);
-          fallbackDate.setDate(fallbackDate.getDate() + 30);
-          return fallbackDate;
-        })();
-    
+        const fallbackDate = new Date(invoice.date);
+        fallbackDate.setDate(fallbackDate.getDate() + 30);
+        return fallbackDate;
+      })();
+
     // For demo purposes, still use random but bias based on due date
     const daysPastDue = Math.floor((currentDate - dueDate) / (1000 * 60 * 60 * 24));
-    
+
     if (daysPastDue > 0) {
       // Past due - higher chance of overdue status
       const statuses = ['paid', 'overdue', 'pending'];
       const weights = [0.3, 0.5, 0.2];
       const random = Math.random();
       let weightSum = 0;
-      
+
       for (let i = 0; i < statuses.length; i++) {
         weightSum += weights[i];
         if (random <= weightSum) {
@@ -136,18 +155,18 @@ const InvoiceList = () => {
 
   const filteredInvoices = invoices.filter(invoice => {
     const matchesSearch = searchTerm === '' ||
-                         invoice.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         invoice.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         String(invoice.invoiceNo).includes(searchTerm);
-    
+      invoice.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      invoice.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(invoice.invoiceNo).includes(searchTerm);
+
     if (statusFilter === 'All Status') {
       return matchesSearch;
     }
-    
+
     // Use actual status from database, fallback to random for older bills without status
     const actualStatus = invoice.status || getRandomStatus();
     const matchesStatus = actualStatus.toLowerCase() === statusFilter.toLowerCase();
-    
+
     return matchesSearch && matchesStatus;
   });
 
@@ -185,8 +204,8 @@ const InvoiceList = () => {
             <h1>Invoices</h1>
             <p>Manage your invoices and billing</p>
           </div>
-          <button 
-            onClick={() => navigate('/admin/bill')} 
+          <button
+            onClick={() => navigate('/admin/bill')}
             className="create-invoice-button"
           >
             <span className="button-icon">+</span>
@@ -252,73 +271,74 @@ const InvoiceList = () => {
                     // Use actual status from database, fallback to intelligent status for older bills
                     const actualStatus = invoice.status || getInvoiceStatus(invoice);
                     // Use the actual paymentDueDate from the bill, or calculate if not available (for backward compatibility)
-                    const dueDate = invoice.paymentDueDate 
+                    const dueDate = invoice.paymentDueDate
                       ? new Date(invoice.paymentDueDate)
                       : (() => {
-                          const fallbackDate = new Date(invoice.date);
-                          fallbackDate.setDate(fallbackDate.getDate() + 30);
-                          return fallbackDate;
-                        })();
+                        const fallbackDate = new Date(invoice.date);
+                        fallbackDate.setDate(fallbackDate.getDate() + 30);
+                        return fallbackDate;
+                      })();
 
                     return (
-                    <tr key={invoice._id}>
-                      <td>
-                        <div className="invoice-number">
-                          INV-{String(invoice.invoiceNo).padStart(4, '0')}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="client-info">
-                          <div className="client-name">{invoice.clientName}</div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="amount">
-                          {formatCurrency(invoice.totalAmount)}
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${getStatusClass(actualStatus)}`}>
-                          {actualStatus}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="date">
-                          {dueDate.toLocaleDateString()}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="date">
-                          {new Date(invoice.date).toLocaleDateString()}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="actions">
-                          <button 
-                            className="action-button view"
-                            onClick={() => console.log('View invoice:', invoice._id)}
-                            title="View Invoice"
-                          >
-                            👁️
-                          </button>
-                          <button 
-                            className="action-button edit"
-                            onClick={() => handleEditInvoice(invoice._id)}
-                            title="Edit Invoice"
-                          >
-                            ✏️
-                          </button>
-                          <button 
-                            className="action-button more"
-                            onClick={() => console.log('More options:', invoice._id)}
-                            title="More Options"
-                          >
-                            ⋯
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )})
+                      <tr key={invoice._id}>
+                        <td>
+                          <div className="invoice-number">
+                            INV-{String(invoice.invoiceNo).padStart(4, '0')}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="client-info">
+                            <div className="client-name">{invoice.clientName}</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="amount">
+                            {formatCurrency(invoice.totalAmount)}
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${getStatusClass(actualStatus)}`}>
+                            {actualStatus}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="date">
+                            {dueDate.toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="date">
+                            {new Date(invoice.date).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="actions">
+                            <button
+                              className="action-button view"
+                              onClick={() => handleViewInvoice(invoice)}
+                              title="View Invoice"
+                            >
+                              👁️
+                            </button>
+                            <button
+                              className="action-button edit"
+                              onClick={() => handleEditInvoice(invoice._id)}
+                              title="Edit Invoice"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              className="action-button more"
+                              onClick={() => console.log('More options:', invoice._id)}
+                              title="More Options"
+                            >
+                              ⋯
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })
                 ) : (
                   <tr>
                     <td colSpan="7" className="no-data">
@@ -326,13 +346,13 @@ const InvoiceList = () => {
                         <div className="no-invoices-icon">📄</div>
                         <h3>No invoices found</h3>
                         <p>
-                          {searchTerm || statusFilter !== 'All Status' 
-                            ? 'No invoices match your search criteria' 
+                          {searchTerm || statusFilter !== 'All Status'
+                            ? 'No invoices match your search criteria'
                             : 'Get started by creating your first invoice'
                           }
                         </p>
                         {!searchTerm && statusFilter === 'All Status' && (
-                          <button 
+                          <button
                             onClick={() => navigate('/admin/bill')}
                             className="create-first-invoice"
                           >
