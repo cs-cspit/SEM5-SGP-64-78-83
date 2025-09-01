@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
-import { printInvoice } from '../../utils/invoiceGenerator.js';
+import { viewInvoice, printInvoice, downloadInvoiceHTML } from '../../utils/invoiceGenerator.js';
 import axios from 'axios';
 import './InvoiceList.css';
 
@@ -91,8 +91,26 @@ const InvoiceList = () => {
       workDescription: invoice.workDescription
     };
 
-    // Generate and print invoice
-    printInvoice(invoiceData);
+    // View invoice without auto-print
+    viewInvoice(invoiceData);
+  };
+
+  const handleDownloadInvoice = (invoice) => {
+    // Prepare invoice data for download
+    const invoiceData = {
+      invoiceNumber: `INV-${String(invoice.invoiceNo).padStart(3, '0')}`,
+      date: invoice.date,
+      companyName: invoice.companyName || invoice.clientName,
+      companyAddress: invoice.companyAddress || invoice.address,
+      siteLocation: invoice.siteLocation,
+      gstNumber: invoice.gstNumber,
+      totalAmount: invoice.totalAmount,
+      items: invoice.items,
+      workDescription: invoice.workDescription
+    };
+
+    // Download invoice as HTML file
+    downloadInvoiceHTML(invoiceData);
   };
 
   const getInvoiceStatus = (invoice) => {
@@ -215,7 +233,7 @@ const InvoiceList = () => {
 
         {error && (
           <div className="alert alert-error">
-            <span className="alert-icon">⚠</span>
+            <span className="alert-icon"><i className="fas fa-exclamation-triangle"></i></span>
             {error}
           </div>
         )}
@@ -225,7 +243,7 @@ const InvoiceList = () => {
             <h3>Invoice Management</h3>
             <div className="header-controls">
               <div className="search-box">
-                <span className="search-icon">🔍</span>
+                <span className="search-icon"><i className="fas fa-search"></i></span>
                 <input
                   type="text"
                   placeholder="Search invoices..."
@@ -316,23 +334,30 @@ const InvoiceList = () => {
                             <button
                               className="action-button view"
                               onClick={() => handleViewInvoice(invoice)}
-                              title="View Invoice"
+                              title="View Invoice (Print/Preview)"
                             >
-                              👁️
+                              <i className="fas fa-eye"></i>
+                            </button>
+                            <button
+                              className="action-button download"
+                              onClick={() => handleDownloadInvoice(invoice)}
+                              title="Download Invoice"
+                            >
+                              <i className="fas fa-download"></i>
                             </button>
                             <button
                               className="action-button edit"
                               onClick={() => handleEditInvoice(invoice._id)}
                               title="Edit Invoice"
                             >
-                              ✏️
+                              <i className="fas fa-edit"></i>
                             </button>
                             <button
                               className="action-button more"
                               onClick={() => console.log('More options:', invoice._id)}
                               title="More Options"
                             >
-                              ⋯
+                              <i className="fas fa-ellipsis-v"></i>
                             </button>
                           </div>
                         </td>
@@ -343,7 +368,7 @@ const InvoiceList = () => {
                   <tr>
                     <td colSpan="7" className="no-data">
                       <div className="no-invoices">
-                        <div className="no-invoices-icon">📄</div>
+                        <div className="no-invoices-icon"><i className="fas fa-file-invoice"></i></div>
                         <h3>No invoices found</h3>
                         <p>
                           {searchTerm || statusFilter !== 'All Status'

@@ -36,7 +36,11 @@ import BillGeneration from './Pages/Admin/BillGeneration';
 import AddClient from './Pages/Admin/AddClient';
 import InvoiceList from './Pages/Admin/InvoiceList';
 import PaymentManagement from './Pages/Admin/PaymentManagement';
+<<<<<<< HEAD
 import WorkDetail from './Pages/WorkDetail';
+=======
+import QuoteForm from './Pages/Admin/QuoteForm';
+>>>>>>> a0b54decd0d041c0ee9b34d06bbf22e341b54b45
 
 function App() {
   return (
@@ -79,8 +83,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route 
-            path="/admin/bill/edit/:billId" 
+          <Route
+            path="/admin/bill/edit/:billId"
             element={
               <ProtectedRoute adminOnly>
                 <BillGeneration />
@@ -108,6 +112,14 @@ function App() {
             element={
               <ProtectedRoute adminOnly>
                 <PaymentManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/quote-form"
+            element={
+              <ProtectedRoute adminOnly>
+                <QuoteForm />
               </ProtectedRoute>
             }
           />

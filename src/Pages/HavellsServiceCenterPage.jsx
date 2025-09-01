@@ -13,7 +13,7 @@ const HavellsServiceCenterPage = () => {
           className="detail-hero-img"
         />
         <div className="detail-hero-overlay">
-          <Link to="/" className="back-button">← Back to Home</Link>
+          <Link to="/" className="back-button"><i className="fas fa-arrow-left"></i> Back to Home</Link>
           <h1 className="detail-title">Havells Service Center</h1>
           <p className="detail-tagline">
             Authorized service center for all your Havells product needs

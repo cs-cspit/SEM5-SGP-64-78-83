@@ -236,7 +236,7 @@ const PaymentManagement = () => {
                     </div>
 
                     <div className="stat-card overdue-amount">
-                        <div className="stat-icon">⚠</div>
+                        <div className="stat-icon"><i className="fas fa-exclamation-triangle"></i></div>
                         <div className="stat-content">
                             <h3>Overdue Amount</h3>
                             <div className="stat-value">{formatCurrency(paymentStats.overdueAmount)}</div>
@@ -245,7 +245,7 @@ const PaymentManagement = () => {
                     </div>
 
                     <div className="stat-card collection-rate">
-                        <div className="stat-icon">📈</div>
+                        <div className="stat-icon"><i className="fas fa-chart-line"></i></div>
                         <div className="stat-content">
                             <h3>Collection Rate</h3>
                             <div className="stat-value">{paymentStats.collectionRate}%</div>
@@ -260,7 +260,7 @@ const PaymentManagement = () => {
                         <h3>Payment Management</h3>
                         <div className="header-controls">
                             <div className="search-box">
-                                <span className="search-icon">🔍</span>
+                                <span className="search-icon"><i className="fas fa-search"></i></span>
                                 <input
                                     type="text"
                                     placeholder="Search payments..."

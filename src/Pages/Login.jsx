@@ -10,6 +10,7 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -93,16 +94,26 @@ const Login = () => {
 
             <div className="login-input-group">
               <label htmlFor="password" className="login-label">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                className="login-input"
-                placeholder="••••••••"
-                required
-              />
+              <div className="password-input-container">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={handleChange}
+                  className="login-input"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                </button>
+              </div>
             </div>
 
             {error && <div className="login-error">{error}</div>}

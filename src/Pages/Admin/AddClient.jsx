@@ -113,7 +113,7 @@ const AddClient = () => {
         <div className="page-header">
           <div className="header-content">
             <button className="back-button" onClick={handleCancel}>
-              ←
+              <i className="fas fa-arrow-left"></i>
             </button>
             <div className="header-text">
               <h1>Add New Client</h1>

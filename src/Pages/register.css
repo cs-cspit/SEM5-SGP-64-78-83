@@ -92,7 +92,7 @@
 
 /* Input field styling with focus effects */
 .register-input {
-  width: 95%;
+  width: 100%;
   padding: 0.875rem 1rem;
   border: 1.5px solid #e2e8f0;
   border-radius: 8px;
@@ -181,6 +181,42 @@
 .register-link:hover {
   color: #1a202c;
   text-decoration: underline;
+}
+
+/* Password input container */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container .register-input {
+  padding-right: 3rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #a0aec0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 1;
+}
+
+.password-toggle-btn:hover {
+  color: #2d3748;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+  color: #2d3748;
 }
 
 /* Responsive design */

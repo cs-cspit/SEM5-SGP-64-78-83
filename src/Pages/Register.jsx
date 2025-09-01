@@ -14,6 +14,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Handles changes to input fields and updates the form state
   const handleChange = (e) => {
@@ -68,11 +69,11 @@ const Register = () => {
           <h1 className="register-main-title">Welcome to JJE</h1>
           <p className="register-subtitle"></p>
         </div>
-        
+
         <div className="register-form-container">
           <h2 className="register-form-title">Create Account</h2>
           <p className="register-description">Enter your details to create a new account</p>
-          
+
           <form onSubmit={handleSubmit} className="register-form">
             <div className="register-input-group">
               <label htmlFor="name" className="register-label">Full Name</label>
@@ -104,16 +105,26 @@ const Register = () => {
 
             <div className="register-input-group">
               <label htmlFor="password" className="register-label">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                className="register-input"
-                placeholder="••••••••"
-                required
-              />
+              <div className="password-input-container">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={handleChange}
+                  className="register-input"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                </button>
+              </div>
             </div>
 
             <div className="register-input-group">

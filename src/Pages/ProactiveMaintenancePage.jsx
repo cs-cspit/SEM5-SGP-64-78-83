@@ -13,7 +13,7 @@ const ProactiveMaintenancePage = () => {
           className="detail-hero-img"
         />
         <div className="detail-hero-overlay">
-          <Link to="/" className="back-button">← Back to Home</Link>
+          <Link to="/" className="back-button"><i className="fas fa-arrow-left"></i> Back to Home</Link>
           <h1 className="detail-title">Proactive Maintenance</h1>
           <p className="detail-tagline">
             Prevent electrical issues before they happen with our comprehensive maintenance solutions

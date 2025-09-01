@@ -18,49 +18,49 @@ const AdminLayout = ({ children }) => {
     {
       id: 'dashboard',
       name: 'Dashboard',
-      icon: '📊',
+      icon: 'fas fa-chart-bar',
       path: '/admin',
       active: true
     },
     {
       id: 'clients',
       name: 'Clients',
-      icon: '👥',
+      icon: 'fas fa-users',
       path: '/admin/user-roles',
       active: true
     },
     {
       id: 'invoices',
       name: 'Invoices',
-      icon: '📄',
+      icon: 'fas fa-file-invoice',
       path: '/admin/invoices',
       active: true
     },
     {
       id: 'payments',
       name: 'Payments',
-      icon: '💳',
+      icon: 'fas fa-credit-card',
       path: '/admin/payments',
       active: true
     },
     {
-      id: 'reports',
-      name: 'Reports',
-      icon: '📈',
-      path: '/admin/reports',
-      active: false
+      id: 'quote-form',
+      name: 'Quote Form',
+      icon: 'fas fa-file-text',
+      path: '/admin/quote-form',
+      active: true
     },
     {
       id: 'admin',
       name: 'Admin',
-      icon: '⚙️',
+      icon: 'fas fa-cogs',
       path: '/admin/settings',
       active: false
     },
     {
       id: 'settings',
       name: 'Settings',
-      icon: '🔧',
+      icon: 'fas fa-wrench',
       path: '/admin/general-settings',
       active: false
     }
@@ -78,14 +78,14 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <div className={`admin-sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
-          
-          <button 
-              className="sidebar-toggle"
-              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            >
-              ☰
-            </button>
-            <div className="sidebar-logo">
+
+          <button
+            className="sidebar-toggle"
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          >
+            ☰
+          </button>
+          <div className="sidebar-logo">
             {/* <div className="logo-icon">📋</div> */}
             <div className="logo-text">
               <h3>Admin</h3>
@@ -108,18 +108,20 @@ const AdminLayout = ({ children }) => {
                   navigate('/admin/invoices');
                 } else if (item.id === 'payments') {
                   navigate('/admin/payments');
+                } else if (item.id === 'quote-form') {
+                  navigate('/admin/quote-form');
                 } else {
-                  // For now, only dashboard, clients, invoices, and payments are functional
+                  // For now, only dashboard, clients, invoices, payments, and quote-form are functional
                   // Future functionality can be added here
                   console.log(`${item.name} clicked - Coming soon!`);
                 }
               }}
               style={{
-                cursor: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments') ? 'pointer' : 'not-allowed',
-                opacity: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments') ? 1 : 0.5
+                cursor: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments' || item.id === 'quote-form') ? 'pointer' : 'not-allowed',
+                opacity: (item.id === 'dashboard' || item.id === 'clients' || item.id === 'invoices' || item.id === 'payments' || item.id === 'quote-form') ? 1 : 0.5
               }}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon"><i className={item.icon}></i></span>
               <span className="nav-text">{item.name}</span>
             </div>
           ))}
