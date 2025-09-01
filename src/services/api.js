@@ -91,7 +91,9 @@ export const getAllContactSubmissions = async () => {
 // Admin: Update contact status
 export const updateContactStatus = async (contactId, status) => {
   try {
-    const response = await api.patch(`/contact/${contactId}/status`, { status });
+    const response = await api.patch(`/contact/${contactId}/status`, {
+      status,
+    });
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Something went wrong";
@@ -138,4 +140,14 @@ export const getAllClients = async () => {
 export const getClientDetails = async (userId) => {
   const response = await api.get(`/clients/${userId}`);
   return response.data;
+};
+
+// Get current user's client details
+export const getMyClientDetails = async () => {
+  try {
+    const response = await api.get("/clients/my/details");
+    return response.data.data || response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch client details";
+  }
 };

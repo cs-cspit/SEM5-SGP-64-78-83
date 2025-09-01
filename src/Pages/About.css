@@ -1,262 +1,281 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* About.css - Works Page Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* Main container */
 .about-wrapper {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #ffffff;
-  background-color: #1a1a1a;
-  padding-bottom: 2rem;
+  background: #1a1a1a;
   min-height: 100vh;
+  padding: 80px 20px;
   box-sizing: border-box;
 }
 
 /* Hero banner */
 .about-hero {
-  background: #ffffff;
-  color: #1a1a1a;
   text-align: center;
-  padding: 5rem 1.5rem 3rem;
-  border-radius: 0 0 1.5rem 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 80px;
+  padding: 0 20px;
 }
 
 .about-title {
+  font-size: 3.5em;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.about-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b00, #ff8c00);
+  border-radius: 2px;
+}
+
+.about-tagline {
+  font-size: 1.2em;
+  color: #999;
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Content section */
+.about-section-1 {
+  max-width: 1400px;
+  margin: 0 auto 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.about-history,
+.about-mission {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 107, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  padding: 40px;
+}
+
+.about-history:hover,
+.about-mission:hover {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 107, 0, 0.2),
+    0 0 30px rgba(255, 107, 0, 0.15);
+}
+
+.about-history h3,
+.about-mission h3 {
+  font-size: 1.8em;
+  font-weight: 700;
+  padding-bottom: 12px;
+  margin-bottom: 25px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.about-history p,
+.about-mission p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 1.05em;
+  text-align: justify;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  word-wrap: break-word;
+  word-spacing: 0.05em;
+  hyphens: none;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+}
+
+.about-timeline {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.about-timeline > div {
+  text-align: center;
+  min-width: 120px;
+}
+
+.timeline-years {
   font-size: 2.5rem;
   font-weight: 800;
   background: linear-gradient(135deg, #ff6b00, #ff8c00);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 2;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-.about-tagline {
-  font-size: 1.2rem;
+.timeline-label {
+  font-size: 0.9rem;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  color: #ccc;
-  position: relative;
-  z-index: 2;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* Section titles */
 .section-heading {
-  font-size: 1.8rem;
+  font-size: 3.5em;
+  font-weight: 800;
   background: linear-gradient(135deg, #ff6b00, #ff8c00);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  margin: 0.5rem 0 1.5rem;
+  margin-bottom: 60px;
+  position: relative;
+  display: inline-block;
   text-align: center;
-  position: relative;
+  width: 100%;
 }
 
-/* Content section */
-.about-section-1 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4rem;
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 3px 20px rgba(255, 107, 0, 0.1);
-  border-radius: 1rem;
-  padding: 3rem;
-  margin: 0 2rem 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.about-history,
-.about-mission {
-  position: relative;
-  z-index: 2;
-  padding: 2rem;
-  background: rgba(26, 26, 26, 0.7);
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 107, 0, 0.1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.about-history:hover,
-.about-mission:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.15);
-}
-
-.about-history h3,
-.about-mission h3 {
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #ff6b00, #ff8c00);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  padding-bottom: 1rem;
-}
-
-.about-history h3::after,
-.about-mission h3::after {
+.section-heading::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #ff6b00, #ff8c00);
-  border-radius: 2px;
-}
-
-.about-history p,
-.about-mission p {
-  font-size: 1.05rem;
-  color: #ccc;
-  line-height: 1.8;
-  text-align: justify;
-  letter-spacing: 0.01em;
-  margin-bottom: 1rem;
-}
-.about-timeline {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap; /* Allow timeline items to wrap */
-  justify-content: center; /* Center timeline items */
-}
-.timeline-years {
-  font-size: 2rem;
-  font-weight: bold;
-  background: linear-gradient(135deg, #ff6b00, #ff8c00);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding: 0.4rem 1rem;
-  text-align: center;
-  position: relative;
-}
-
-.timeline-years::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 40px;
-  height: 2px;
+  width: 100px;
+  height: 4px;
   background: linear-gradient(90deg, #ff6b00, #ff8c00);
   border-radius: 2px;
-}
-
-.timeline-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #ccc;
-  text-align: center;
-  margin-top: 0.5rem;
-  letter-spacing: 0.02em;
 }
 
 /* Team Section */
 .about-team-section {
-  background: #ffffff;
-  border-radius: 1rem;
-  padding: 3rem 1rem 2rem;
-  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
+  max-width: 1400px;
+  margin: 0 auto 60px;
   text-align: center;
-  margin: 0 2rem 2rem;
+  padding: 0 15px;
 }
 
 .team-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2.5rem;
-  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
 }
 
 .team-card {
-  background: rgba(26, 26, 26, 0.95);
-  border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
-  padding: 1.5rem;
-  width: 280px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(255, 107, 0, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 107, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .team-card:hover {
   transform: translateY(-10px);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 30px 60px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 107, 0, 0.2),
     0 0 30px rgba(255, 107, 0, 0.15);
 }
 
 .team-card img {
-  width: 180px;
-  height: 180px;
-  border-radius: 15px;
+  width: 100%;
+  height: 300px;
   object-fit: cover;
-  margin-bottom: 1.2rem;
-  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .team-card:hover img {
   transform: scale(1.05);
 }
 
+.team-card > div {
+  padding: 25px;
+  text-align: center;
+}
+
 .team-card h4 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.4em;
+  margin-bottom: 8px;
   background: linear-gradient(135deg, #ff6b00, #ff8c00);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .team-role {
   font-size: 1rem;
-  color: #ccc;
+  color: #999;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* Call To Action */
 .about-cta {
   text-align: center;
-  padding: 2rem 1rem 2.5rem;
+  padding: 60px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
+
 .about-cta h3 {
-  font-size: 1.3rem;
+  font-size: 2.2em;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 30px;
+  color: #ffffff;
 }
+
 .btn.big-btn {
-  padding: 0.9rem 2.5rem;
-  font-size: 1.1rem;
-  border-radius: 2rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: linear-gradient(135deg, #ff6b00, #ff8c00);
-  color: #fff;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 25px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-block;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .btn.big-btn:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
 }
 
@@ -273,6 +292,7 @@
 .fade-up {
   animation: fadeUp 1.1s ease-out both;
 }
+
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -290,146 +310,107 @@
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* Responsive Adjustments */
-
-/* For screens smaller than 1200px (e.g., smaller desktops, large tablets) */
-@media (max-width: 1200px) {
-  .about-section-1 {
-    padding: 2rem 10rem; /* Reduce horizontal padding */
-  }
-}
-
-/* For screens smaller than 992px (e.g., tablets) */
-@media (max-width: 992px) {
-  .about-hero {
-    padding: 4rem 1rem 2.5rem; /* Reduce hero padding */
-  }
-  .about-title {
-    font-size: 2rem; /* Adjust title size */
-  }
-  .about-tagline {
-    font-size: 1.1rem; /* Adjust tagline size */
-  }
-
-  .about-section-1 {
-    grid-template-columns: 1fr; /* Stack story and mission */
-    padding: 2rem 1.5rem;
-    margin: 0 1rem 2rem;
-    gap: 2rem;
-  }
+/* Responsive Design */
+@media (max-width: 1024px) {
   .about-history,
   .about-mission {
-    width: 100%;
-    padding: 1.5rem;
+    padding: 30px;
   }
-  .about-history h3,
-  .about-mission h3 {
-    text-align: center;
-  }
-  .about-history h3::after,
-  .about-mission h3::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .about-timeline {
-    justify-content: center; /* Ensure timeline items are centered */
-  }
-
-  .about-team-section {
-    padding: 2.5rem 1rem 1.5rem; /* Adjust team section padding */
-    margin: 0 1rem 2rem; /* Adjust horizontal margin */
-  }
+  
   .team-grid {
-    gap: 1.5rem; /* Reduce gap between team cards */
-  }
-  .team-card {
-    width: 100%; /* Make cards take full width */
-    max-width: 250px; /* Limit max width for a better look on smaller tablets */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
   }
 }
 
-/* For screens smaller than 768px (e.g., larger phones) */
 @media (max-width: 768px) {
-  .about-hero {
-    padding: 3rem 1rem 2rem; /* Further reduce hero padding */
-  }
-  .about-title {
-    font-size: 1.8rem; /* Further adjust title size */
-  }
-  .about-tagline {
-    font-size: 1rem; /* Further adjust tagline size */
+  .about-wrapper {
+    padding: 60px 15px;
   }
 
+  .about-title,
   .section-heading {
-    font-size: 1.3rem; /* Adjust section heading size */
+    font-size: 2.5em;
+  }
+
+  .about-tagline {
+    font-size: 1.1em;
   }
 
   .about-section-1 {
-    padding: 1.5rem 1rem; /* Even tighter padding */
-  }
-  .timeline-years {
-    font-size: 1.5rem; /* Adjust timeline year size */
-    padding: 0.3rem 0.8rem;
-  }
-  .timeline-label {
-    font-size: 0.85rem; /* Adjust timeline label size */
+    gap: 30px;
   }
 
-  .about-team-section {
-    padding: 2rem 0.5rem 1rem; /* Tighter padding for team section */
+  .about-history,
+  .about-mission {
+    padding: 25px;
   }
-  .team-card {
-    max-width: 200px; /* Adjust max width for phones */
+
+  .about-timeline {
+    gap: 2rem;
+  }
+
+  .timeline-years {
+    font-size: 2rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .team-card img {
+    height: 250px;
+  }
+
+  .about-cta h3 {
+    font-size: 1.8em;
   }
 }
 
-/* For screens smaller than 576px (e.g., small phones) */
-@media (max-width: 576px) {
-  .about-hero {
-    padding: 2.5rem 0.8rem 1.5rem; /* Minimal padding for hero */
-  }
-  .about-title {
-    font-size: 1.6rem;
-  }
-  .about-tagline {
-    font-size: 0.9rem;
+@media (max-width: 480px) {
+  .about-title,
+  .section-heading {
+    font-size: 2em;
   }
 
-  .about-section-1,
-  .about-team-section {
-    margin: 0 0.5rem 1.5rem; /* Reduce overall horizontal margin */
-    padding: 1rem 0.8rem; /* Tighter padding within sections */
+  .about-history h3,
+  .about-mission h3 {
+    font-size: 1.5em;
   }
 
   .about-history p,
   .about-mission p {
-    font-size: 0.95rem; /* Smaller paragraph text */
+    font-size: 1em;
+  }
+
+  .about-timeline {
+    gap: 1.5rem;
+  }
+
+  .timeline-years {
+    font-size: 1.5rem;
+  }
+
+  .timeline-label {
+    font-size: 0.8rem;
   }
 
   .team-grid {
-    gap: 1rem; /* Smaller gap between team cards */
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
-  .team-card {
-    width: 100%;
-    max-width: 180px; /* Even smaller max width for very small screens */
-    padding: 1rem; /* Reduce card padding */
-  }
+
   .team-card img {
-    width: 60px;
-    height: 60px;
-  }
-  .team-card h4 {
-    font-size: 1rem;
-  }
-  .team-role {
-    font-size: 0.85rem;
+    height: 200px;
   }
 
   .about-cta h3 {
-    font-size: 1.1rem;
+    font-size: 1.5em;
   }
+
   .btn.big-btn {
-    padding: 0.7rem 1.5rem;
-    font-size: 0.9rem;
+    padding: 12px 25px;
+    font-size: 1em;
   }
 }

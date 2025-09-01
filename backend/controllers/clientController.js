@@ -108,6 +108,22 @@ exports.getClientDetails = async (req, res) => {
   }
 };
 
+// Get my client details (for authenticated clients)
+exports.getMyClientDetails = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const clientDetails = await ClientDetails.findOne({ userId });
+
+    if (!clientDetails) {
+      return res.status(404).json({ message: "Client details not found" });
+    }
+
+    res.json(clientDetails);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get all clients
 exports.getAllClients = async (req, res) => {
   try {

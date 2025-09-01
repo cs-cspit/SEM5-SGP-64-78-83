@@ -28,10 +28,24 @@
 
 .admin-layout {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 70px); /* Subtract header height */
+  margin-top: 70px; /* Push admin panel below header */
   font-family: 'Inter', sans-serif;
   background: #f8fafc;
   overflow: hidden;
+  position: relative;
+}
+
+/* Black background above admin panel */
+.admin-layout::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #000000;
+  z-index: -1;
 }
 
 /* Sidebar Styles */
@@ -462,11 +476,21 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .admin-layout {
+    margin-top: 60px; /* Slightly smaller margin for mobile header */
+    height: calc(100vh - 60px);
+  }
+
+  /* Black background above admin panel for mobile */
+  .admin-layout::before {
+    height: 60px; /* Adjust height for mobile */
+  }
+
   .admin-sidebar {
     position: fixed;
-    top: 0;
+    top: 60px; /* Position below mobile header */
     left: 0;
-    height: 100vh;
+    height: calc(100vh - 60px); /* Adjust height for mobile header */
     z-index: 1000;
     transform: translateX(-100%);
     transition: transform 0.3s ease;

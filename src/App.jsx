@@ -5,14 +5,18 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 
 // Protected Route Component
-const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { user, isAdmin } = useAuth();
+const ProtectedRoute = ({ children, adminOnly = false, clientOnly = false }) => {
+  const { user, isAdmin, isClient } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" />;
   }
 
   if (adminOnly && !isAdmin()) {
+    return <Navigate to="/" />;
+  }
+
+  if (clientOnly && !isClient()) {
     return <Navigate to="/" />;
   }
 
@@ -36,11 +40,10 @@ import BillGeneration from './Pages/Admin/BillGeneration';
 import AddClient from './Pages/Admin/AddClient';
 import InvoiceList from './Pages/Admin/InvoiceList';
 import PaymentManagement from './Pages/Admin/PaymentManagement';
-<<<<<<< HEAD
 import WorkDetail from './Pages/WorkDetail';
-=======
 import QuoteForm from './Pages/Admin/QuoteForm';
->>>>>>> a0b54decd0d041c0ee9b34d06bbf22e341b54b45
+import Profile from './Pages/Profile';
+import ClientDashboard from './Pages/ClientDashboard';
 
 function App() {
   return (
@@ -120,6 +123,22 @@ function App() {
             element={
               <ProtectedRoute adminOnly>
                 <QuoteForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/client-dashboard"
+            element={
+              <ProtectedRoute clientOnly>
+                <ClientDashboard />
               </ProtectedRoute>
             }
           />
