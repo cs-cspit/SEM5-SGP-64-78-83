@@ -76,9 +76,6 @@ const UserMenu = () => {
             </div>
           </div>
           <div className="menu-items">
-            {(isAdmin() || isClient()) && (
-              
-            )}
             {isAdmin() && (
               <button 
                 onClick={() => { navigate('/admin'); setIsOpen(false); }}
