@@ -12,11 +12,13 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchClientDetails = async () => {
-      if (isClient()) {
+      if (isClient() && user) {
         try {
           setLoading(true);
           setError('');
+          console.log('Fetching client details for user:', user);
           const details = await getMyClientDetails();
+          console.log('Client details received:', details);
           setClientDetails(details);
         } catch (err) {
           console.error('Error fetching client details:', err);
@@ -131,7 +133,7 @@ const Profile = () => {
                   </div>
                   <div className="info-content">
                     <label>Full Name</label>
-                    <span>{user.name}</span>
+                    <span>{user.name || 'Not provided'}</span>
                   </div>
                 </div>
 
@@ -141,7 +143,7 @@ const Profile = () => {
                   </div>
                   <div className="info-content">
                     <label>Email Address</label>
-                    <span>{user.email}</span>
+                    <span>{user.email || 'Not provided'}</span>
                   </div>
                 </div>
 
@@ -152,7 +154,7 @@ const Profile = () => {
                   <div className="info-content">
                     <label>Account Type</label>
                     <span className={`role-badge ${user.role}`}>
-                      {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                      {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Unknown'}
                     </span>
                   </div>
                 </div>
@@ -185,6 +187,22 @@ const Profile = () => {
                 </div>
               )}
 
+              {!loading && !error && !clientDetails && isClient() && (
+                <div className="no-data-section">
+                  <i className="fas fa-info-circle"></i>
+                  <p>No client details found. This might be because:</p>
+                  <ul>
+                    <li>You haven't been set up as a client yet</li>
+                    <li>There's an issue with your account</li>
+                    <li>The data hasn't been synchronized</li>
+                  </ul>
+                  <p>User data: {JSON.stringify(user, null, 2)}</p>
+                  <button onClick={() => window.location.reload()} className="retry-btn">
+                    <i className="fas fa-redo"></i> Refresh Page
+                  </button>
+                </div>
+              )}
+
               {clientDetails && (
                 <div className="info-grid">
                   <div className="info-item full-width">
@@ -193,7 +211,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>Company Name</label>
-                      <span className="company-name">{clientDetails.companyName}</span>
+                      <span className="company-name">{clientDetails.companyName || 'Not provided'}</span>
                     </div>
                   </div>
 
@@ -203,7 +221,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>GST Number</label>
-                      <span className="gst-number">{clientDetails.gstNumber}</span>
+                      <span className="gst-number">{clientDetails.gstNumber || 'Not provided'}</span>
                     </div>
                   </div>
 
@@ -225,7 +243,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>Business Email</label>
-                      <span>{clientDetails.email}</span>
+                      <span>{clientDetails.email || 'Not provided'}</span>
                     </div>
                   </div>
 
@@ -235,7 +253,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>Phone Number</label>
-                      <span>{clientDetails.phone}</span>
+                      <span>{clientDetails.phone || 'Not provided'}</span>
                     </div>
                   </div>
 
@@ -257,7 +275,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>Business Address</label>
-                      <span className="address-text">{clientDetails.address}</span>
+                      <span className="address-text">{clientDetails.address || 'Not provided'}</span>
                     </div>
                   </div>
 
@@ -279,7 +297,7 @@ const Profile = () => {
                     </div>
                     <div className="info-content">
                       <label>Client Since</label>
-                      <span>{formatDate(clientDetails.createdAt)}</span>
+                      <span>{formatDate(clientDetails.createdAt || new Date())}</span>
                     </div>
                   </div>
                 </div>

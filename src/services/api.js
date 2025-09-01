@@ -131,6 +131,37 @@ export const updateBillStatus = async (billId, status) => {
   return response.data;
 };
 
+// Client Bills APIs
+export const getClientDashboardStats = async () => {
+  try {
+    const response = await api.get("/bills/my/dashboard-stats");
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error.response?.data || error.message);
+    throw error.response?.data?.error || "Failed to fetch dashboard statistics";
+  }
+};
+
+export const getMyBills = async () => {
+  try {
+    const response = await api.get("/bills/my/bills");
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching client bills:', error.response?.data || error.message);
+    throw error.response?.data?.error || "Failed to fetch your bills";
+  }
+};
+
+export const getMyBill = async (billId) => {
+  try {
+    const response = await api.get(`/bills/my/${billId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching bill:', error.response?.data || error.message);
+    throw error.response?.data?.error || "Failed to fetch bill details";
+  }
+};
+
 // Client APIs (admin)
 export const getAllClients = async () => {
   const response = await api.get("/clients");
@@ -146,8 +177,10 @@ export const getClientDetails = async (userId) => {
 export const getMyClientDetails = async () => {
   try {
     const response = await api.get("/clients/my/details");
+    console.log('Client details response:', response.data); // Debug log
     return response.data.data || response.data;
   } catch (error) {
+    console.error('Error fetching client details:', error.response?.data || error.message);
     throw error.response?.data?.message || "Failed to fetch client details";
   }
 };

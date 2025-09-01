@@ -9,8 +9,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check for saved user data in localStorage
     const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('userToken');
+    
+    console.log('Checking saved user data:');
+    console.log('Saved user:', savedUser);
+    console.log('Saved token:', savedToken ? 'Present' : 'Not found');
+    
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        console.log('Parsed user data:', parsedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing saved user data:', error);
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);

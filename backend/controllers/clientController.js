@@ -111,16 +111,30 @@ exports.getClientDetails = async (req, res) => {
 // Get my client details (for authenticated clients)
 exports.getMyClientDetails = async (req, res) => {
   try {
+    console.log('Getting client details for user:', req.user._id);
     const userId = req.user._id;
     const clientDetails = await ClientDetails.findOne({ userId });
 
+    console.log('Client details found:', clientDetails ? 'Yes' : 'No');
+    
     if (!clientDetails) {
-      return res.status(404).json({ message: "Client details not found" });
+      return res.status(404).json({ 
+        success: false,
+        message: "Client details not found. You may not be registered as a client." 
+      });
     }
 
-    res.json(clientDetails);
+    console.log('Returning client details:', clientDetails);
+    res.json({
+      success: true,
+      data: clientDetails
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in getMyClientDetails:', error);
+    res.status(500).json({ 
+      success: false,
+      message: error.message 
+    });
   }
 };
 
