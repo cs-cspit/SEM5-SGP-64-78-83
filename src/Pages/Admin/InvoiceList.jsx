@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
-import { printInvoice } from '../../utils/invoiceGenerator.js';
+import { viewInvoice, printInvoice, downloadInvoiceHTML } from '../../utils/invoiceGenerator.js';
 import axios from 'axios';
 import './InvoiceList.css';
 
@@ -91,8 +91,26 @@ const InvoiceList = () => {
       workDescription: invoice.workDescription
     };
 
-    // Generate and print invoice
-    printInvoice(invoiceData);
+    // View invoice without auto-print
+    viewInvoice(invoiceData);
+  };
+
+  const handleDownloadInvoice = (invoice) => {
+    // Prepare invoice data for download
+    const invoiceData = {
+      invoiceNumber: `INV-${String(invoice.invoiceNo).padStart(3, '0')}`,
+      date: invoice.date,
+      companyName: invoice.companyName || invoice.clientName,
+      companyAddress: invoice.companyAddress || invoice.address,
+      siteLocation: invoice.siteLocation,
+      gstNumber: invoice.gstNumber,
+      totalAmount: invoice.totalAmount,
+      items: invoice.items,
+      workDescription: invoice.workDescription
+    };
+
+    // Download invoice as HTML file
+    downloadInvoiceHTML(invoiceData);
   };
 
   const getInvoiceStatus = (invoice) => {
@@ -316,9 +334,16 @@ const InvoiceList = () => {
                             <button
                               className="action-button view"
                               onClick={() => handleViewInvoice(invoice)}
-                              title="View Invoice"
+                              title="View Invoice (Print/Preview)"
                             >
                               <i className="fas fa-eye"></i>
+                            </button>
+                            <button
+                              className="action-button download"
+                              onClick={() => handleDownloadInvoice(invoice)}
+                              title="Download Invoice"
+                            >
+                              <i className="fas fa-download"></i>
                             </button>
                             <button
                               className="action-button edit"
@@ -332,7 +357,7 @@ const InvoiceList = () => {
                               onClick={() => console.log('More options:', invoice._id)}
                               title="More Options"
                             >
-                              ⋯
+                              <i className="fas fa-ellipsis-v"></i>
                             </button>
                           </div>
                         </td>

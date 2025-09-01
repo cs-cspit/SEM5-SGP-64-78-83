@@ -68,11 +68,11 @@ const Register = () => {
           <h1 className="register-main-title">Welcome to JJE</h1>
           <p className="register-subtitle"></p>
         </div>
-        
+
         <div className="register-form-container">
           <h2 className="register-form-title">Create Account</h2>
           <p className="register-description">Enter your details to create a new account</p>
-          
+
           <form onSubmit={handleSubmit} className="register-form">
             <div className="register-input-group">
               <label htmlFor="name" className="register-label">Full Name</label>

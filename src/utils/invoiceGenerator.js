@@ -512,6 +512,17 @@ export const generateInvoice = (invoiceData) => {
   return invoiceHTML;
 };
 
+// Function to view invoice in new window (no auto-print)
+export const viewInvoice = (invoiceData) => {
+  const invoiceHTML = generateInvoice(invoiceData).replace(
+    /<script>[\s\S]*?<\/script>/g,
+    "" // Remove auto-print script
+  );
+  const viewWindow = window.open("", "_blank", "width=800,height=600");
+  viewWindow.document.write(invoiceHTML);
+  viewWindow.document.close();
+};
+
 // Function to open invoice in new window for printing/download
 export const printInvoice = (invoiceData) => {
   const invoiceHTML = generateInvoice(invoiceData);
