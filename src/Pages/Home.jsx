@@ -54,13 +54,26 @@ const Home = () => {
   // Client logos data
   const clientLogos = [
     { src: "/Images/havells.jpg", alt: "Havells" },
-    { src: "/Images/havells.jpg", alt: "Tata Power" },
-    { src: "/Images/havells.jpg", alt: "Siemens" },
-    { src: "/Images/havells.jpg", alt: "Schneider Electric" },
-    { src: "/Images/havells.jpg", alt: "L&T" },
-    { src: "/Images/havells.jpg", alt: "ABB" },
-    { src: "/Images/havells.jpg", alt: "Bajaj" },
-    { src: "/Images/havells.jpg", alt: "Crompton" },
+    { src: "/Images/gmdc.jpg", alt: "gmdc" },
+    { src: "/Images/cinepolis.png", alt: "Siemens" },
+    { src: "/Images/pvr.jpeg", alt: "Schneider Electric" },
+    { src: "/Images/L&T.jpeg", alt: "L&T" },
+    { src: "/Images/siemns.jpeg", alt: "siemns" },
+    { src: "/Images/tata.png", alt: "tata" },
+    { src: "/Images/Pidilite.png", alt: "pidilite" },
+    { src: "/Images/inox.jpeg", alt: "inox" },
+    { src: "/Images/VR.png", alt: "VR" },
+    { src: "/Images/rrtm.jpg", alt: "rrtm" },
+     { src: "/Images/enviro.jpeg", alt: "enviro" },
+     { src: "/Images/ppl.png", alt: "people" },
+     { src: "/Images/metro.png", alt: "metro" },
+      { src: "/Images/redfm.png", alt: "redfm" },
+      { src: "/Images/iocl.png", alt: "iocl" },
+      { src: "/Images/mafat.png", alt: "mafat" },
+      { src: "/Images/jkumar.jpg", alt: "jkumar" },
+       { src: "/Images/shalby.avif", alt: "avif" },
+     
+     
   ];
 
   // Navigation functions for client carousel
@@ -160,7 +173,7 @@ const Home = () => {
 
       {/* Enhanced Clients Section with Navigation */}
       <section className="clients-section">
-        <h3 className="section-title fade-in">Trusted by Leading Companies</h3>
+        <h3 className="section-title fade-in">Our Clients</h3>
         <div className="clients-carousel-container">
           <button className="carousel-nav carousel-nav-left" onClick={prevSlide}>
             <svg viewBox="0 0 24 24" fill="currentColor">
