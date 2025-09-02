@@ -57,7 +57,7 @@ export default function TestimonialCarousel() {
 
   return (
     <section className="testimonial-section">
-      <h3 className="section-title">What Our Clients Say</h3>
+      <h3 className="enhanced-section-title fade-in">What Our Clients Say</h3>
       <div className="testimonial-carousel">
         <button className="arrow-btn left" onClick={prevSlide}>
           <ChevronLeft size={28} />
