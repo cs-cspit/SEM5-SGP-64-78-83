@@ -126,7 +126,7 @@ const Home = () => {
 
       {/* Services with Electrical-Themed Cards */}
       <section className="pro-section" id="services">
-        <h3 className="section-title fade-in">Our Signature Services</h3>
+        <h3 className="enhanced-section-title fade-in">Our Signature Services</h3>
         <div className="service-showcase-grid">
           <Link to="/services/wiring" className="pro-card fade-left">
             <img
@@ -173,7 +173,7 @@ const Home = () => {
 
       {/* Enhanced Clients Section with Navigation */}
       <section className="clients-section">
-        <h3 className="section-title fade-in">Our Clients</h3>
+        <h3 className="enhanced-section-title fade-in">Our Clients</h3>
         <div className="clients-carousel-container">
           <button className="carousel-nav carousel-nav-left" onClick={prevSlide}>
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -253,7 +253,7 @@ const Home = () => {
 
       {/* Why Choose Us Section */}
       <section className="why-choose-section">
-  <h3 className="section-title fade-in">Why Choose Jay Jalaram Electricals?</h3>
+  <h3 className="enhanced-section-title fade-in">Why Choose Jay Jalaram Electricals?</h3>
   <div className="features-grid">
     <div className="feature-item fade-left">
       <div className="feature-icon">
@@ -297,7 +297,7 @@ const Home = () => {
 
       {/* Contact Call-to-Action */}
       <section className="contact-teaser fade-in">
-        <h3 className="section-title">Ready to Connect?</h3>
+        <h3 className="enhanced-section-title">Ready to Connect?</h3>
         <p className="contact-description">
           Let's build the future of electrical safety and efficiency together. Reach out to us for expert consultation and solutions.
         </p>

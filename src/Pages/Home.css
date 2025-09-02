@@ -63,6 +63,37 @@ body {
   overflow: hidden; /* Ensures animations stay within bounds */
 }
 
+/* Enhanced Section Title - Unified styling for all sections */
+.enhanced-section-title {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #1a1a1a, #ff6b00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.02em;
+  padding: 0 20px;
+  display: inline-block;
+  width: 100%;
+}
+
+.enhanced-section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b00, #ff8c00);
+  border-radius: 2px;
+  box-shadow: 0 2px 10px rgba(255, 107, 0, 0.3);
+}
+
 .section-title {
   font-size: 3em;
   font-weight: 700;
@@ -84,6 +115,14 @@ body {
 }
 
 .pro-section {
+  text-align: center;
+}
+
+.pro-section .section-title {
+  background: linear-gradient(135deg, #ff6b00, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   text-align: center;
 }
 
