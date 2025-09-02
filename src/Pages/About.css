@@ -55,37 +55,36 @@
 .about-section-1 {
   max-width: 1400px;
   margin: 0 auto 60px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 40px;
+  padding: 0 20px;
 }
 
 .about-history,
 .about-mission {
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 107, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   padding: 40px;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .about-history:hover,
 .about-mission:hover {
   transform: translateY(-10px);
-  box-shadow: 
-    0 30px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 107, 0, 0.2),
-    0 0 30px rgba(255, 107, 0, 0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
 }
 
 .about-history h3,
 .about-mission h3 {
   font-size: 1.8em;
-  font-weight: 700;
+  font-weight: 800;
   padding-bottom: 12px;
   margin-bottom: 25px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -100,7 +99,7 @@
 
 .about-history p,
 .about-mission p {
-  color: #ccc;
+  color: #333333;
   line-height: 1.6;
   margin-bottom: 20px;
   font-size: 1.05em;
@@ -110,7 +109,13 @@
   word-spacing: 0.05em;
   hyphens: none;
   letter-spacing: 0.01em;
-  font-weight: 400;
+  font-weight: 500;
+}
+
+.about-history strong,
+.about-mission strong {
+  font-weight: 800;
+  color: #1a1a1a;
 }
 
 .about-timeline {

@@ -99,18 +99,19 @@ body {
   font-weight: 700;
   background: linear-gradient(
     135deg,
-    var(--primary-dark),
-    var(--secondary-dark)
+    #ff6b00,
+    #ff8c00
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-align: right;
+  text-align: center;
   margin-bottom: 60px;
   padding: 0 20px;
   letter-spacing: -0.02em;
   position: relative;
   display: inline-block;
+  text-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
 }
 
 .pro-section {
