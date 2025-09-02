@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/auth-context.jsx';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+import ScrollToTop from './Components/ScrollToTop';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false, clientOnly = false }) => {
@@ -48,6 +49,7 @@ import ClientDashboard from './Pages/ClientDashboard';
 function App() {
   return (
     <AuthProvider>
+      <ScrollToTop />
       <Header />
       <main>
         <Routes>
