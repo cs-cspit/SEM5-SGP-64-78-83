@@ -99,21 +99,30 @@ const AdminLayout = ({ children }) => {
             <div
               key={item.id}
               className={`nav-item ${isActiveRoute(item.path) ? 'active' : ''}`}
-              onClick={() => {
-                if (item.id === 'dashboard') {
-                  navigate('/admin');
-                } else if (item.id === 'clients') {
-                  navigate('/admin/user-roles');
-                } else if (item.id === 'invoices') {
-                  navigate('/admin/invoices');
-                } else if (item.id === 'payments') {
-                  navigate('/admin/payments');
-                } else if (item.id === 'quote-form') {
-                  navigate('/admin/quote-form');
-                } else {
-                  // For now, only dashboard, clients, invoices, payments, and quote-form are functional
-                  // Future functionality can be added here
-                  console.log(`${item.name} clicked - Coming soon!`);
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Navigate to the appropriate route
+                switch (item.id) {
+                  case 'dashboard':
+                    navigate('/admin');
+                    break;
+                  case 'clients':
+                    navigate('/admin/user-roles');
+                    break;
+                  case 'invoices':
+                    navigate('/admin/invoices');
+                    break;
+                  case 'payments':
+                    navigate('/admin/payments');
+                    break;
+                  case 'quote-form':
+                    navigate('/admin/quote-form');
+                    break;
+                  default:
+                    // For inactive items, just log for now
+                    console.log(`${item.name} clicked - Coming soon!`);
                 }
               }}
               style={{

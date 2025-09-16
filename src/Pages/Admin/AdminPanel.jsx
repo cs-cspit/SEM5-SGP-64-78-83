@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
+import { getAdminDashboardStats } from '../../services/api.js';
 import AdminLayout from '../../Components/AdminLayout.jsx';
 import './AdminPanel.css';
 
@@ -8,14 +9,23 @@ const AdminPanel = () => {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState({
-    clients: 0,
-    invoices: 0,
-    revenue: 0,
+    totalClients: 0,
+    totalInvoices: 0,
+    totalRevenue: 0,
     pendingPayments: 0,
     paymentsReceived: 0,
-    collectionRate: 0
+    collectionRate: 0,
+    recentInvoices: [],
+    billsByStatus: {
+      paid: 0,
+      pending: 0,
+      sent: 0,
+      viewed: 0,
+      overdue: 0
+    }
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Redirect if not admin
   React.useEffect(() => {
@@ -24,22 +34,38 @@ const AdminPanel = () => {
     }
   }, [isAdmin, navigate]);
 
-  // Simulate fetching dashboard data
+  // Fetch real dashboard data from database
   useEffect(() => {
     const fetchDashboardData = async () => {
-      setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await getAdminDashboardStats();
+        console.log('Admin dashboard data:', data); // Debug log
+        setDashboardData(data);
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+        setError(error.message || 'Failed to load dashboard data');
+        // Set fallback data in case of error
         setDashboardData({
-          clients: 24,
-          invoices: 156,
-          revenue: 452310,
-          pendingPayments: 84200,
-          paymentsReceived: 368110,
-          collectionRate: 87
+          totalClients: 0,
+          totalInvoices: 0,
+          totalRevenue: 0,
+          pendingPayments: 0,
+          paymentsReceived: 0,
+          collectionRate: 0,
+          recentInvoices: [],
+          billsByStatus: {
+            paid: 0,
+            pending: 0,
+            sent: 0,
+            viewed: 0,
+            overdue: 0
+          }
         });
+      } finally {
         setIsLoading(false);
-      }, 1000);
+      }
     };
 
     fetchDashboardData();
@@ -61,39 +87,39 @@ const AdminPanel = () => {
   const dashboardStats = [
     {
       title: 'Total Clients',
-      value: isLoading ? '...' : dashboardData.clients.toString(),
-      subtitle: 'Active clients',
+      value: isLoading ? '...' : dashboardData.totalClients.toString(),
+      subtitle: 'Registered clients',
       icon: 'fas fa-users',
       iconColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      trend: '+3 this month',
+      trend: dashboardData.totalClients > 0 ? `${dashboardData.totalClients} clients` : 'No clients yet',
       trendPositive: true
     },
     {
       title: 'Total Invoices',
-      value: isLoading ? '...' : dashboardData.invoices.toString(),
-      subtitle: 'This month',
+      value: isLoading ? '...' : dashboardData.totalInvoices.toString(),
+      subtitle: 'All time invoices',
       icon: 'fas fa-file-invoice',
       iconColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      trend: '+12% from last month',
+      trend: `${dashboardData.billsByStatus.paid} paid, ${dashboardData.billsByStatus.pending + dashboardData.billsByStatus.sent + dashboardData.billsByStatus.viewed} pending`,
       trendPositive: true
     },
     {
       title: 'Total Revenue',
-      value: isLoading ? '...' : formatCurrency(dashboardData.revenue),
-      subtitle: 'This month',
+      value: isLoading ? '...' : formatCurrency(dashboardData.totalRevenue),
+      subtitle: 'All paid invoices',
       icon: 'fas fa-rupee-sign',
       iconColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      trend: '+12% from last month',
+      trend: dashboardData.totalRevenue > 0 ? 'From completed payments' : 'No revenue yet',
       trendPositive: true
     },
     {
       title: 'Pending Payments',
       value: isLoading ? '...' : formatCurrency(dashboardData.pendingPayments),
-      subtitle: '12 overdue invoices',
+      subtitle: `${dashboardData.billsByStatus.pending + dashboardData.billsByStatus.sent + dashboardData.billsByStatus.viewed} outstanding invoices`,
       icon: 'fas fa-exclamation-triangle',
       iconColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-      trend: '-5% improvement',
-      trendPositive: true
+      trend: dashboardData.pendingPayments > 0 ? 'Awaiting payment' : 'All caught up!',
+      trendPositive: dashboardData.pendingPayments === 0
     },
     {
       title: 'Payments Received',
@@ -101,7 +127,7 @@ const AdminPanel = () => {
       subtitle: 'This month',
       icon: 'fas fa-credit-card',
       iconColor: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-      trend: '+8% from last month',
+      trend: dashboardData.paymentsReceived > 0 ? 'Monthly collections' : 'No payments this month',
       trendPositive: true
     },
     {
@@ -110,8 +136,9 @@ const AdminPanel = () => {
       subtitle: 'Payment efficiency',
       icon: 'fas fa-chart-line',
       iconColor: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-      trend: '+5% improvement',
-      trendPositive: true
+      trend: dashboardData.collectionRate >= 80 ? 'Excellent rate' : 
+             dashboardData.collectionRate >= 60 ? 'Good rate' : 'Needs improvement',
+      trendPositive: dashboardData.collectionRate >= 70
     }
   ];
 
@@ -119,8 +146,14 @@ const AdminPanel = () => {
     <AdminLayout>
       <div className="dashboard-container">
         <div className="dashboard-header">
-          <h1>Dashboard</h1>
-          <p>Welcome to your comprehensive invoice management system. Monitor your business performance and manage your operations efficiently.</p>
+          <h1>Admin Dashboard</h1>
+          <p>Monitor your business performance and manage operations efficiently with real-time data from your database.</p>
+          {error && (
+            <div className="error-message">
+              <i className="fas fa-exclamation-triangle"></i>
+              {error}
+            </div>
+          )}
         </div>
 
         <div className="dashboard-stats">
@@ -148,6 +181,35 @@ const AdminPanel = () => {
           ))}
         </div>
 
+        {/* Recent Invoices Section */}
+        {!isLoading && dashboardData.recentInvoices && dashboardData.recentInvoices.length > 0 && (
+          <div className="recent-invoices-section">
+            <h2>Recent Invoices</h2>
+            <div className="recent-invoices-table">
+              <div className="table-header">
+                <span>Invoice ID</span>
+                <span>Company</span>
+                <span>Amount</span>
+                <span>Status</span>
+                <span>Date</span>
+              </div>
+              {dashboardData.recentInvoices.map((invoice, index) => (
+                <div key={index} className="table-row">
+                  <span className="invoice-id">{invoice.id}</span>
+                  <span className="company-name">{invoice.companyName}</span>
+                  <span className="amount">{formatCurrency(invoice.amount)}</span>
+                  <span className={`status status-${invoice.status}`}>
+                    {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                  </span>
+                  <span className="date">
+                    {new Date(invoice.date).toLocaleDateString('en-IN')}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="dashboard-actions">
           <div className="action-cards">
             <div className="action-card" onClick={() => navigate('/admin/user-roles')}>
@@ -161,6 +223,13 @@ const AdminPanel = () => {
               <div className="action-icon"><i className="fas fa-plus"></i></div>
               <h3>Add New Client</h3>
               <p>Quickly add new clients to your system</p>
+              <div className="action-arrow"><i className="fas fa-arrow-right"></i></div>
+            </div>
+            
+            <div className="action-card" onClick={() => navigate('/admin/invoices')}>
+              <div className="action-icon"><i className="fas fa-file-invoice"></i></div>
+              <h3>Manage Invoices</h3>
+              <p>View, create, and manage all invoices</p>
               <div className="action-arrow"><i className="fas fa-arrow-right"></i></div>
             </div>
             

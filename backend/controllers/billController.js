@@ -1,5 +1,85 @@
 const Bill = require('../models/Bill');
 const ClientDetails = require('../models/ClientDetails');
+const User = require('../models/User');
+
+// Get admin dashboard stats
+exports.getAdminDashboardStats = async (req, res) => {
+    try {
+        // Get total clients (users with role 'user')
+        const totalClients = await User.countDocuments({ role: 'user' });
+        
+        // Get total invoices
+        const totalInvoices = await Bill.countDocuments();
+        
+        // Get all bills for calculations
+        const bills = await Bill.find();
+        
+        // Calculate total revenue (all paid bills)
+        const totalRevenue = bills
+            .filter(bill => bill.status === 'paid')
+            .reduce((sum, bill) => sum + (bill.totalAmount || 0), 0);
+        
+        // Calculate pending payments (pending, sent, viewed bills)
+        const pendingPayments = bills
+            .filter(bill => ['pending', 'sent', 'viewed'].includes(bill.status))
+            .reduce((sum, bill) => sum + (bill.totalAmount || 0), 0);
+        
+        // Calculate payments received this month
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        const paymentsReceived = bills
+            .filter(bill => {
+                const billDate = new Date(bill.date);
+                return bill.status === 'paid' && 
+                       billDate.getMonth() === currentMonth && 
+                       billDate.getFullYear() === currentYear;
+            })
+            .reduce((sum, bill) => sum + (bill.totalAmount || 0), 0);
+        
+        // Calculate collection rate
+        const totalBilled = bills.reduce((sum, bill) => sum + (bill.totalAmount || 0), 0);
+        const collectionRate = totalBilled > 0 ? Math.round((totalRevenue / totalBilled) * 100) : 0;
+        
+        // Recent invoices (last 10)
+        const recentInvoices = bills
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 10)
+            .map(bill => ({
+                id: `INV-${String(bill.invoiceNo).padStart(3, '0')}`,
+                _id: bill._id,
+                companyName: bill.companyName,
+                amount: bill.totalAmount,
+                status: bill.status,
+                date: bill.date
+            }));
+        
+        // Bills by status
+        const billsByStatus = {
+            paid: bills.filter(bill => bill.status === 'paid').length,
+            pending: bills.filter(bill => bill.status === 'pending').length,
+            sent: bills.filter(bill => bill.status === 'sent').length,
+            viewed: bills.filter(bill => bill.status === 'viewed').length,
+            overdue: bills.filter(bill => bill.status === 'overdue').length
+        };
+        
+        res.status(200).json({ 
+            success: true, 
+            data: {
+                totalClients,
+                totalInvoices,
+                totalRevenue,
+                pendingPayments,
+                paymentsReceived,
+                collectionRate,
+                recentInvoices,
+                billsByStatus
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching admin dashboard stats:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
 
 // Create new bill
 exports.createBill = async (req, res) => {

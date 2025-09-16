@@ -131,6 +131,17 @@ export const updateBillStatus = async (billId, status) => {
   return response.data;
 };
 
+// Admin dashboard stats
+export const getAdminDashboardStats = async () => {
+  try {
+    const response = await api.get("/bills/admin/dashboard-stats");
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching admin dashboard stats:', error.response?.data || error.message);
+    throw error.response?.data?.error || "Failed to fetch admin dashboard statistics";
+  }
+};
+
 // Client Bills APIs
 export const getClientDashboardStats = async () => {
   try {

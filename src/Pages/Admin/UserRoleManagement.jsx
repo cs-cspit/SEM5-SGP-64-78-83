@@ -7,7 +7,6 @@ import './UserRoleManagement.css';
 
 const UserRoleManagement = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const { isAdmin } = useAuth();
@@ -57,10 +56,8 @@ const UserRoleManagement = () => {
         }
       });
       setUsers(response.data);
-      setLoading(false);
     } catch (err) {
       setError('Failed to fetch users');
-      setLoading(false);
     }
   };
 
@@ -89,7 +86,6 @@ const UserRoleManagement = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -101,7 +97,11 @@ const UserRoleManagement = () => {
             <p>Manage clients and user permissions across the system</p>
           </div>
           <button 
-            onClick={() => navigate('/admin/add-client')} 
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/admin/add-client');
+            }} 
             className="add-client-button"
           >
             <span className="button-icon">+</span>
@@ -175,7 +175,11 @@ const UserRoleManagement = () => {
                           <option value="admin">Admin</option>
                         </select>
                         <button
-                          onClick={() => handleDeleteUser(user._id, user.name)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteUser(user._id, user.name);
+                          }}
                           className="delete-button"
                           title={`Delete ${user.name}`}
                         >

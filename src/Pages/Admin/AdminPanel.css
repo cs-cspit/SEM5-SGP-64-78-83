@@ -336,6 +336,135 @@
   border: 1px solid var(--warning-color);
 }
 
+/* Error Message */
+.error-message {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-left: 4px solid #c53030;
+}
+
+.error-message i {
+  font-size: 1.2rem;
+}
+
+/* Recent Invoices Section */
+.recent-invoices-section {
+  margin-top: 3rem;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+}
+
+.recent-invoices-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.recent-invoices-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--light-grey);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  align-items: center;
+}
+
+.table-row:hover {
+  background: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.invoice-id {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.company-name {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.amount {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  text-align: center;
+}
+
+.status-paid {
+  background: var(--success-bg);
+  color: var(--success-color);
+}
+
+.status-pending {
+  background: var(--warning-bg);
+  color: var(--warning-color);
+}
+
+.status-sent {
+  background: var(--info-bg);
+  color: var(--info-color);
+}
+
+.status-viewed {
+  background: #e6fffa;
+  color: #234e52;
+}
+
+.status-overdue {
+  background: var(--danger-bg);
+  color: var(--danger-color);
+}
+
+.date {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .dashboard-stats {
@@ -365,6 +494,42 @@
   .stat-value {
     font-size: 1.75rem;
   }
+
+  /* Recent invoices mobile layout */
+  .recent-invoices-section {
+    padding: 1.5rem;
+  }
+
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1.5rem;
+  }
+
+  .table-row span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .table-row span:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .invoice-id:before { content: "Invoice ID: "; }
+  .company-name:before { content: "Company: "; }
+  .amount:before { content: "Amount: "; }
+  .status:before { content: "Status: "; }
+  .date:before { content: "Date: "; }
 }
 
 @media (max-width: 480px) {

@@ -9,11 +9,13 @@ const {
     updateBillStatus,
     getMyBills,
     getMyBill,
-    getClientDashboardStats
+    getClientDashboardStats,
+    getAdminDashboardStats
 } = require('../controllers/billController');
 const { adminAuth, auth } = require('../middleware/auth');
 
 // Admin-only bill routes
+router.get('/admin/dashboard-stats', adminAuth, getAdminDashboardStats);
 router.post('/', adminAuth, createBill);
 router.get('/', adminAuth, getAllBills);
 router.get('/next-invoice', adminAuth, getNextInvoiceNumber);
