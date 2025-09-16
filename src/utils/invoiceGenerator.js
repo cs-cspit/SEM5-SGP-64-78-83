@@ -2,6 +2,10 @@
 // Based on JAY JALARAM Electricals invoice format
 
 export const generateInvoice = (invoiceData) => {
+  // Debug log to see what data we're receiving
+  console.log('Invoice data received:', invoiceData);
+  console.log('Items in invoice data:', invoiceData.items);
+  
   // Format currency for Indian locale
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
@@ -375,35 +379,37 @@ export const generateInvoice = (invoiceData) => {
                   invoiceData.items && invoiceData.items.length > 0
                     ? invoiceData.items
                         .map(
-                          (item, index) => `
+                          (item, index) => {
+                            console.log(`Item ${index + 1}:`, item);
+                            return `
                         <tr>
                             <td>${index + 1}</td>
                             <td class="particular-col">${
                               item.description ||
                               item.particular ||
+                              item.productName ||
                               "Electrical Services"
                             }</td>
                             <td>${item.quantity || 1}</td>
                             <td>${item.hsn || "998719"}</td>
-                            <td>${item.rate || baseAmount}</td>
-                            <td>9%</td>
-                            <td>9%</td>
-                            <td>${formatCurrency(item.amount || baseAmount)
-                              .replace("₹", "")
-                              .replace(",", "")}</td>
+                            <td>${(item.rate || item.basicAmount || baseAmount).toFixed(2)}</td>
+                            <td>${item.gstRate || 9}%</td>
+                            <td>${item.gstRate || 9}%</td>
+                            <td>${(item.amount || item.total || item.basicAmount || baseAmount).toFixed(2)}</td>
                         </tr>
-                    `
+                    `;
+                          }
                         )
                         .join("")
                     : `
                         <tr>
                             <td>1</td>
                             <td class="particular-col">${
-                              invoiceData.workDescription || "STC of AC Stand"
+                              invoiceData.workDescription || "Electrical Services"
                             }</td>
                             <td>1</td>
                             <td>998719</td>
-                            <td>${baseAmount}</td>
+                            <td>${baseAmount.toFixed(2)}</td>
                             <td>9%</td>
                             <td>9%</td>
                             <td>${baseAmount.toFixed(2)}</td>

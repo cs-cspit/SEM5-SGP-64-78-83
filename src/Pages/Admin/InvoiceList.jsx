@@ -84,11 +84,24 @@ const InvoiceList = () => {
       date: invoice.date,
       companyName: invoice.companyName || invoice.clientName,
       companyAddress: invoice.companyAddress || invoice.address,
-      siteLocation: invoice.siteLocation,
-      gstNumber: invoice.gstNumber,
-      totalAmount: invoice.totalAmount,
-      items: invoice.items,
-      workDescription: invoice.workDescription
+      siteLocation: invoice.siteLocation || invoice.workingSite,
+      gstNumber: invoice.gstNumber || invoice.companyGst,
+      totalAmount: invoice.netAmount || invoice.totalAmount,
+      items: invoice.products ? invoice.products.map(product => ({
+        description: product.productName,
+        particular: product.productName,
+        quantity: product.quantity,
+        hsn: product.hsn,
+        rate: product.rate,
+        gstRate: product.gstRate || 9,
+        basicAmount: product.basicAmount,
+        cgst: product.cgst,
+        sgst: product.sgst,
+        amount: product.total
+      })) : [],
+      workDescription: invoice.products && invoice.products.length > 0 ? 
+        invoice.products.map(p => p.productName).join(', ') : 
+        'Electrical Services'
     };
 
     // View invoice without auto-print
@@ -102,11 +115,24 @@ const InvoiceList = () => {
       date: invoice.date,
       companyName: invoice.companyName || invoice.clientName,
       companyAddress: invoice.companyAddress || invoice.address,
-      siteLocation: invoice.siteLocation,
-      gstNumber: invoice.gstNumber,
-      totalAmount: invoice.totalAmount,
-      items: invoice.items,
-      workDescription: invoice.workDescription
+      siteLocation: invoice.siteLocation || invoice.workingSite,
+      gstNumber: invoice.gstNumber || invoice.companyGst,
+      totalAmount: invoice.netAmount || invoice.totalAmount,
+      items: invoice.products ? invoice.products.map(product => ({
+        description: product.productName,
+        particular: product.productName,
+        quantity: product.quantity,
+        hsn: product.hsn,
+        rate: product.rate,
+        gstRate: product.gstRate || 9,
+        basicAmount: product.basicAmount,
+        cgst: product.cgst,
+        sgst: product.sgst,
+        amount: product.total
+      })) : [],
+      workDescription: invoice.products && invoice.products.length > 0 ? 
+        invoice.products.map(p => p.productName).join(', ') : 
+        'Electrical Services'
     };
 
     // Download invoice as HTML file
