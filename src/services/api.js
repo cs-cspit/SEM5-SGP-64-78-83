@@ -100,6 +100,26 @@ export const updateContactStatus = async (contactId, status) => {
   }
 };
 
+// Admin: Reply to contact
+export const replyToContact = async (contactId, replyData) => {
+  try {
+    const response = await api.post(`/contact/${contactId}/reply`, replyData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to send reply";
+  }
+};
+
+// Admin: Get contact with replies
+export const getContactWithReplies = async (contactId) => {
+  try {
+    const response = await api.get(`/contact/${contactId}/replies`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch contact details";
+  }
+};
+
 // Billing APIs (admin)
 export const getNextInvoiceNumber = async () => {
   const response = await api.get("/bills/next-invoice");

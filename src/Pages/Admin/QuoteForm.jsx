@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
-import axios from 'axios';
+import { getAllContactSubmissions, replyToContact, getContactWithReplies } from '../../services/api.js';
 import './QuoteForm.css';
 
 const QuoteForm = () => {
@@ -15,6 +15,12 @@ const QuoteForm = () => {
     const [statusFilter, setStatusFilter] = useState('All Status');
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showReplyModal, setShowReplyModal] = useState(false);
+    const [replyData, setReplyData] = useState({
+        subject: '',
+        message: '',
+        priority: 'normal'
+    });
 
     // Redirect if not admin
     React.useEffect(() => {
@@ -31,12 +37,8 @@ const QuoteForm = () => {
     const fetchQuotes = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:5000/api/contact/all', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('userToken')}`
-                }
-            });
-            setQuotes(response.data.contacts || []);
+            const response = await getAllContactSubmissions();
+            setQuotes(response.contacts || []);
             setError('');
         } catch (err) {
             console.error('Error fetching quotes:', err);
@@ -46,45 +48,98 @@ const QuoteForm = () => {
         }
     };
 
-    const handleStatusUpdate = async (quoteId, newStatus) => {
+    const handleViewQuote = async (quote) => {
         try {
-            console.log('Updating quote status:', quoteId, newStatus);
-
-            const response = await axios.patch(`http://localhost:5000/api/contact/${quoteId}/status`,
-                { status: newStatus },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
-                    }
-                }
-            );
-
-            console.log('Status update response:', response.data);
-
-            // Update local state
-            setQuotes(quotes.map(quote =>
-                (quote._id || quote.id) === quoteId ? { ...quote, status: newStatus } : quote
-            ));
-
-            setSelectedQuote(prev => (prev?._id || prev?.id) === quoteId ? { ...prev, status: newStatus } : prev);
-
-            // Clear any previous errors
-            setError('');
-        } catch (err) {
-            console.error('Error updating status:', err);
-            console.error('Error response:', err.response?.data);
-            setError('Failed to update status. Please try again.');
+            setLoading(true);
+            console.log('Fetching quote details with replies...');
+            
+            // Fetch complete quote details with replies
+            const response = await getContactWithReplies(quote._id || quote.id);
+            console.log('Quote with replies:', response);
+            
+            setSelectedQuote(response.contact);
+            setShowModal(true);
+        } catch (error) {
+            console.error('Error fetching quote details:', error);
+            // Fallback to showing basic quote info if API fails
+            setSelectedQuote(quote);
+            setShowModal(true);
+            setError('Could not load reply history. Showing basic quote information.');
+        } finally {
+            setLoading(false);
         }
-    };
-
-    const handleViewQuote = (quote) => {
-        setSelectedQuote(quote);
-        setShowModal(true);
     };
 
     const closeModal = () => {
         setShowModal(false);
         setSelectedQuote(null);
+    };
+
+    const handleReplyClick = (quote) => {
+        setSelectedQuote(quote);
+        setReplyData({
+            subject: `Re: ${quote.subject || 'Your Inquiry'}`,
+            message: `Dear ${quote.name},\n\nThank you for your inquiry regarding electrical services. \n\nBest regards,\nJay Jalaram Electricals Team`,
+            priority: 'normal'
+        });
+        setShowReplyModal(true);
+        setShowModal(false);
+    };
+
+    const closeReplyModal = () => {
+        setShowReplyModal(false);
+        setReplyData({
+            subject: '',
+            message: '',
+            priority: 'normal'
+        });
+    };
+
+    const handleReplySubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!replyData.subject.trim() || !replyData.message.trim()) {
+            setError('Please fill in both subject and message fields.');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            console.log('Sending reply via API...');
+            
+            const response = await replyToContact(selectedQuote._id || selectedQuote.id, {
+                subject: replyData.subject,
+                message: replyData.message,
+                priority: replyData.priority
+            });
+
+            console.log('Reply response:', response);
+
+            // Refresh the selected quote with updated reply history
+            try {
+                const updatedQuoteResponse = await getContactWithReplies(selectedQuote._id || selectedQuote.id);
+                setSelectedQuote(updatedQuoteResponse.contact);
+            } catch (refreshError) {
+                console.error('Error refreshing quote details:', refreshError);
+            }
+
+            // Close the reply modal
+            closeReplyModal();
+            
+            // Show success message based on email result
+            if (response.emailResult?.success) {
+                alert(`✅ Reply sent successfully!\n\n📧 Email delivered to: ${selectedQuote.email}\n📨 Message ID: ${response.emailResult.messageId}`);
+            } else {
+                alert(`⚠️ Reply saved but email failed to send.\n\n❌ Email error: ${response.emailResult?.error}\n\nThe reply has been saved to the database. You may need to contact the client through alternative means.`);
+            }
+            
+        } catch (error) {
+            console.error('Error sending reply:', error);
+            setError(`Failed to send reply: ${error}`);
+            alert(`❌ Failed to send reply: ${error}\n\nPlease check your internet connection and try again.`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const filteredQuotes = quotes.filter(quote => {
@@ -255,17 +310,13 @@ const QuoteForm = () => {
                                                     >
                                                         <i className="fas fa-eye"></i>
                                                     </button>
-                                                    <select
-                                                        className="status-select"
-                                                        value={quote.status}
-                                                        onChange={(e) => handleStatusUpdate(quote._id || quote.id, e.target.value)}
-                                                        title="Update Status"
+                                                    <button
+                                                        className="action-btn reply-btn-small"
+                                                        onClick={() => handleReplyClick(quote)}
+                                                        title="Reply to Client"
                                                     >
-                                                        <option value="pending">Pending</option>
-                                                        <option value="read">Read</option>
-                                                        <option value="replied">Replied</option>
-                                                        <option value="resolved">Resolved</option>
-                                                    </select>
+                                                        <i className="fas fa-reply"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -337,23 +388,173 @@ const QuoteForm = () => {
                                     </div>
                                 </div>
 
+                                {/* Reply History Section */}
+                                {selectedQuote.replies && selectedQuote.replies.length > 0 && (
+                                    <div className="reply-history-section">
+                                        <h4>
+                                            <i className="fas fa-comments"></i>
+                                            Reply History ({selectedQuote.replies.length})
+                                        </h4>
+                                        <div className="reply-timeline">
+                                            {selectedQuote.replies.map((reply, index) => (
+                                                <div key={reply.id || index} className="reply-item">
+                                                    <div className="reply-header">
+                                                        <div className="reply-meta">
+                                                            <span className="admin-name">
+                                                                <i className="fas fa-user-tie"></i>
+                                                                {reply.adminName}
+                                                            </span>
+                                                            <span className="reply-date">
+                                                                <i className="far fa-clock"></i>
+                                                                {formatDate(reply.createdAt)}
+                                                            </span>
+                                                            <span className={`priority-badge priority-${reply.priority}`}>
+                                                                <i className="fas fa-flag"></i>
+                                                                {reply.priority.toUpperCase()}
+                                                            </span>
+                                                        </div>
+                                                        <div className="email-status">
+                                                            {reply.emailSent ? (
+                                                                <span className="email-success">
+                                                                    <i className="fas fa-check-circle"></i>
+                                                                    Delivered
+                                                                </span>
+                                                            ) : (
+                                                                <span className="email-failed">
+                                                                    <i className="fas fa-times-circle"></i>
+                                                                    Failed
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="reply-content">
+                                                        <div className="reply-subject">
+                                                            <i className="fas fa-envelope"></i>
+                                                            <strong>Subject:</strong> {reply.subject}
+                                                        </div>
+                                                        <div className="reply-message">
+                                                            {reply.message}
+                                                        </div>
+                                                        {reply.emailError && (
+                                                            <div className="email-error">
+                                                                <i className="fas fa-exclamation-triangle"></i>
+                                                                <strong>Error:</strong> {reply.emailError}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="modal-actions">
-                                    <select
-                                        className="status-update-select"
-                                        value={selectedQuote.status}
-                                        onChange={(e) => handleStatusUpdate(selectedQuote._id || selectedQuote.id, e.target.value)}
+                                    <button 
+                                        className="action-btn reply-btn"
+                                        onClick={() => handleReplyClick(selectedQuote)}
                                     >
-                                        <option value="pending">Mark as Pending</option>
-                                        <option value="read">Mark as Read</option>
-                                        <option value="replied">Mark as Replied</option>
-                                        <option value="resolved">Mark as Resolved</option>
-                                    </select>
-                                    <button className="action-btn reply-btn">
                                         <i className="fas fa-reply"></i>
                                         Reply to Client
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Reply Modal */}
+                {showReplyModal && selectedQuote && (
+                    <div className="modal-overlay" onClick={closeReplyModal}>
+                        <div className="modal-content reply-modal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modal-header">
+                                <h3>Reply to {selectedQuote.name}</h3>
+                                <button className="close-btn" onClick={closeReplyModal}>
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleReplySubmit} className="reply-form">
+                                <div className="modal-body">
+                                    <div className="client-context">
+                                        <div className="context-item">
+                                            <span className="context-label">To:</span>
+                                            <span className="context-value">{selectedQuote.email}</span>
+                                        </div>
+                                        <div className="context-item">
+                                            <span className="context-label">Company:</span>
+                                            <span className="context-value">{selectedQuote.company || 'Individual'}</span>
+                                        </div>
+                                        <div className="context-item">
+                                            <span className="context-label">Original Subject:</span>
+                                            <span className="context-value">{selectedQuote.subject || 'General Inquiry'}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="replySubject">Subject <span className="required">*</span></label>
+                                        <input
+                                            id="replySubject"
+                                            type="text"
+                                            value={replyData.subject}
+                                            onChange={(e) => setReplyData({...replyData, subject: e.target.value})}
+                                            placeholder="Enter email subject"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="replyPriority">Priority</label>
+                                        <select
+                                            id="replyPriority"
+                                            value={replyData.priority}
+                                            onChange={(e) => setReplyData({...replyData, priority: e.target.value})}
+                                        >
+                                            <option value="low">Low Priority</option>
+                                            <option value="normal">Normal Priority</option>
+                                            <option value="high">High Priority</option>
+                                            <option value="urgent">Urgent</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="replyMessage">Message <span className="required">*</span></label>
+                                        <textarea
+                                            id="replyMessage"
+                                            value={replyData.message}
+                                            onChange={(e) => setReplyData({...replyData, message: e.target.value})}
+                                            placeholder="Type your reply message here..."
+                                            rows="8"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="original-message">
+                                        <h4>Original Message:</h4>
+                                        <div className="original-content">
+                                            {selectedQuote.message}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="modal-actions">
+                                    <button type="button" className="cancel-btn" onClick={closeReplyModal}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="send-reply-btn" disabled={loading}>
+                                        {loading ? (
+                                            <>
+                                                <i className="fas fa-spinner fa-spin"></i>
+                                                Sending...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fas fa-paper-plane"></i>
+                                                Send Reply
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 )}
