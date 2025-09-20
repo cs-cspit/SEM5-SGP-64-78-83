@@ -6,7 +6,10 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
   const clientsTrackRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +28,29 @@ const Home = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // Set video playback rate to smooth slow motion
+  useEffect(() => {
+  if (videoRef.current) {
+    const video = videoRef.current;
+
+    const setRate = () => {
+      video.playbackRate = 0.5; // smoother slow motion
+    };
+
+    video.addEventListener("loadeddata", setRate);
+    video.addEventListener("canplay", setRate);
+
+    if (video.readyState >= 2) {
+      setRate();
+    }
+
+    return () => {
+      video.removeEventListener("loadeddata", setRate);
+      video.removeEventListener("canplay", setRate);
+    };
+  }
+}, []);
 
   const testimonials = [
     {
@@ -85,6 +111,33 @@ const Home = () => {
     setCurrentSlide(prev => (prev - 1 + clientLogos.length) % clientLogos.length);
   };
 
+  // Touch event handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+    
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+
+    // Reset touch positions
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
   // Auto-slide for clients
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,10 +150,14 @@ const Home = () => {
     <div className="home-wrapper">
       {/* Hero Section with Electrical Background */}
       <section className="hero-section apple-hero">
-        <img
-          src="/Images/home1.jpg"
-          alt="Modern electrical cables cityscape"
-          className="hero-bg-img"
+        <video
+          ref={videoRef}
+          src="/Video/Home_Page_Video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hero-bg-video"
         />
         <div className="hero-overlay">
           <h2 className="fade-down">Jay Jalaram Electricals</h2>
@@ -186,6 +243,9 @@ const Home = () => {
               className="clients-carousel-track"
               ref={clientsTrackRef}
               style={{ transform: `translateX(-${currentSlide * 250}px)` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
               {/* Render logos multiple times for infinite scroll effect */}
               {[...clientLogos, ...clientLogos, ...clientLogos].map((logo, index) => (
