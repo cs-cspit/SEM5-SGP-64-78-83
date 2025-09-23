@@ -8,7 +8,6 @@ const Profile = () => {
   const [clientDetails, setClientDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -64,7 +63,6 @@ const Profile = () => {
     setEditForm({ ...clientDetails });
     setError('');
     setUpdateSuccess('');
-    setActiveTab('business'); // Automatically switch to business tab
   };
 
   const handleCancelEdit = () => {
@@ -107,111 +105,11 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-layout">
 
-        {/* Profile Header Card */}
-        <div className="profile-header-card">
-          <div className="profile-cover">
-            <div className="profile-avatar-section">
-              <div className="profile-avatar">
-                {user.profilePic ? (
-                  <img src={user.profilePic} alt={user.name} className="avatar-image" />
-                ) : (
-                  <div className="avatar-placeholder">
-                    <i className="fas fa-user"></i>
-                  </div>
-                )}
-                <div className="avatar-status"></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="profile-header-info">
-            <h1 className="profile-name">{user.name}</h1>
-            <p className="profile-email">{user.email}</p>
-            <div className="profile-meta">
-              <span className={`role-badge ${user.role}`}>
-                <i className={`fas ${user.role === 'admin' ? 'fa-crown' : user.role === 'client' ? 'fa-building' : 'fa-user'}`}></i>
-                {user.role.toUpperCase()}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="profile-tabs">
-          <button
-            className={`tab-button ${activeTab === 'personal' ? 'active' : ''}`}
-            onClick={() => setActiveTab('personal')}
-          >
-            <i className="fas fa-user-circle"></i>
-            Personal Information
-          </button>
-          {isClient() && (
-            <button
-              className={`tab-button ${activeTab === 'business' ? 'active' : ''}`}
-              onClick={() => setActiveTab('business')}
-            >
-              <i className="fas fa-building"></i>
-              Business Details
-            </button>
-          )}
-          <button
-            className={`tab-button ${activeTab === 'security' ? 'active' : ''}`}
-            onClick={() => setActiveTab('security')}
-          >
-            <i className="fas fa-shield-alt"></i>
-            Security
-          </button>
-        </div>
-
         {/* Content Cards */}
         <div className="profile-content">
 
-          {/* Personal Information Tab */}
-          {activeTab === 'personal' && (
-            <div className="content-card">
-              <div className="card-header">
-                <h2><i className="fas fa-user-circle"></i> Personal Information</h2>
-                <p>Manage your personal details and preferences</p>
-              </div>
-
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="info-icon">
-                    <i className="fas fa-signature"></i>
-                  </div>
-                  <div className="info-content">
-                    <label>Full Name</label>
-                    <span>{user.name || 'Not provided'}</span>
-                  </div>
-                </div>
-
-                <div className="info-item">
-                  <div className="info-icon">
-                    <i className="fas fa-envelope"></i>
-                  </div>
-                  <div className="info-content">
-                    <label>Email Address</label>
-                    <span>{user.email || 'Not provided'}</span>
-                  </div>
-                </div>
-
-                <div className="info-item">
-                  <div className="info-icon">
-                    <i className="fas fa-user-tag"></i>
-                  </div>
-                  <div className="info-content">
-                    <label>Account Type</label>
-                    <span className={`role-badge ${user.role}`}>
-                      {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Unknown'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Business Details Tab */}
-          {activeTab === 'business' && isClient() && (
+          {/* Business Details - Main Content */}
+          {isClient() && (
             <div className="content-card">
               <div className="card-header">
                 <h2><i className="fas fa-building"></i> Business Information</h2>
@@ -258,100 +156,96 @@ const Profile = () => {
               )}
 
               {clientDetails && !isEditing && (
-                <div className="info-grid">
-                  <div className="info-item full-width">
-                    <div className="info-icon">
-                      <i className="fas fa-building"></i>
+                <div className="business-layout">
+                  {/* Left Side - Client Summary Card */}
+                  <div className="client-summary-card">
+                    <div className="client-avatar">
+                      <div className="company-initial">
+                        {clientDetails.companyName ? clientDetails.companyName.charAt(0).toUpperCase() : 'C'}
+                      </div>
                     </div>
-                    <div className="info-content">
-                      <label>Company Name</label>
-                      <span className="company-name">{clientDetails.companyName || 'Not provided'}</span>
+                    <div className="client-summary-info">
+                      <h3 className="company-title">{clientDetails.companyName || 'Company Name'}</h3>
+                      <p className="client-role">Business Client</p>
+                      <div className="client-meta">
+                        <div className="meta-item">
+                          <i className="fas fa-calendar"></i>
+                          <span>Since {formatDate(clientDetails.createdAt || new Date()).split(',')[1]}</span>
+                        </div>
+                        <div className="meta-item">
+                          <i className="fas fa-shield-check"></i>
+                          <span>GST Verified</span>
+                        </div>
+                      </div>
+                      <button onClick={handleEdit} className="edit-profile-btn">
+                        <i className="fas fa-edit"></i>
+                        Edit Details
+                      </button>
                     </div>
                   </div>
 
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <i className="fas fa-file-invoice"></i>
-                    </div>
-                    <div className="info-content">
-                      <label>GST Number</label>
-                      <span className="gst-number">{clientDetails.gstNumber || 'Not provided'}</span>
-                    </div>
-                  </div>
-
-                  {clientDetails.panNumber && (
-                    <div className="info-item">
-                      <div className="info-icon">
-                        <i className="fas fa-id-card"></i>
+                  {/* Right Side - Detailed Information */}
+                  <div className="client-details-section">
+                    <div className="details-grid">
+                      <div className="detail-group">
+                        <h4><i className="fas fa-building"></i> Company Information</h4>
+                        <div className="detail-items">
+                          <div className="detail-item">
+                            <label>Company Name</label>
+                            <span className="company-name">{clientDetails.companyName || 'Not provided'}</span>
+                          </div>
+                          <div className="detail-item">
+                            <label>GST Number</label>
+                            <span className="gst-number">{clientDetails.gstNumber || 'Not provided'}</span>
+                          </div>
+                          {clientDetails.panNumber && (
+                            <div className="detail-item">
+                              <label>PAN Number</label>
+                              <span className="pan-number">{maskSensitiveData(clientDetails.panNumber, 6)}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="info-content">
-                        <label>PAN Number</label>
-                        <span className="pan-number">{maskSensitiveData(clientDetails.panNumber, 6)}</span>
+
+                      <div className="detail-group">
+                        <h4><i className="fas fa-address-book"></i> Contact Information</h4>
+                        <div className="detail-items">
+                          <div className="detail-item">
+                            <label>Business Email</label>
+                            <span>{clientDetails.email || 'Not provided'}</span>
+                          </div>
+                          <div className="detail-item">
+                            <label>Phone Number</label>
+                            <span>{clientDetails.phone || 'Not provided'}</span>
+                          </div>
+                          {clientDetails.contactPerson && (
+                            <div className="detail-item">
+                              <label>Contact Person</label>
+                              <span>{clientDetails.contactPerson}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
 
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <i className="fas fa-envelope-open"></i>
-                    </div>
-                    <div className="info-content">
-                      <label>Business Email</label>
-                      <span>{clientDetails.email || 'Not provided'}</span>
-                    </div>
-                  </div>
-
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <i className="fas fa-phone"></i>
-                    </div>
-                    <div className="info-content">
-                      <label>Phone Number</label>
-                      <span>{clientDetails.phone || 'Not provided'}</span>
-                    </div>
-                  </div>
-
-                  {clientDetails.contactPerson && (
-                    <div className="info-item">
-                      <div className="info-icon">
-                        <i className="fas fa-user-tie"></i>
+                      <div className="detail-group full-width">
+                        <h4><i className="fas fa-map-marker-alt"></i> Business Address</h4>
+                        <div className="detail-items">
+                          <div className="detail-item">
+                            <span className="address-text">{clientDetails.address || 'Not provided'}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="info-content">
-                        <label>Contact Person</label>
-                        <span>{clientDetails.contactPerson}</span>
-                      </div>
-                    </div>
-                  )}
 
-                  <div className="info-item full-width">
-                    <div className="info-icon">
-                      <i className="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div className="info-content">
-                      <label>Business Address</label>
-                      <span className="address-text">{clientDetails.address || 'Not provided'}</span>
-                    </div>
-                  </div>
-
-                  {clientDetails.bankDetails && (
-                    <div className="info-item full-width">
-                      <div className="info-icon">
-                        <i className="fas fa-university"></i>
-                      </div>
-                      <div className="info-content">
-                        <label>Bank Details</label>
-                        <span className="bank-details">{clientDetails.bankDetails}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <i className="fas fa-handshake"></i>
-                    </div>
-                    <div className="info-content">
-                      <label>Client Since</label>
-                      <span>{formatDate(clientDetails.createdAt || new Date())}</span>
+                      {clientDetails.bankDetails && (
+                        <div className="detail-group full-width">
+                          <h4><i className="fas fa-university"></i> Banking Information</h4>
+                          <div className="detail-items">
+                            <div className="detail-item">
+                              <span className="bank-details">{clientDetails.bankDetails}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -510,53 +404,45 @@ const Profile = () => {
             </div>
           )}
 
-          {/* Security Tab */}
-          {activeTab === 'security' && (
+          {/* Non-Client Users */}
+          {!isClient() && (
             <div className="content-card">
               <div className="card-header">
-                <h2><i className="fas fa-shield-alt"></i> Security Settings</h2>
-                <p>Manage your account security and password settings</p>
+                <h2><i className="fas fa-user-circle"></i> Profile Information</h2>
+                <p>Your account details and information</p>
               </div>
 
-              <div className="security-section">
-                <div className="security-item">
-                  <div className="security-info">
-                    <h3><i className="fas fa-key"></i> Password</h3>
-                    <p>Last updated: {formatDate(user.createdAt)}</p>
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-icon">
+                    <i className="fas fa-signature"></i>
                   </div>
-                  <button className="security-btn">
-                    <i className="fas fa-edit"></i>
-                    Change Password
-                  </button>
+                  <div className="info-content">
+                    <label>Full Name</label>
+                    <span>{user.name || 'Not provided'}</span>
+                  </div>
                 </div>
 
-                <div className="security-item">
-                  <div className="security-info">
-                    <h3><i className="fas fa-user-edit"></i> Profile Information</h3>
-                    <p>{isClient() ? 'Update your business details' : 'Update your personal details'}</p>
+                <div className="info-item">
+                  <div className="info-icon">
+                    <i className="fas fa-envelope"></i>
                   </div>
-                  {isClient() && clientDetails ? (
-                    <button onClick={handleEdit} className="security-btn primary">
-                      <i className="fas fa-edit"></i>
-                      Edit Business Details
-                    </button>
-                  ) : (
-                    <button className="security-btn primary">
-                      <i className="fas fa-edit"></i>
-                      Edit Profile
-                    </button>
-                  )}
+                  <div className="info-content">
+                    <label>Email Address</label>
+                    <span>{user.email || 'Not provided'}</span>
+                  </div>
                 </div>
 
-                <div className="security-item">
-                  <div className="security-info">
-                    <h3><i className="fas fa-sign-out-alt"></i> Account Access</h3>
-                    <p>Manage your login sessions</p>
+                <div className="info-item">
+                  <div className="info-icon">
+                    <i className="fas fa-user-tag"></i>
                   </div>
-                  <button className="security-btn danger">
-                    <i className="fas fa-power-off"></i>
-                    Sign Out All Devices
-                  </button>
+                  <div className="info-content">
+                    <label>Account Type</label>
+                    <span className={`role-badge ${user.role}`}>
+                      {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Unknown'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
