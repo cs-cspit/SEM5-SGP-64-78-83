@@ -1,27 +1,15 @@
 /* Works.css */
 .works-container {
   padding: 80px 20px;
-  background: #1a1a1a;
+  padding-top: calc(60px + 20px);
+  background: linear-gradient(to bottom, #000000 0%, #000000 60px, #1a1a1a 60px, #1a1a1a 100%);
   min-height: 100vh;
   color: #ffffff;
 }
 
 .works-header {
   text-align: center;
-.description,
-.extended-description {
-  color: #ccc;
-  line-height: 1.6;
-  margin-bottom: 10px;
-  font-size: 1.05em;
-  text-align: justify;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  word-wrap: break-word;
-  word-spacing: 0.05em;
-  hyphens: none;
-  letter-spacing: 0.01em;
-  font-weight: 700;
-}m: 80px;
+  margin: 80px;
   padding: 0 20px;
 }
 
@@ -298,6 +286,8 @@
 @media (max-width: 768px) {
   .works-container {
     padding: 60px 15px;
+    padding-top: calc(50px + 15px);
+    background: linear-gradient(to bottom, #000000 0%, #000000 50px, #1a1a1a 50px, #1a1a1a 100%);
   }
 
   .works-header h1 {

@@ -6,8 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: linear-gradient(to bottom, #000000 0%, #000000 60px, #f8f9fa 60px, #f8f9fa 100%);
   padding: 2rem;
+  padding-top: calc(60px + 0.5rem);
   font-family: 'Inter', sans-serif;
 }
 
@@ -223,6 +224,8 @@
 @media (max-width: 640px) {
   .register-container {
     padding: 1rem;
+    padding-top: calc(50px + 0.5rem);
+    background: linear-gradient(to bottom, #000000 0%, #000000 50px, #f8f9fa 50px, #f8f9fa 100%);
   }
   
   .register-card {

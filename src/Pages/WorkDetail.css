@@ -1,9 +1,11 @@
 .work-detail-container {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   min-height: calc(100vh - 300px); /* Adjust based on your footer height */
   padding-bottom: 4rem; /* Space for footer */
+  padding-top: calc(60px + 2rem);
+  background: linear-gradient(to bottom, #000000 0%, #000000 60px, transparent 60px, transparent 100%);
 }
 
 .work-detail-title {
@@ -33,11 +35,13 @@
 }
 
 .site-list {
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   position: relative;
   padding-left: 60px;
+  margin: 0 auto;
 }
 
 .site-list::before {
@@ -323,6 +327,8 @@
 @media (max-width: 768px) {
   .work-detail-container {
     padding: 1rem;
+    padding-top: calc(50px + 1rem);
+    background: linear-gradient(to bottom, #000000 0%, #000000 50px, transparent 50px, transparent 100%);
   }
 
   .work-detail-title {
