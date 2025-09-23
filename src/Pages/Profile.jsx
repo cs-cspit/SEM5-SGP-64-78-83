@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/auth-context.jsx';
-import { getMyClientDetails } from '../services/api.js';
+import { getMyClientDetails, updateMyClientDetails } from '../services/api.js';
 import './Profile.css';
 
 const Profile = () => {
@@ -9,6 +9,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('personal');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({});
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState('');
 
   useEffect(() => {
     const fetchClientDetails = async () => {
@@ -53,6 +57,50 @@ const Profile = () => {
     if (!data) return 'N/A';
     if (data.length <= visibleChars) return data;
     return data.slice(0, visibleChars) + '•'.repeat(data.length - visibleChars);
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditForm({ ...clientDetails });
+    setError('');
+    setUpdateSuccess('');
+    setActiveTab('business'); // Automatically switch to business tab
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditForm({});
+    setError('');
+    setUpdateSuccess('');
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      setUpdateLoading(true);
+      setError('');
+      setUpdateSuccess('');
+
+      const updatedDetails = await updateMyClientDetails(editForm);
+      setClientDetails(updatedDetails);
+      setIsEditing(false);
+      setUpdateSuccess('Profile updated successfully!');
+
+      // Clear success message after 3 seconds
+      setTimeout(() => setUpdateSuccess(''), 3000);
+    } catch (err) {
+      console.error('Error updating client details:', err);
+      setError(err || 'Failed to update profile');
+    } finally {
+      setUpdateLoading(false);
+    }
   };
 
   return (
@@ -168,6 +216,13 @@ const Profile = () => {
               <div className="card-header">
                 <h2><i className="fas fa-building"></i> Business Information</h2>
                 <p>Your company details and business information</p>
+
+                {updateSuccess && (
+                  <div className="success-message">
+                    <i className="fas fa-check-circle"></i>
+                    {updateSuccess}
+                  </div>
+                )}
               </div>
 
               {loading && (
@@ -196,14 +251,13 @@ const Profile = () => {
                     <li>There's an issue with your account</li>
                     <li>The data hasn't been synchronized</li>
                   </ul>
-                  <p>User data: {JSON.stringify(user, null, 2)}</p>
                   <button onClick={() => window.location.reload()} className="retry-btn">
                     <i className="fas fa-redo"></i> Refresh Page
                   </button>
                 </div>
               )}
 
-              {clientDetails && (
+              {clientDetails && !isEditing && (
                 <div className="info-grid">
                   <div className="info-item full-width">
                     <div className="info-icon">
@@ -302,6 +356,157 @@ const Profile = () => {
                   </div>
                 </div>
               )}
+
+              {isEditing && (
+                <div className="edit-form">
+                  <div className="form-grid">
+                    <div className="form-group full-width">
+                      <label>
+                        <i className="fas fa-building"></i>
+                        Company Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={editForm.companyName || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter company name"
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        <i className="fas fa-file-invoice"></i>
+                        GST Number *
+                      </label>
+                      <input
+                        type="text"
+                        name="gstNumber"
+                        value={editForm.gstNumber || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter GST number"
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        <i className="fas fa-id-card"></i>
+                        PAN Number
+                      </label>
+                      <input
+                        type="text"
+                        name="panNumber"
+                        value={editForm.panNumber || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter PAN number"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        <i className="fas fa-envelope-open"></i>
+                        Business Email *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={editForm.email || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter business email"
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        <i className="fas fa-phone"></i>
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={editForm.phone || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter phone number"
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        <i className="fas fa-user-tie"></i>
+                        Contact Person
+                      </label>
+                      <input
+                        type="text"
+                        name="contactPerson"
+                        value={editForm.contactPerson || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter contact person name"
+                      />
+                    </div>
+
+                    <div className="form-group full-width">
+                      <label>
+                        <i className="fas fa-map-marker-alt"></i>
+                        Business Address *
+                      </label>
+                      <textarea
+                        name="address"
+                        value={editForm.address || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter complete business address"
+                        rows="3"
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group full-width">
+                      <label>
+                        <i className="fas fa-university"></i>
+                        Bank Details
+                      </label>
+                      <textarea
+                        name="bankDetails"
+                        value={editForm.bankDetails || ''}
+                        onChange={handleInputChange}
+                        placeholder="Enter bank details (optional)"
+                        rows="3"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-actions">
+                    <button
+                      onClick={handleCancelEdit}
+                      className="cancel-btn"
+                      disabled={updateLoading}
+                    >
+                      <i className="fas fa-times"></i>
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveChanges}
+                      className="save-btn"
+                      disabled={updateLoading}
+                    >
+                      {updateLoading ? (
+                        <>
+                          <div className="mini-spinner"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-save"></i>
+                          Save Changes
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -328,12 +533,19 @@ const Profile = () => {
                 <div className="security-item">
                   <div className="security-info">
                     <h3><i className="fas fa-user-edit"></i> Profile Information</h3>
-                    <p>Update your personal details</p>
+                    <p>{isClient() ? 'Update your business details' : 'Update your personal details'}</p>
                   </div>
-                  <button className="security-btn primary">
-                    <i className="fas fa-edit"></i>
-                    Edit Profile
-                  </button>
+                  {isClient() && clientDetails ? (
+                    <button onClick={handleEdit} className="security-btn primary">
+                      <i className="fas fa-edit"></i>
+                      Edit Business Details
+                    </button>
+                  ) : (
+                    <button className="security-btn primary">
+                      <i className="fas fa-edit"></i>
+                      Edit Profile
+                    </button>
+                  )}
                 </div>
 
                 <div className="security-item">

@@ -3,7 +3,7 @@
   min-height: 100vh;
   background: #1a1a1a;
   padding: 80px 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
 }
 
@@ -28,8 +28,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .profile-layout {
@@ -44,9 +48,7 @@
 .profile-header-card {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 107, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.1);
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,9 +56,7 @@
 
 .profile-header-card:hover {
   transform: translateY(-5px);
-  box-shadow: 
-    0 30px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 107, 0, 0.2),
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 0, 0.2),
     0 0 30px rgba(255, 107, 0, 0.15);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .profile-cover::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -197,9 +197,7 @@
   background: rgba(255, 255, 255, 0.03);
   border-radius: 15px;
   padding: 0.5rem;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 107, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.1);
   gap: 0.5rem;
   overflow-x: auto;
 }
@@ -247,18 +245,14 @@
 .content-card {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 107, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.1);
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .content-card:hover {
   transform: translateY(-5px);
-  box-shadow: 
-    0 30px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 107, 0, 0.2),
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 0, 0.2),
     0 0 30px rgba(255, 107, 0, 0.15);
 }
 
@@ -365,7 +359,7 @@
 
 .gst-number,
 .pan-number {
-  font-family: 'Courier New', monospace !important;
+  font-family: "Courier New", monospace !important;
   background: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
   padding: 0.25rem 0.5rem;
@@ -554,79 +548,79 @@
   .profile-container {
     padding: 1rem;
   }
-  
+
   .profile-layout {
     gap: 1.5rem;
   }
-  
+
   .profile-cover {
     height: 150px;
   }
-  
+
   .profile-avatar {
     width: 100px;
     height: 100px;
   }
-  
+
   .profile-avatar-section {
     bottom: -40px;
   }
-  
+
   .profile-header-info {
     padding: 3rem 1.5rem 1.5rem;
   }
-  
+
   .profile-name {
     font-size: 2rem;
   }
-  
+
   .profile-meta {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .profile-tabs {
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .tab-button {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
     padding: 1.5rem;
     gap: 1rem;
   }
-  
+
   .info-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
     padding: 1rem;
   }
-  
+
   .security-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .security-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .card-header {
     padding: 1.5rem 1.5rem 1rem;
   }
-  
+
   .card-header h2 {
     font-size: 1.25rem;
   }
-  
+
   .security-section {
     padding: 1.5rem;
   }
@@ -636,24 +630,218 @@
   .profile-container {
     padding: 0.5rem;
   }
-  
+
   .profile-header-info {
     padding: 2.5rem 1rem 1rem;
   }
-  
+
   .profile-name {
     font-size: 1.75rem;
   }
-  
+
   .info-grid {
     padding: 1rem;
   }
-  
+
   .card-header {
     padding: 1rem;
   }
-  
+
   .security-section {
     padding: 1rem;
+  }
+}
+
+/* Edit Form Styles */
+.card-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  font-size: 0.9rem;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  color: #10b981;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.edit-form {
+  padding: 2.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group label i {
+  color: #ff6b00;
+  width: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 1rem;
+  border: 2px solid rgba(255, 107, 0, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 107, 0, 0.05);
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ff6b00;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+  background: rgba(255, 107, 0, 0.08);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 107, 0, 0.1);
+}
+
+.cancel-btn,
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.save-btn:disabled,
+.cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.mini-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive Design for Edit Form */
+@media (max-width: 768px) {
+  .card-header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .edit-btn {
+    align-self: flex-start;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

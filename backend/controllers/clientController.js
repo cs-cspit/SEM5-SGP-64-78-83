@@ -13,18 +13,17 @@ exports.createClient = async (req, res) => {
       contactPerson,
       panNumber,
       address,
-      bankDetails
+      bankDetails,
     } = req.body;
 
     // Validate required fields
-    if (
-      !companyName ||
-      !gstNumber ||
-      !email ||
-      !phone ||
-      !address
-    ) {
-      return res.status(400).json({ message: "Required fields: Company Name, GST Number, Email, Phone, and Address" });
+    if (!companyName || !gstNumber || !email || !phone || !address) {
+      return res
+        .status(400)
+        .json({
+          message:
+            "Required fields: Company Name, GST Number, Email, Phone, and Address",
+        });
     }
 
     // Check if email already exists
@@ -111,29 +110,30 @@ exports.getClientDetails = async (req, res) => {
 // Get my client details (for authenticated clients)
 exports.getMyClientDetails = async (req, res) => {
   try {
-    console.log('Getting client details for user:', req.user._id);
+    console.log("Getting client details for user:", req.user._id);
     const userId = req.user._id;
     const clientDetails = await ClientDetails.findOne({ userId });
 
-    console.log('Client details found:', clientDetails ? 'Yes' : 'No');
-    
+    console.log("Client details found:", clientDetails ? "Yes" : "No");
+
     if (!clientDetails) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: "Client details not found. You may not be registered as a client." 
+        message:
+          "Client details not found. You may not be registered as a client.",
       });
     }
 
-    console.log('Returning client details:', clientDetails);
+    console.log("Returning client details:", clientDetails);
     res.json({
       success: true,
-      data: clientDetails
+      data: clientDetails,
     });
   } catch (error) {
-    console.error('Error in getMyClientDetails:', error);
-    res.status(500).json({ 
+    console.error("Error in getMyClientDetails:", error);
+    res.status(500).json({
       success: false,
-      message: error.message 
+      message: error.message,
     });
   }
 };
@@ -142,17 +142,80 @@ exports.getMyClientDetails = async (req, res) => {
 exports.getAllClients = async (req, res) => {
   try {
     const clients = await ClientDetails.find()
-      .populate('userId', 'name email')
+      .populate("userId", "name email")
       .sort({ companyName: 1 });
 
     res.json({
       success: true,
-      data: clients
+      data: clients,
     });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Update my client details (for authenticated clients)
+exports.updateMyClientDetails = async (req, res) => {
+  try {
+    console.log("Updating client details for user:", req.user._id);
+    const userId = req.user._id;
+    const updateData = req.body;
+
+    // Remove fields that shouldn't be updated directly
+    delete updateData.userId;
+    delete updateData._id;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
+
+    // Find and update client details
+    const clientDetails = await ClientDetails.findOneAndUpdate(
+      { userId },
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!clientDetails) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Client details not found. You may not be registered as a client.",
+      });
+    }
+
+    console.log("Client details updated successfully");
+    res.json({
+      success: true,
+      message: "Client details updated successfully",
+      data: clientDetails,
+    });
+  } catch (error) {
+    console.error("Error in updateMyClientDetails:", error);
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: errors,
+      });
+    }
+
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "This GST number or email is already registered by another client",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

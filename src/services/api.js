@@ -157,8 +157,14 @@ export const getAdminDashboardStats = async () => {
     const response = await api.get("/bills/admin/dashboard-stats");
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching admin dashboard stats:', error.response?.data || error.message);
-    throw error.response?.data?.error || "Failed to fetch admin dashboard statistics";
+    console.error(
+      "Error fetching admin dashboard stats:",
+      error.response?.data || error.message
+    );
+    throw (
+      error.response?.data?.error ||
+      "Failed to fetch admin dashboard statistics"
+    );
   }
 };
 
@@ -168,7 +174,10 @@ export const getClientDashboardStats = async () => {
     const response = await api.get("/bills/my/dashboard-stats");
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error.response?.data || error.message);
+    console.error(
+      "Error fetching dashboard stats:",
+      error.response?.data || error.message
+    );
     throw error.response?.data?.error || "Failed to fetch dashboard statistics";
   }
 };
@@ -178,7 +187,10 @@ export const getMyBills = async () => {
     const response = await api.get("/bills/my/bills");
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching client bills:', error.response?.data || error.message);
+    console.error(
+      "Error fetching client bills:",
+      error.response?.data || error.message
+    );
     throw error.response?.data?.error || "Failed to fetch your bills";
   }
 };
@@ -188,7 +200,10 @@ export const getMyBill = async (billId) => {
     const response = await api.get(`/bills/my/${billId}`);
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching bill:', error.response?.data || error.message);
+    console.error(
+      "Error fetching bill:",
+      error.response?.data || error.message
+    );
     throw error.response?.data?.error || "Failed to fetch bill details";
   }
 };
@@ -208,10 +223,27 @@ export const getClientDetails = async (userId) => {
 export const getMyClientDetails = async () => {
   try {
     const response = await api.get("/clients/my/details");
-    console.log('Client details response:', response.data); // Debug log
+    console.log("Client details response:", response.data); // Debug log
     return response.data.data || response.data;
   } catch (error) {
-    console.error('Error fetching client details:', error.response?.data || error.message);
+    console.error(
+      "Error fetching client details:",
+      error.response?.data || error.message
+    );
     throw error.response?.data?.message || "Failed to fetch client details";
+  }
+};
+
+// Update current user's client details
+export const updateMyClientDetails = async (clientData) => {
+  try {
+    const response = await api.put("/clients/my/details", clientData);
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error(
+      "Error updating client details:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Failed to update client details";
   }
 };
