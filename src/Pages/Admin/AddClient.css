@@ -149,7 +149,7 @@
 }
 
 .form-group label {
-  color: var(--text-secondary);
+  color: #000000 !important;
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.025em;
@@ -167,7 +167,7 @@
   font-weight: 500;
   transition: var(--transition);
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  color: var(--text-primary);
+  color: #000000 !important;
   box-shadow: var(--shadow-sm);
 }
 
@@ -176,6 +176,7 @@
   outline: none;
   border-color: var(--primary-dark);
   background: white;
+  color: #000000 !important;
   box-shadow: 0 0 0 4px rgba(26, 32, 44, 0.1);
   transform: translateY(-2px);
 }
@@ -183,6 +184,7 @@
 .form-group input:hover,
 .form-group textarea:hover {
   border-color: var(--secondary-dark);
+  color: #000000 !important;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }

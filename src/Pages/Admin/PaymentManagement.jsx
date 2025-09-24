@@ -204,14 +204,17 @@ const PaymentManagement = () => {
     return (
         <AdminLayout>
             <div className="payment-management">
-                <div className="payment-header">
+                <div className="page-header">
                     <div className="header-content">
-                        <h2>Payments</h2>
-                        <p className="header-subtitle">Track and manage payment records</p>
+                        <h1>Payments</h1>
+                        <p>Track and manage payment records</p>
                     </div>
-                    <button className="record-payment-btn" onClick={() => navigate('/admin/bill')}>
-                        <span className="btn-icon">+</span>
-                        Record Payment
+                    <button
+                        onClick={() => navigate('/admin/bill')}
+                        className="create-payment-button"
+                    >
+                        <span className="button-icon">+</span>
+                        Create Payment
                     </button>
                 </div>
 

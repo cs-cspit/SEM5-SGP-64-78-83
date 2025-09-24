@@ -135,15 +135,6 @@ const AdminLayout = ({ children }) => {
             </div>
           ))}
         </nav>
-
-        <div className="sidebar-footer">
-          <div className="user-profile" onClick={handleLogout}>
-            <div className="user-avatar">
-              {user?.name?.charAt(0) || 'N'}
-            </div>
-            <span className="logout-text">Logout</span>
-          </div>
-        </div>
       </div>
 
       {/* Main Content */}

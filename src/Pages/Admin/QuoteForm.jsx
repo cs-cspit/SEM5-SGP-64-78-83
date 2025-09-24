@@ -207,11 +207,11 @@ const QuoteForm = () => {
                         <p>Manage submitted quote requests and inquiries</p>
                     </div>
                     <div className="header-stats">
-                        <div className="stat-item">
+                        <div className="quote-stat-item">
                             <span className="stat-number">{quotes.length}</span>
                             <span className="stat-label">Total Quotes</span>
                         </div>
-                        <div className="stat-item">
+                        <div className="quote-stat-item">
                             <span className="stat-number">{quotes.filter(q => q.status === 'pending').length}</span>
                             <span className="stat-label">Pending</span>
                         </div>
