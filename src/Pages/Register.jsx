@@ -14,8 +14,6 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [registeredEmail, setRegisteredEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   // Handles changes to input fields and updates the form state
@@ -51,87 +49,18 @@ const Register = () => {
         password: form.password
       });
       console.log('Registration successful:', userData);
-
-      // Handle the new registration response
-      if (userData.requiresVerification) {
-        setSuccess(true);
-        setRegisteredEmail(form.email);
-      } else {
-        // Fallback for old registration flow (if token is still returned)
-        if (userData.token) {
-          localStorage.setItem('userToken', userData.token);
-        }
-        navigate('/login');
+      // Store user data in localStorage if needed
+      if (userData.token) {
+        localStorage.setItem('userToken', userData.token);
       }
+      navigate('/login'); // Redirect to login page after successful registration
     } catch (err) {
       console.error('Registration error:', err);
-      // Handle specific verification-related errors
-      if (err.includes('email not verified') || err.includes('needsVerification')) {
-        setError(err);
-        // Could navigate to resend verification page
-      } else {
-        setError(err || 'Registration failed. Please try again.');
-      }
+      setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  // Success view after registration
-  if (success) {
-    return (
-      <div className="register-container">
-        <div className="register-card">
-          <div className="register-header">
-            <h1 className="register-main-title">📧 Check Your Email</h1>
-            <p className="register-subtitle">Registration successful!</p>
-          </div>
-
-          <div className="register-form-container">
-            <div className="success-message">
-              <div className="success-icon">✅</div>
-              <h3>Welcome to Jay Jalaram Electricals!</h3>
-              <p>
-                Thank you for registering! We've sent a verification email to:
-              </p>
-              <p><strong>{registeredEmail}</strong></p>
-              <p>
-                Please check your email and click on the verification link to activate your account.
-              </p>
-            </div>
-
-            <div className="verification-info">
-              <h4>Next Steps:</h4>
-              <ul>
-                <li>📬 Check your email inbox (and spam folder)</li>
-                <li>📧 Click the verification link in the email</li>
-                <li>🔓 Once verified, you can log in to your account</li>
-                <li>⏰ The verification link expires in 24 hours</li>
-              </ul>
-            </div>
-
-            <div className="form-actions">
-              <Link to="/login" className="btn btn-primary">
-                Go to Login
-              </Link>
-              <Link to="/resend-verification" className="btn btn-secondary">
-                Resend Email
-              </Link>
-            </div>
-
-            <div className="form-footer">
-              <p>
-                Didn't receive the email? <Link to="/resend-verification">Resend verification email</Link>
-              </p>
-              <p>
-                Already have an account? <Link to="/login">Sign In</Link>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="register-container">
