@@ -18,12 +18,10 @@ exports.createClient = async (req, res) => {
 
     // Validate required fields
     if (!companyName || !gstNumber || !email || !phone || !address) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Required fields: Company Name, GST Number, Email, Phone, and Address",
-        });
+      return res.status(400).json({
+        message:
+          "Required fields: Company Name, GST Number, Email, Phone, and Address",
+      });
     }
 
     // Check if email already exists
@@ -38,19 +36,37 @@ exports.createClient = async (req, res) => {
       return res.status(400).json({ message: "GST number already registered" });
     }
 
+    // Generate default password: companyname@pan_last_4_digits
+    let defaultPassword = "temp@123"; // fallback password
+    if (companyName && panNumber && panNumber.length >= 4) {
+      // Remove spaces and special characters from company name, convert to lowercase
+      const cleanCompanyName = companyName
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toLowerCase();
+      const panLast4 = panNumber.slice(-4);
+      defaultPassword = `${cleanCompanyName}@${panLast4}`;
+    } else if (companyName) {
+      // If no PAN number, use company name with @123
+      const cleanCompanyName = companyName
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toLowerCase();
+      defaultPassword = `${cleanCompanyName}@123`;
+    }
+
     // Create a basic user account for the client
     let user;
     try {
       user = await User.create({
         name: contactPerson || companyName,
         email,
-        password: "temp123", // Default password - client should change this
+        password: defaultPassword, // Generated password based on company name and PAN
         role: "client",
       });
       console.log("Client user created:", {
         id: user._id,
         email: user.email,
         role: user.role,
+        defaultPassword: defaultPassword, // Log the generated password for admin reference
       });
     } catch (error) {
       console.error("Error creating client user:", error);
@@ -79,6 +95,7 @@ exports.createClient = async (req, res) => {
         role: user.role,
         clientDetails: clientDetails,
       },
+      generatedPassword: defaultPassword, // Include the generated password for admin reference
     });
   } catch (error) {
     if (error.code === 11000) {
