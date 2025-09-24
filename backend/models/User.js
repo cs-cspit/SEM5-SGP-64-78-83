@@ -41,6 +41,18 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+      default: null,
+    },
+    emailVerificationExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -102,6 +114,47 @@ userSchema.methods.verifyResetPasswordToken = function (token) {
     this.resetPasswordToken === hashedToken &&
     this.resetPasswordExpires > Date.now()
   );
+};
+
+// Generate email verification token
+userSchema.methods.generateEmailVerificationToken = function () {
+  const crypto = require("crypto");
+
+  // Generate random token
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+
+  // Hash and set to emailVerificationToken field
+  this.emailVerificationToken = crypto
+    .createHash("sha256")
+    .update(verificationToken)
+    .digest("hex");
+
+  // Set expire time (24 hours)
+  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+  // Return unhashed token
+  return verificationToken;
+};
+
+// Verify email verification token
+userSchema.methods.verifyEmailVerificationToken = function (token) {
+  const crypto = require("crypto");
+
+  // Hash the token and compare
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  // Check if token matches and hasn't expired
+  return (
+    this.emailVerificationToken === hashedToken &&
+    this.emailVerificationExpires > Date.now()
+  );
+};
+
+// Mark email as verified
+userSchema.methods.markEmailAsVerified = function () {
+  this.isEmailVerified = true;
+  this.emailVerificationToken = undefined;
+  this.emailVerificationExpires = undefined;
 };
 
 const User = mongoose.model("User", userSchema);

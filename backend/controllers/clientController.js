@@ -61,11 +61,13 @@ exports.createClient = async (req, res) => {
         email,
         password: defaultPassword, // Generated password based on company name and PAN
         role: "client",
+        isEmailVerified: true, // Admin-created clients are automatically verified
       });
       console.log("Client user created:", {
         id: user._id,
         email: user.email,
         role: user.role,
+        isEmailVerified: user.isEmailVerified,
         defaultPassword: defaultPassword, // Log the generated password for admin reference
       });
     } catch (error) {
@@ -93,9 +95,11 @@ exports.createClient = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isEmailVerified: user.isEmailVerified,
         clientDetails: clientDetails,
       },
       generatedPassword: defaultPassword, // Include the generated password for admin reference
+      note: "Client account is automatically verified and ready to use",
     });
   } catch (error) {
     if (error.code === 11000) {

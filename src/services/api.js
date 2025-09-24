@@ -272,3 +272,23 @@ export const resetPassword = async (token, password, confirmPassword) => {
     throw error.response?.data?.message || "Failed to reset password";
   }
 };
+
+// Email verification
+export const verifyEmail = async (token) => {
+  try {
+    const response = await api.get(`/users/verify-email/${token}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to verify email";
+  }
+};
+
+// Resend verification email
+export const resendVerificationEmail = async (email) => {
+  try {
+    const response = await api.post("/users/resend-verification", { email });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to send verification email";
+  }
+};

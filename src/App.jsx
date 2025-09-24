@@ -31,6 +31,8 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import ForgotPassword from './Pages/ForgotPassword';
 import ResetPassword from './Pages/ResetPassword';
+import EmailVerification from './Pages/EmailVerification';
+import ResendVerification from './Pages/ResendVerification';
 import Works from './Pages/Works';
 import ContactForm from './Pages/ContactForm';
 import WiringExcellencePage from './Pages/WiringExcellencePage';
@@ -62,6 +64,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-email/:token" element={<EmailVerification />} />
+          <Route path="/resend-verification" element={<ResendVerification />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/register" element={<Register />} />
           <Route path="/services/wiring" element={<WiringExcellencePage />} />

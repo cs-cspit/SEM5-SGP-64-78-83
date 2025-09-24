@@ -314,6 +314,168 @@ const sendPasswordResetEmail = async (resetData) => {
   }
 };
 
+// Send email verification email
+const sendEmailVerificationEmail = async (verificationData) => {
+  try {
+    const transporter = createTransporter();
+
+    const verificationUrl = `${
+      process.env.FRONTEND_URL || "http://localhost:5173"
+    }/verify-email/${verificationData.token}`;
+
+    // Email verification email template
+    const emailTemplate = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .header {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+          }
+          .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+          }
+          .verify-button {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+          }
+          .verify-button:hover {
+            background: #38a169;
+          }
+          .welcome-message {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            color: #22543d;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+          }
+          .info {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            color: #2c5282;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+          }
+          .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>✅ Welcome to Jay Jalaram Electricals!</h1>
+          <p>Email Verification Required</p>
+        </div>
+        
+        <div class="content">
+          <div class="welcome-message">
+            <h2>Welcome ${verificationData.name}! 🎉</h2>
+            <p>Thank you for creating an account with <strong>Jay Jalaram Electricals</strong>. We're excited to have you as part of our community!</p>
+          </div>
+
+          <h3>Verify Your Email Address</h3>
+          <p>To complete your registration and start using your account, please verify your email address by clicking the button below:</p>
+          
+          <div style="text-align: center;">
+            <a href="${verificationUrl}" class="verify-button">✅ Verify My Email</a>
+          </div>
+          
+          <div class="info">
+            <strong>Important Information:</strong>
+            <ul>
+              <li>This verification link will expire in <strong>24 hours</strong></li>
+              <li>You won't be able to log in until your email is verified</li>
+              <li>If you didn't create this account, please ignore this email</li>
+              <li>For security reasons, don't share this link with anyone</li>
+            </ul>
+          </div>
+          
+          <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; background: #f0f0f0; padding: 10px; border-radius: 5px;">
+            ${verificationUrl}
+          </p>
+
+          <h3>What happens after verification?</h3>
+          <p>Once verified, you'll be able to:</p>
+          <ul>
+            <li>✅ Access your personal dashboard</li>
+            <li>✅ View and manage your electrical service requests</li>
+            <li>✅ Track your invoices and payments</li>
+            <li>✅ Contact our support team directly</li>
+            <li>✅ Receive important updates about our services</li>
+          </ul>
+          
+          <div class="footer">
+            <p>This is an automated message from Jay Jalaram Electricals Business Management System.</p>
+            <p>Need help? Contact our support team.</p>
+            
+            <hr style="margin: 20px 0;">
+            
+            <p><strong>Jay Jalaram Electricals</strong><br>
+            📧 Email: jayalarameelectricals@gmail.com<br>
+            📞 Phone: 7016388853<br>
+            📍 Address: Juna Jeen Hanuman Tekri, Opp. Ramji Mandir, Rander, Surat - 5<br>
+            🌐 Website: <a href="http://localhost:5173">Jay Jalaram Electricals</a></p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: {
+        name: "Jay Jalaram Electricals",
+        address: process.env.EMAIL_USER || "jayalarameelectricals@gmail.com",
+      },
+      to: verificationData.email,
+      subject: "✅ Welcome! Please verify your email - Jay Jalaram Electricals",
+      html: emailTemplate,
+      text: `Welcome ${verificationData.name}!\n\nThank you for creating an account with Jay Jalaram Electricals.\n\nTo complete your registration, please verify your email by clicking this link: ${verificationUrl}\n\nThis link will expire in 24 hours.\n\nIf you didn't create this account, please ignore this email.\n\nBest regards,\nJay Jalaram Electricals Team`,
+      priority: "high",
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+
+    return {
+      success: true,
+      messageId: result.messageId,
+      response: result.response,
+    };
+  } catch (error) {
+    console.error("Email verification email sending error:", error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
 // Test email configuration
 const testEmailConfig = async () => {
   try {
@@ -328,5 +490,6 @@ const testEmailConfig = async () => {
 module.exports = {
   sendReplyEmail,
   sendPasswordResetEmail,
+  sendEmailVerificationEmail,
   testEmailConfig,
 };
