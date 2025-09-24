@@ -1,25 +1,29 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { 
-  register, 
-  login, 
-  getAllUsers, 
+const {
+  register,
+  login,
+  getAllUsers,
   updateUserRole,
   getProfile,
-  deleteUser 
-} = require('../controllers/userController');
-const { auth, adminAuth } = require('../middleware/auth');
+  deleteUser,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/userController");
+const { auth, adminAuth } = require("../middleware/auth");
 
 // Public routes
-router.post('/register', register);
-router.post('/login', login);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 // Protected routes
-router.get('/profile', auth, getProfile);
+router.get("/profile", auth, getProfile);
 
 // Admin routes
-router.get('/all', adminAuth, getAllUsers);
-router.patch('/role', adminAuth, updateUserRole);
-router.delete('/:userId', adminAuth, deleteUser);
+router.get("/all", adminAuth, getAllUsers);
+router.patch("/role", adminAuth, updateUserRole);
+router.delete("/:userId", adminAuth, deleteUser);
 
 module.exports = router;

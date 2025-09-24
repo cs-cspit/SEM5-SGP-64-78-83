@@ -72,11 +72,11 @@ const Login = () => {
           <h1 className="login-main-title">Welcome to JJE</h1>
           <p className="login-subtitle"></p>
         </div>
-        
+
         <div className="login-form-container">
           <h2 className="login-form-title">Login In</h2>
           <p className="login-description">Enter your credentials to access system</p>
-          
+
           <form onSubmit={handleSubmit} className="login-form">
             <div className="login-input-group">
               <label htmlFor="email" className="login-label">Email</label>
@@ -117,6 +117,12 @@ const Login = () => {
             </div>
 
             {error && <div className="login-error">{error}</div>}
+
+            <div className="form-options">
+              <Link to="/forgot-password" className="forgot-password-link">
+                Forgot your password?
+              </Link>
+            </div>
 
             <button type="submit" className="login-button" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}

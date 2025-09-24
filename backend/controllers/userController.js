@@ -2,6 +2,7 @@ const User = require("../models/User");
 const ClientDetails = require("../models/ClientDetails");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const { sendPasswordResetEmail } = require("../services/emailService");
 
 // Generate JWT token
 const generateToken = (id) => {
@@ -172,9 +173,9 @@ exports.getProfile = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    
+
     const user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -183,16 +184,16 @@ exports.deleteUser = async (req, res) => {
     if (user.role === "admin") {
       const adminCount = await User.countDocuments({ role: "admin" });
       if (adminCount <= 1) {
-        return res.status(400).json({ 
-          message: "Cannot delete the last admin user" 
+        return res.status(400).json({
+          message: "Cannot delete the last admin user",
         });
       }
     }
 
     // Prevent users from deleting themselves
     if (req.user._id.toString() === userId) {
-      return res.status(400).json({ 
-        message: "You cannot delete your own account" 
+      return res.status(400).json({
+        message: "You cannot delete your own account",
       });
     }
 
@@ -202,30 +203,150 @@ exports.deleteUser = async (req, res) => {
       try {
         // Convert userId to ObjectId for proper matching
         const objectId = new mongoose.Types.ObjectId(userId);
-        const deletedClientDetails = await ClientDetails.findOneAndDelete({ userId: objectId });
-        console.log('Client details found and deleted:', deletedClientDetails ? 'Yes' : 'No');
+        const deletedClientDetails = await ClientDetails.findOneAndDelete({
+          userId: objectId,
+        });
+        console.log(
+          "Client details found and deleted:",
+          deletedClientDetails ? "Yes" : "No"
+        );
         if (deletedClientDetails) {
-          console.log('Deleted client details for company:', deletedClientDetails.companyName);
+          console.log(
+            "Deleted client details for company:",
+            deletedClientDetails.companyName
+          );
         } else {
-          console.log('No client details found for userId:', userId);
+          console.log("No client details found for userId:", userId);
         }
       } catch (clientDeleteError) {
-        console.error('Error deleting client details:', clientDeleteError);
+        console.error("Error deleting client details:", clientDeleteError);
       }
     }
 
     await User.findByIdAndDelete(userId);
     console.log(`User deleted: ${userId}`);
 
-    res.json({ 
+    res.json({
       message: "User deleted successfully",
       deletedUser: {
         id: user._id,
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Forgot password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    // Validate email format
+    if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // Don't reveal whether user exists or not for security
+      return res.status(200).json({
+        message:
+          "If an account with this email exists, you will receive a password reset link",
+      });
+    }
+
+    // Generate reset token
+    const resetToken = user.generateResetPasswordToken();
+    await user.save({ validateBeforeSave: false });
+
+    // Send reset email
+    const emailResult = await sendPasswordResetEmail({
+      name: user.name,
+      email: user.email,
+      token: resetToken,
+    });
+
+    if (!emailResult.success) {
+      // Clear the reset token if email fails
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(500).json({
+        message: "Failed to send password reset email. Please try again.",
+      });
+    }
+
+    res.status(200).json({
+      message: "Password reset link sent to your email address",
+      emailSent: true,
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: "Reset token is required" });
+    }
+
+    if (!password || !confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "Password and confirm password are required" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters long" });
+    }
+
+    // Find user with valid reset token
+    const user = await User.findOne({
+      resetPasswordToken: { $ne: null },
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user || !user.verifyResetPasswordToken(token)) {
+      return res.status(400).json({
+        message:
+          "Invalid or expired reset token. Please request a new password reset.",
+      });
+    }
+
+    // Update password
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({
+      message:
+        "Password reset successful. You can now login with your new password.",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };

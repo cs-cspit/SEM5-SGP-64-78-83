@@ -247,3 +247,28 @@ export const updateMyClientDetails = async (clientData) => {
     throw error.response?.data?.message || "Failed to update client details";
   }
 };
+
+// Forgot password
+export const forgotPassword = async (email) => {
+  try {
+    const response = await api.post("/users/forgot-password", { email });
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data?.message || "Failed to send password reset email"
+    );
+  }
+};
+
+// Reset password
+export const resetPassword = async (token, password, confirmPassword) => {
+  try {
+    const response = await api.post(`/users/reset-password/${token}`, {
+      password,
+      confirmPassword,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to reset password";
+  }
+};

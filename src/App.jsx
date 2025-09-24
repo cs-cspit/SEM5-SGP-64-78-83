@@ -29,6 +29,8 @@ import Home from './Pages/Home';
 import About from './Pages/about';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
+import ForgotPassword from './Pages/ForgotPassword';
+import ResetPassword from './Pages/ResetPassword';
 import Works from './Pages/Works';
 import ContactForm from './Pages/ContactForm';
 import WiringExcellencePage from './Pages/WiringExcellencePage';
@@ -58,6 +60,8 @@ function App() {
           <Route path="/works/:category" element={<WorkDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/register" element={<Register />} />
           <Route path="/services/wiring" element={<WiringExcellencePage />} />

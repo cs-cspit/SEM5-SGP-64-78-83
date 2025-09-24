@@ -1,15 +1,15 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 // Email transporter configuration
 const createTransporter = () => {
   // You can configure this for different email providers
   // Gmail configuration (requires app-specific password)
   return nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: process.env.EMAIL_USER || 'jayalarameelectricals@gmail.com',
-      pass: process.env.EMAIL_PASSWORD || 'your-app-specific-password'
-    }
+      user: process.env.EMAIL_USER || "jayalarameelectricals@gmail.com",
+      pass: process.env.EMAIL_PASSWORD || "your-app-specific-password",
+    },
   });
 
   // Alternative configuration for other SMTP providers
@@ -144,30 +144,172 @@ const sendReplyEmail = async (replyData) => {
 
     const mailOptions = {
       from: {
-        name: 'Jay Jalaram Electricals',
-        address: process.env.EMAIL_USER || 'jayalarameelectricals@gmail.com'
+        name: "Jay Jalaram Electricals",
+        address: process.env.EMAIL_USER || "jayalarameelectricals@gmail.com",
       },
       to: replyData.clientEmail,
       subject: replyData.subject,
       html: emailTemplate,
       text: `Dear ${replyData.clientName},\n\n${replyData.message}\n\nBest regards,\n${replyData.adminName}\nJay Jalaram Electricals Team`,
-      priority: replyData.priority === 'urgent' ? 'high' : 
-                replyData.priority === 'high' ? 'high' : 'normal'
+      priority:
+        replyData.priority === "urgent"
+          ? "high"
+          : replyData.priority === "high"
+          ? "high"
+          : "normal",
     };
 
     const result = await transporter.sendMail(mailOptions);
-    
+
     return {
       success: true,
       messageId: result.messageId,
-      response: result.response
+      response: result.response,
     };
-    
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error("Email sending error:", error);
     return {
       success: false,
-      error: error.message
+      error: error.message,
+    };
+  }
+};
+
+// Send password reset email
+const sendPasswordResetEmail = async (resetData) => {
+  try {
+    const transporter = createTransporter();
+
+    const resetUrl = `${
+      process.env.FRONTEND_URL || "http://localhost:5173"
+    }/reset-password/${resetData.token}`;
+
+    // Password reset email template
+    const emailTemplate = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+          }
+          .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+          }
+          .reset-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+          }
+          .reset-button:hover {
+            background: #5a6fd8;
+          }
+          .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+          }
+          .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>🔐 Password Reset Request</h1>
+          <p>Jay Jalaram Electricals</p>
+        </div>
+        
+        <div class="content">
+          <h2>Hello ${resetData.name},</h2>
+          
+          <p>We received a request to reset your password for your Jay Jalaram Electricals account.</p>
+          
+          <p>Click the button below to reset your password:</p>
+          
+          <div style="text-align: center;">
+            <a href="${resetUrl}" class="reset-button">Reset Password</a>
+          </div>
+          
+          <div class="warning">
+            <strong>Important:</strong>
+            <ul>
+              <li>This link will expire in <strong>10 minutes</strong> for security reasons</li>
+              <li>If you didn't request this password reset, please ignore this email</li>
+              <li>Never share this link with anyone</li>
+            </ul>
+          </div>
+          
+          <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; background: #f0f0f0; padding: 10px; border-radius: 5px;">
+            ${resetUrl}
+          </p>
+          
+          <div class="footer">
+            <p>This is an automated message from Jay Jalaram Electricals Business Management System.</p>
+            <p>If you have any questions, please contact our support team.</p>
+            
+            <hr style="margin: 20px 0;">
+            
+            <p><strong>Jay Jalaram Electricals</strong><br>
+            📧 Email: jayalarameelectricals@gmail.com<br>
+            🌐 Website: <a href="http://localhost:5173">Jay Jalaram Electricals</a></p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: {
+        name: "Jay Jalaram Electricals",
+        address: process.env.EMAIL_USER || "jayalarameelectricals@gmail.com",
+      },
+      to: resetData.email,
+      subject: "🔐 Password Reset Request - Jay Jalaram Electricals",
+      html: emailTemplate,
+      text: `Hello ${resetData.name},\n\nWe received a request to reset your password.\n\nClick this link to reset your password: ${resetUrl}\n\nThis link will expire in 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\nJay Jalaram Electricals Team`,
+      priority: "high",
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+
+    return {
+      success: true,
+      messageId: result.messageId,
+      response: result.response,
+    };
+  } catch (error) {
+    console.error("Password reset email sending error:", error);
+    return {
+      success: false,
+      error: error.message,
     };
   }
 };
@@ -177,7 +319,7 @@ const testEmailConfig = async () => {
   try {
     const transporter = createTransporter();
     const result = await transporter.verify();
-    return { success: true, message: 'Email configuration is valid' };
+    return { success: true, message: "Email configuration is valid" };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -185,5 +327,6 @@ const testEmailConfig = async () => {
 
 module.exports = {
   sendReplyEmail,
-  testEmailConfig
+  sendPasswordResetEmail,
+  testEmailConfig,
 };
