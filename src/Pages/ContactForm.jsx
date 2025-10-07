@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth-context.jsx';
 import { submitContactForm } from '../services/api';
+import { FormValidator, APIErrorHandler } from '../utils/errorHandler';
 import './contact-form.css';
 
 const ContactForm = () => {
@@ -16,7 +17,8 @@ const ContactForm = () => {
     subject: "",
     message: "" 
   });
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   
@@ -26,8 +28,69 @@ const ContactForm = () => {
   };
   
   // Update form fields
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // Clear field-specific error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+    
+    // Clear general messages when user starts typing
+    if (generalError) {
+      setGeneralError("");
+    }
+    if (success) {
+      setSuccess("");
+    }
+  };
+
+  const validateForm = () => {
+    const validator = new FormValidator();
+    
+    // Validate required fields
+    validator.validateRequired(form.name, 'name');
+    validator.validateRequired(form.email, 'email');
+    validator.validateRequired(form.message, 'message');
+    
+    // Validate email format
+    if (form.email) {
+      validator.validateEmail(form.email, 'email');
+    }
+    
+    // Validate phone if provided
+    if (form.phone) {
+      validator.validatePhone(form.phone, 'phone');
+    }
+    
+    // Validate name format
+    if (form.name) {
+      validator.validateName(form.name, 'name');
+    }
+    
+    // Validate message length
+    if (form.message) {
+      validator.validateLength(form.message, 'message', 10, 1000);
+    }
+    
+    // Validate subject length if provided
+    if (form.subject) {
+      validator.validateLength(form.subject, 'subject', 0, 200);
+    }
+
+    // Set field-specific errors
+    const fieldErrors = {};
+    Object.keys(validator.errors).forEach(field => {
+      fieldErrors[field] = validator.getFieldErrors(field)[0]; // Get first error for each field
+    });
+    
+    setErrors(fieldErrors);
+    return !validator.hasErrors();
+  };
   
   // Form submission handler with validation
   const handleSubmit = async (e) => {
@@ -35,34 +98,44 @@ const ContactForm = () => {
     
     // Check if user is authenticated
     if (!isAuthenticated()) {
-      setError("Please login to submit a contact form.");
+      setGeneralError("Please login to submit a contact form.");
       setTimeout(() => {
         navigate('/login');
       }, 2000);
       return;
     }
 
-    if (!form.email || !form.message) {
-      setError("Email and message are required.");
+    // Clear previous errors
+    setErrors({});
+    setGeneralError("");
+    setSuccess("");
+
+    // Validate form
+    if (!validateForm()) {
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
-      setSuccess("");
       
       const response = await submitContactForm(form);
       setSuccess("Message sent successfully! We'll get back to you soon.");
       setForm({ name: "", company: "", email: "", phone: "", subject: "", message: "" }); // Reset form
     } catch (err) {
-      if (err.includes("Please authenticate")) {
-        setError("Your session has expired. Please login again.");
+      console.error('Contact form error:', err);
+      const errorMessage = APIErrorHandler.parseError(err);
+      
+      if (errorMessage.includes("authenticate") || errorMessage.includes("session")) {
+        setGeneralError("Your session has expired. Please login again.");
         setTimeout(() => {
           navigate('/login');
         }, 2000);
+      } else if (errorMessage.includes("email")) {
+        setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+      } else if (errorMessage.includes("message")) {
+        setErrors(prev => ({ ...prev, message: 'Please enter a valid message' }));
       } else {
-        setError(err.toString());
+        setGeneralError(errorMessage);
       }
     } finally {
       setLoading(false);
@@ -167,11 +240,12 @@ const ContactForm = () => {
                       type="text"
                       value={form.name}
                       onChange={handleChange}
-                      placeholder="Name"
-                      className="form-input"
+                      placeholder="Name *"
+                      className={`form-input ${errors.name ? 'error' : ''}`}
                       required
                       disabled={!isAuthenticated()}
                     />
+                    {errors.name && <div className="field-error">{errors.name}</div>}
                   </div>
                   <div className="form-group">
                     <input
@@ -194,9 +268,10 @@ const ContactForm = () => {
                       value={form.phone}
                       onChange={handleChange}
                       placeholder="Phone"
-                      className="form-input"
+                      className={`form-input ${errors.phone ? 'error' : ''}`}
                       disabled={!isAuthenticated()}
                     />
+                    {errors.phone && <div className="field-error">{errors.phone}</div>}
                   </div>
                   <div className="form-group">
                     <input
@@ -204,11 +279,12 @@ const ContactForm = () => {
                       type="email"
                       value={form.email}
                       onChange={handleChange}
-                      placeholder="Email"
-                      className="form-input"
+                      placeholder="Email *"
+                      className={`form-input ${errors.email ? 'error' : ''}`}
                       required
                       disabled={!isAuthenticated()}
                     />
+                    {errors.email && <div className="field-error">{errors.email}</div>}
                   </div>
                 </div>
 
@@ -219,9 +295,10 @@ const ContactForm = () => {
                     value={form.subject}
                     onChange={handleChange}
                     placeholder="Subject"
-                    className="form-input"
+                    className={`form-input ${errors.subject ? 'error' : ''}`}
                     disabled={!isAuthenticated()}
                   />
+                  {errors.subject && <div className="field-error">{errors.subject}</div>}
                 </div>
 
                 <div className="form-group full-width">
@@ -229,14 +306,15 @@ const ContactForm = () => {
                     name="message"
                     value={form.message}
                     onChange={handleChange}
-                    placeholder="Write your message here..."
-                    className="form-input form-textarea"
+                    placeholder="Write your message here... *"
+                    className={`form-input form-textarea ${errors.message ? 'error' : ''}`}
                     required
                     disabled={!isAuthenticated()}
                   ></textarea>
+                  {errors.message && <div className="field-error">{errors.message}</div>}
                 </div>
 
-                {error && <div className="error-message">{error}</div>}
+                {generalError && <div className="error-message">{generalError}</div>}
                 {success && <div className="success-message">{success}</div>}
                 
                 <button 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { resetPassword } from '../services/api';
+import { FormValidator, APIErrorHandler, PasswordStrengthChecker } from '../utils/errorHandler';
 import './ResetPassword.css'; // Use dedicated reset password styles
 
 const ResetPassword = () => {
@@ -13,34 +14,67 @@ const ResetPassword = () => {
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({});
+    const [generalError, setGeneralError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState(null);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: value
         });
+        
+        // Clear field-specific error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+        
+        // Clear general error when user starts typing
+        if (generalError) {
+            setGeneralError('');
+        }
+
+        // Update password strength when password changes
+        if (name === 'password') {
+            const strength = PasswordStrengthChecker.checkStrength(value);
+            setPasswordStrength(strength);
+        }
+    };
+
+    const validateForm = () => {
+        const validator = new FormValidator();
+        
+        // Validate password
+        validator.validatePassword(formData.password, 'password');
+        
+        // Validate password confirmation
+        validator.validatePasswordConfirmation(formData.password, formData.confirmPassword);
+
+        // Set field-specific errors
+        const fieldErrors = {};
+        Object.keys(validator.errors).forEach(field => {
+            fieldErrors[field] = validator.getFieldErrors(field)[0]; // Get first error for each field
+        });
+        
+        setErrors(fieldErrors);
+        return !validator.hasErrors();
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        
+        // Clear previous errors
+        setErrors({});
+        setGeneralError('');
 
         // Validate form
-        if (!formData.password || !formData.confirmPassword) {
-            setError('Both password fields are required');
-            return;
-        }
-
-        if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long');
-            return;
-        }
-
-        if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+        if (!validateForm()) {
             return;
         }
 
@@ -51,11 +85,27 @@ const ResetPassword = () => {
 
             // Redirect to login after 3 seconds
             setTimeout(() => {
-                navigate('/login');
+                navigate('/login', { 
+                    state: { 
+                        message: 'Password reset successful! You can now login with your new password.' 
+                    } 
+                });
             }, 3000);
 
         } catch (error) {
-            setError(error || 'Failed to reset password');
+            const errorMessage = APIErrorHandler.parseError(error);
+            
+            if (errorMessage.includes('token') && errorMessage.includes('invalid')) {
+                setGeneralError('This password reset link is invalid or has expired. Please request a new password reset.');
+            } else if (errorMessage.includes('token') && errorMessage.includes('expired')) {
+                setGeneralError('This password reset link has expired. Please request a new password reset.');
+            } else if (errorMessage.includes('password') && errorMessage.includes('match')) {
+                setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+            } else if (errorMessage.includes('password') && errorMessage.includes('weak')) {
+                setErrors(prev => ({ ...prev, password: 'Password is too weak. Please choose a stronger password' }));
+            } else {
+                setGeneralError(errorMessage);
+            }
         } finally {
             setLoading(false);
         }
@@ -126,7 +176,7 @@ const ResetPassword = () => {
 
                 <div className="reset-password-form-container">
                     <form onSubmit={handleSubmit} className="reset-password-form">
-                        {error && <div className="reset-error-message">{error}</div>}
+                        {generalError && <div className="reset-error-message">{generalError}</div>}
 
                         <div className="reset-form-group">
                             <label htmlFor="password" className="reset-label">New Password</label>
@@ -140,7 +190,7 @@ const ResetPassword = () => {
                                     placeholder="Enter new password (min. 6 characters)"
                                     disabled={loading}
                                     autoComplete="new-password"
-                                    className="reset-input"
+                                    className={`reset-input ${errors.password ? 'error' : ''}`}
                                     required
                                 />
                                 <button
@@ -152,9 +202,22 @@ const ResetPassword = () => {
                                     <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
                                 </button>
                             </div>
-                            <small className="reset-password-hint">
-                                Password must be at least 6 characters long
-                            </small>
+                            {errors.password && <div className="field-error">{errors.password}</div>}
+                            {passwordStrength && formData.password && (
+                                <div className={`password-strength ${passwordStrength.strength.toLowerCase().replace(' ', '-')}`}>
+                                    <div className="strength-bar">
+                                        <div className="strength-fill" style={{ width: `${(passwordStrength.score / 5) * 100}%` }}></div>
+                                    </div>
+                                    <span className="strength-text">Password strength: {passwordStrength.strength}</span>
+                                    {passwordStrength.feedback.length > 0 && (
+                                        <ul className="strength-feedback">
+                                            {passwordStrength.feedback.map((tip, index) => (
+                                                <li key={index}>{tip}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="reset-form-group">
@@ -169,7 +232,7 @@ const ResetPassword = () => {
                                     placeholder="Confirm your new password"
                                     disabled={loading}
                                     autoComplete="new-password"
-                                    className="reset-input"
+                                    className={`reset-input ${errors.confirmPassword ? 'error' : ''}`}
                                     required
                                 />
                                 <button
@@ -181,6 +244,7 @@ const ResetPassword = () => {
                                     <i className={showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
                                 </button>
                             </div>
+                            {errors.confirmPassword && <div className="field-error">{errors.confirmPassword}</div>}
                         </div>
 
                         <button

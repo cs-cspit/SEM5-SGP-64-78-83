@@ -2,34 +2,68 @@ import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { login as apiLogin } from '../services/api';
 import { useAuth } from '../context/auth-context.jsx';
+import { FormValidator, APIErrorHandler } from '../utils/errorHandler';
 import './login.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // Clear field-specific error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+    
+    // Clear general error when user starts typing
+    if (generalError) {
+      setGeneralError("");
+    }
+  };
+
+  const validateForm = () => {
+    const validator = new FormValidator();
+    
+    // Validate email
+    validator.validateEmail(form.email, 'email');
+    
+    // Validate password
+    if (!form.password) {
+      validator.addError('password', 'Password is required');
+    } else if (form.password.length < 6) {
+      validator.addError('password', 'Password must be at least 6 characters long');
+    }
+
+    // Set field-specific errors
+    const fieldErrors = {};
+    Object.keys(validator.errors).forEach(field => {
+      fieldErrors[field] = validator.getFieldErrors(field)[0]; // Get first error for each field
+    });
+    
+    setErrors(fieldErrors);
+    return !validator.hasErrors();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Reset error state
-    setError("");
+    // Clear previous errors
+    setErrors({});
+    setGeneralError("");
 
     // Validate form
-    if (!form.email || !form.password) {
-      setError("All fields are required.");
-      return;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      setError("Please enter a valid email address.");
+    if (!validateForm()) {
       return;
     }
 
@@ -49,16 +83,25 @@ const Login = () => {
       if (userData.role === 'admin') {
         navigate('/admin');
       } else if (userData.role === 'client') {
-        navigate('/ ');
+        navigate('/client-dashboard');
       } else {
         navigate('/');
       }
     } catch (err) {
       console.error('Login error:', err);
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
+      const errorMessage = APIErrorHandler.parseError(err);
+      
+      // Handle specific login errors
+      if (errorMessage.includes('email')) {
+        setErrors(prev => ({ ...prev, email: 'No account found with this email address' }));
+      } else if (errorMessage.includes('password')) {
+        setErrors(prev => ({ ...prev, password: 'Incorrect password. Please try again' }));
+      } else if (errorMessage.includes('verify') || errorMessage.includes('verification')) {
+        setGeneralError('Please verify your email address before logging in. Check your email for verification link.');
+      } else if (errorMessage.includes('session') || errorMessage.includes('expired')) {
+        setGeneralError('Your session has expired. Please try logging in again.');
       } else {
-        setError("Failed to login. Please try again.");
+        setGeneralError(errorMessage);
       }
     } finally {
       setLoading(false);
@@ -86,10 +129,11 @@ const Login = () => {
                 type="email"
                 value={form.email}
                 onChange={handleChange}
-                className="login-input"
+                className={`login-input ${errors.email ? 'error' : ''}`}
                 placeholder="admin@company.com"
                 required
               />
+              {errors.email && <div className="field-error">{errors.email}</div>}
             </div>
 
             <div className="login-input-group">
@@ -101,7 +145,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   value={form.password}
                   onChange={handleChange}
-                  className="login-input"
+                  className={`login-input ${errors.password ? 'error' : ''}`}
                   placeholder="••••••••"
                   required
                 />
@@ -114,9 +158,10 @@ const Login = () => {
                   <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
                 </button>
               </div>
+              {errors.password && <div className="field-error">{errors.password}</div>}
             </div>
 
-            {error && <div className="login-error">{error}</div>}
+            {generalError && <div className="login-error">{generalError}</div>}
 
             <div className="form-options">
               <Link to="/forgot-password" className="forgot-password-link">

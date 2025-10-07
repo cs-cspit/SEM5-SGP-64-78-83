@@ -1,0 +1,305 @@
+/* Shared Error Handling Styles */
+
+/* Field-specific error messages */
+.field-error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+}
+
+.field-error::before {
+  content: '⚠';
+  margin-right: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* Input error states */
+.form-input.error,
+.login-input.error,
+.register-input.error,
+.reset-input.error,
+.forgot-input.error {
+  border-color: #e53e3e !important;
+  background: #fed7d7 !important;
+}
+
+.form-input.error:focus,
+.login-input.error:focus,
+.register-input.error:focus,
+.reset-input.error:focus,
+.forgot-input.error:focus {
+  border-color: #e53e3e !important;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+}
+
+/* Password strength indicator */
+.password-strength {
+  margin-top: 0.5rem;
+}
+
+.strength-bar {
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.25rem;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.very-weak .strength-fill {
+  background: #e53e3e;
+}
+
+.weak .strength-fill {
+  background: #f56500;
+}
+
+.good .strength-fill {
+  background: #d69e2e;
+}
+
+.strong .strength-fill {
+  background: #38a169;
+}
+
+.very-strong .strength-fill {
+  background: #25855a;
+}
+
+.strength-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.strength-feedback {
+  margin: 0.25rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.strength-feedback li {
+  margin-bottom: 0.125rem;
+}
+
+/* General error message styles */
+.error-message {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin: 1rem 0;
+  text-align: center;
+  font-weight: 500;
+  background: #fed7d7;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #feb2b2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message::before {
+  content: '⚠';
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Success message styles */
+.success-message {
+  color: #22543d;
+  font-size: 0.875rem;
+  margin: 1rem 0;
+  text-align: center;
+  font-weight: 500;
+  background: #c6f6d5;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #9ae6b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-message::before {
+  content: '✓';
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Loading states */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s ease-in-out infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form validation hints */
+.validation-hint {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.validation-hint.error {
+  color: #e53e3e;
+}
+
+.validation-hint.success {
+  color: #38a169;
+}
+
+/* Required field indicator */
+.required::after {
+  content: ' *';
+  color: #e53e3e;
+  font-weight: bold;
+}
+
+/* Tooltip error messages */
+.error-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.error-tooltip .tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #e53e3e;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.error-tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+.error-tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #e53e3e transparent transparent transparent;
+}
+
+/* Multiple error list */
+.error-list {
+  background: #fed7d7;
+  border: 1px solid #feb2b2;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 1rem 0;
+}
+
+.error-list-title {
+  font-weight: 600;
+  color: #e53e3e;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.error-list ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style-type: none;
+}
+
+.error-list li {
+  color: #c53030;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+
+.error-list li::before {
+  content: '•';
+  color: #e53e3e;
+  font-weight: bold;
+  position: absolute;
+  left: -1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .field-error {
+    font-size: 0.8125rem;
+  }
+  
+  .error-message,
+  .success-message {
+    font-size: 0.8125rem;
+    padding: 0.625rem;
+  }
+  
+  .error-tooltip .tooltip-text {
+    width: 150px;
+    margin-left: -75px;
+  }
+  
+  .strength-feedback {
+    font-size: 0.6875rem;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .field-error {
+    color: #fc8181;
+  }
+  
+  .form-input.error,
+  .login-input.error,
+  .register-input.error,
+  .reset-input.error,
+  .forgot-input.error {
+    border-color: #fc8181 !important;
+    background: rgba(254, 215, 215, 0.1) !important;
+  }
+  
+  .error-message {
+    background: rgba(254, 215, 215, 0.1);
+    border-color: rgba(254, 178, 178, 0.3);
+    color: #fc8181;
+  }
+  
+  .success-message {
+    background: rgba(198, 246, 213, 0.1);
+    border-color: rgba(154, 230, 180, 0.3);
+    color: #68d391;
+  }
+}

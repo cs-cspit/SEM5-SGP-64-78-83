@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AdminLayout from '../../Components/AdminLayout';
+import { FormValidator, APIErrorHandler } from '../../utils/errorHandler';
 import './AddClient.css';
 
 const AddClient = () => {
@@ -16,63 +17,99 @@ const AddClient = () => {
     address: '',
     bankDetails: ''
   });
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+    
+    // Clear field-specific error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+    
+    // Clear general error when user starts typing
+    if (generalError) {
+      setGeneralError('');
+    }
   };
 
   const validateForm = () => {
-    if (!formData.companyName || !formData.gstNumber || !formData.email ||
-        !formData.phone || !formData.address) {
-      setError('Required fields: Company Name, GST Number, Email, Phone, and Address');
-      return false;
+    const validator = new FormValidator();
+    
+    // Validate required fields
+    validator.validateRequired(formData.companyName, 'companyName', 'Company name is required');
+    validator.validateRequired(formData.gstNumber, 'gstNumber', 'GST number is required');
+    validator.validateRequired(formData.email, 'email', 'Email is required');
+    validator.validateRequired(formData.phone, 'phone', 'Phone number is required');
+    validator.validateRequired(formData.address, 'address', 'Address is required');
+
+    // Validate email format
+    if (formData.email) {
+      validator.validateEmail(formData.email, 'email');
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
-      return false;
+    // Validate GST number
+    if (formData.gstNumber) {
+      validator.validateGST(formData.gstNumber, 'gstNumber');
     }
 
-    // GST number validation
-    const gstRegex = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$/;
-    if (!gstRegex.test(formData.gstNumber)) {
-      setError('Please enter a valid GST number (format: 29ABCDE1234F1Z5)');
-      return false;
-    }
-
-    // PAN number validation (if provided)
+    // Validate PAN number (optional)
     if (formData.panNumber) {
-      const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-      if (!panRegex.test(formData.panNumber)) {
-        setError('Please enter a valid PAN number (format: ABCDE1234F)');
-        return false;
-      }
+      validator.validatePAN(formData.panNumber, 'panNumber', false);
     }
 
-    return true;
+    // Validate phone number
+    if (formData.phone) {
+      validator.validatePhone(formData.phone, 'phone');
+    }
+
+    // Validate company name length
+    if (formData.companyName) {
+      validator.validateLength(formData.companyName, 'companyName', 2, 100);
+    }
+
+    // Validate contact person name if provided
+    if (formData.contactPerson) {
+      validator.validateName(formData.contactPerson, 'contactPerson');
+    }
+
+    // Set field-specific errors
+    const fieldErrors = {};
+    Object.keys(validator.errors).forEach(field => {
+      fieldErrors[field] = validator.getFieldErrors(field)[0]; // Get first error for each field
+    });
+    
+    setErrors(fieldErrors);
+    return !validator.hasErrors();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Clear previous errors
+    setErrors({});
+    setGeneralError('');
+
+    // Validate form
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setError('');
 
     try {
       const token = localStorage.getItem('userToken');
       if (!token) {
-        setError('You must be logged in to perform this action');
+        setGeneralError('You must be logged in to perform this action');
         return;
       }
 
@@ -88,15 +125,26 @@ const AddClient = () => {
       );
 
       console.log('Client created successfully:', response.data);
-      navigate('/admin/user-roles');
+      navigate('/admin/user-roles', { 
+        state: { 
+          message: `Client "${formData.companyName}" created successfully!` 
+        } 
+      });
     } catch (err) {
       console.error('Error creating client:', err);
-      if (err.response?.status === 401) {
-        setError('You are not authorized to perform this action');
-      } else if (err.response?.status === 400) {
-        setError(err.response.data.message || 'Invalid input data');
+      const errorMessage = APIErrorHandler.parseError(err);
+      
+      // Handle specific client creation errors
+      if (errorMessage.includes('GST') && errorMessage.includes('exists')) {
+        setErrors(prev => ({ ...prev, gstNumber: 'A client with this GST number already exists' }));
+      } else if (errorMessage.includes('email') && errorMessage.includes('exists')) {
+        setErrors(prev => ({ ...prev, email: 'A client with this email already exists' }));
+      } else if (errorMessage.includes('unauthorized') || errorMessage.includes('authenticate')) {
+        setGeneralError('You are not authorized to perform this action. Please login again.');
+      } else if (errorMessage.includes('validation')) {
+        setGeneralError('Please check your input data and try again.');
       } else {
-        setError('Server error. Please try again later.');
+        setGeneralError(errorMessage);
       }
     } finally {
       setLoading(false);
@@ -137,8 +185,10 @@ const AddClient = () => {
                       name="companyName"
                       value={formData.companyName}
                       onChange={handleChange}
+                      className={`form-input ${errors.companyName ? 'error' : ''}`}
                       placeholder="Enter company name"
                     />
+                    {errors.companyName && <div className="field-error">{errors.companyName}</div>}
                   </div>
 
                   <div className="form-group">
@@ -149,8 +199,10 @@ const AddClient = () => {
                       name="gstNumber"
                       value={formData.gstNumber}
                       onChange={handleChange}
+                      className={`form-input ${errors.gstNumber ? 'error' : ''}`}
                       placeholder="29ABCDE1234F1Z5"
                     />
+                    {errors.gstNumber && <div className="field-error">{errors.gstNumber}</div>}
                   </div>
                 </div>
 
@@ -163,8 +215,10 @@ const AddClient = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      className={`form-input ${errors.email ? 'error' : ''}`}
                       placeholder="contact@company.com"
                     />
+                    {errors.email && <div className="field-error">{errors.email}</div>}
                   </div>
 
                   <div className="form-group">
@@ -175,8 +229,10 @@ const AddClient = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
+                      className={`form-input ${errors.phone ? 'error' : ''}`}
                       placeholder="+91 9876543210"
                     />
+                    {errors.phone && <div className="field-error">{errors.phone}</div>}
                   </div>
                 </div>
 
@@ -189,8 +245,10 @@ const AddClient = () => {
                       name="contactPerson"
                       value={formData.contactPerson}
                       onChange={handleChange}
+                      className={`form-input ${errors.contactPerson ? 'error' : ''}`}
                       placeholder="John Doe"
                     />
+                    {errors.contactPerson && <div className="field-error">{errors.contactPerson}</div>}
                   </div>
 
                   <div className="form-group">
@@ -201,8 +259,10 @@ const AddClient = () => {
                       name="panNumber"
                       value={formData.panNumber}
                       onChange={handleChange}
+                      className={`form-input ${errors.panNumber ? 'error' : ''}`}
                       placeholder="ABCDE1234F"
                     />
+                    {errors.panNumber && <div className="field-error">{errors.panNumber}</div>}
                   </div>
                 </div>
 
@@ -213,9 +273,11 @@ const AddClient = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
+                    className={`form-input ${errors.address ? 'error' : ''}`}
                     placeholder="Enter complete address"
                     rows="3"
                   ></textarea>
+                  {errors.address && <div className="field-error">{errors.address}</div>}
                 </div>
 
                 <div className="form-group full-width">
@@ -225,12 +287,14 @@ const AddClient = () => {
                     name="bankDetails"
                     value={formData.bankDetails}
                     onChange={handleChange}
+                    className={`form-input ${errors.bankDetails ? 'error' : ''}`}
                     placeholder="Bank name, account number, IFSC code"
                     rows="3"
                   ></textarea>
+                  {errors.bankDetails && <div className="field-error">{errors.bankDetails}</div>}
                 </div>
 
-                {error && <div className="error-message">{error}</div>}
+                {generalError && <div className="error-message">{generalError}</div>}
 
                 <div className="form-actions">
                   <button type="button" onClick={handleCancel} className="cancel-button">
