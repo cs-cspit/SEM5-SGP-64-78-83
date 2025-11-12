@@ -31,26 +31,26 @@ const Home = () => {
 
   // Set video playback rate to smooth slow motion
   useEffect(() => {
-  if (videoRef.current) {
-    const video = videoRef.current;
+    if (videoRef.current) {
+      const video = videoRef.current;
 
-    const setRate = () => {
-      video.playbackRate = 0.5; // smoother slow motion
-    };
+      const setRate = () => {
+        video.playbackRate = 0.5; // smoother slow motion
+      };
 
-    video.addEventListener("loadeddata", setRate);
-    video.addEventListener("canplay", setRate);
+      video.addEventListener("loadeddata", setRate);
+      video.addEventListener("canplay", setRate);
 
-    if (video.readyState >= 2) {
-      setRate();
+      if (video.readyState >= 2) {
+        setRate();
+      }
+
+      return () => {
+        video.removeEventListener("loadeddata", setRate);
+        video.removeEventListener("canplay", setRate);
+      };
     }
-
-    return () => {
-      video.removeEventListener("loadeddata", setRate);
-      video.removeEventListener("canplay", setRate);
-    };
-  }
-}, []);
+  }, []);
 
   const testimonials = [
     {
@@ -90,16 +90,16 @@ const Home = () => {
     { src: "/Images/inox.jpeg", alt: "inox" },
     { src: "/Images/VR.png", alt: "VR" },
     { src: "/Images/rrtm.jpg", alt: "rrtm" },
-     { src: "/Images/enviro.jpeg", alt: "enviro" },
-     { src: "/Images/ppl.png", alt: "people" },
-     { src: "/Images/metro.png", alt: "metro" },
-      { src: "/Images/redfm.png", alt: "redfm" },
-      { src: "/Images/iocl.png", alt: "iocl" },
-      { src: "/Images/mafat.png", alt: "mafat" },
-      { src: "/Images/jkumar.jpg", alt: "jkumar" },
-       { src: "/Images/shalby.avif", alt: "avif" },
-     
-     
+    { src: "/Images/enviro.jpeg", alt: "enviro" },
+    { src: "/Images/ppl.png", alt: "people" },
+    { src: "/Images/metro.png", alt: "metro" },
+    { src: "/Images/redfm.png", alt: "redfm" },
+    { src: "/Images/iocl.png", alt: "iocl" },
+    { src: "/Images/mafat.png", alt: "mafat" },
+    { src: "/Images/jkumar.jpg", alt: "jkumar" },
+    { src: "/Images/shalby.avif", alt: "avif" },
+
+
   ];
 
   // Navigation functions for client carousel
@@ -122,7 +122,7 @@ const Home = () => {
 
   const handleTouchEnd = () => {
     if (!touchStartX || !touchEndX) return;
-    
+
     const distance = touchStartX - touchEndX;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
@@ -160,7 +160,16 @@ const Home = () => {
           className="hero-bg-video"
         />
         <div className="hero-overlay">
-          <h2 className="fade-down">Jay Jalaram Electricals</h2>
+          <div className="hero-title-container fade-down">
+            <div className="cube-wrapper">
+              <div className="cube">
+                <div className="cube-face cube-front">Jay Jalaram Electricals</div>
+                <div className="cube-face cube-top">જય જલારામ ઇલેક્ટ્રિકલ્સ</div>
+                <div className="cube-face cube-back">Jay Jalaram Electricals</div>
+                <div className="cube-face cube-bottom">જય જલારામ ઇલેક્ટ્રિકલ્સ</div>
+              </div>
+            </div>
+          </div>
           <p className="hero-tagline fade-in">We provide Quality Service</p>
           <div className="hero-buttons slide-up">
             <a href="/contact" className="btn big-btn">Get a Quote</a>
@@ -234,12 +243,12 @@ const Home = () => {
         <div className="clients-carousel-container">
           <button className="carousel-nav carousel-nav-left" onClick={prevSlide}>
             <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
           </button>
-          
+
           <div className="clients-carousel-wrapper">
-            <div 
+            <div
               className="clients-carousel-track"
               ref={clientsTrackRef}
               style={{ transform: `translateX(-${currentSlide * 250}px)` }}
@@ -255,14 +264,14 @@ const Home = () => {
               ))}
             </div>
           </div>
-          
+
           <button className="carousel-nav carousel-nav-right" onClick={nextSlide}>
             <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
             </svg>
           </button>
         </div>
-        
+
         {/* Carousel Indicators */}
         <div className="carousel-indicators">
           {clientLogos.map((_, index) => (
@@ -275,7 +284,7 @@ const Home = () => {
         </div>
       </section>
 
-     
+
       {/* Testimonial Section with Professional Imagery */}
       {/* <section className="testimonial-apple">
         <h3 className="section-title fade-in">Trusted by Industry Leaders</h3>
@@ -305,54 +314,96 @@ const Home = () => {
         </div>
       </section> */}
       <div className="carousel-container">
-  <TestimonialCarousel />
-</div>
+        <TestimonialCarousel />
+      </div>
 
-    
-      
 
-      {/* Why Choose Us Section */}
-      <section className="why-choose-section">
-  <h3 className="enhanced-section-title fade-in">Why Choose Jay Jalaram Electricals?</h3>
-  <div className="features-grid">
-    <div className="feature-item fade-left">
-      <div className="feature-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
-        </svg>
-      </div>
-      <h4>Licensed & Insured</h4>
-      <p>Fully licensed professionals with comprehensive insurance coverage for your peace of mind.</p>
-    </div>
-    <div className="feature-item fade-up">
-      <div className="feature-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2L1 21H23L12 2Z"/>
-        </svg>
-      </div>
-      <h4>24/7 Emergency Service</h4>
-      <p>Round-the-clock emergency electrical services to keep your operations running smoothly.</p>
-    </div>
-    <div className="feature-item fade-down">
-      <div className="feature-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
-        </svg>
-      </div>
-      <h4>Expert Technicians</h4>
-      <p>Highly trained and certified electricians with years of industry experience.</p>
-    </div>
-    <div className="feature-item fade-right">
-      <div className="feature-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M9 12L11 14L15 10M21 12C21 16.97 16.97 21 12 21C7.03 21 3 16.97 3 12C3 7.03 7.03 3 12 3C16.97 3 21 7.03 21 12Z"/>
-        </svg>
-      </div>
-      <h4>Quality Guarantee</h4>
-      <p>100% satisfaction guarantee with warranty on all our electrical work and installations.</p>
-    </div>
-  </div>
-</section>
+
+
+      {/* Why Choose Us Section - Redesigned */}
+      <section className="why-choose-section-new">
+        <div className="why-choose-container">
+          <div className="section-header-new">
+            <span className="section-badge">OUR ADVANTAGES</span>
+            <h3 className="enhanced-section-title-new fade-in">
+              Why Choose Jay Jalaram Electricals?
+            </h3>
+            <p className="section-subtitle">
+              Experience excellence in electrical services with our industry-leading solutions and dedicated team
+            </p>
+          </div>
+
+          <div className="features-showcase">
+            {/* Feature Card 1 */}
+            <div className="feature-card-simple feature-card-1 fade-up">
+              <div className="feature-icon-new">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="feature-number">01</div>
+              <h4>Licensed & Insured</h4>
+              <p>Fully licensed professionals with comprehensive insurance coverage for your peace of mind and protection.</p>
+              <ul className="feature-benefits-simple">
+                <li>✓ Certified Electricians</li>
+                <li>✓ Full Insurance Coverage</li>
+                <li>✓ Safety Guaranteed</li>
+              </ul>
+            </div>
+
+            {/* Feature Card 2 */}
+            <div className="feature-card-simple feature-card-2 fade-up">
+              <div className="feature-icon-new">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="feature-number">02</div>
+              <h4>24/7 Emergency Service</h4>
+              <p>Round-the-clock support available for all your electrical emergencies whenever you need assistance.</p>
+              <ul className="feature-benefits-simple">
+                <li>✓ Instant Response Team</li>
+                <li>✓ Available 24/7/365</li>
+                <li>✓ Quick Solutions</li>
+              </ul>
+            </div>
+
+            {/* Feature Card 3 */}
+            <div className="feature-card-simple feature-card-3 fade-up">
+              <div className="feature-icon-new">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="feature-number">03</div>
+              <h4>Expert Technicians</h4>
+              <p>Highly trained and certified professionals with years of industry experience and technical expertise.</p>
+              <ul className="feature-benefits-simple">
+                <li>✓ 15+ Years Experience</li>
+                <li>✓ Trained Experts</li>
+                <li>✓ Latest Techniques</li>
+              </ul>
+            </div>
+
+            {/* Feature Card 4 */}
+            <div className="feature-card-simple feature-card-4 fade-up">
+              <div className="feature-icon-new">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="feature-number">04</div>
+              <h4>Quality Guarantee</h4>
+              <p>100% satisfaction guarantee with comprehensive warranty coverage on all our electrical work and installations.</p>
+              <ul className="feature-benefits-simple">
+                <li>✓ Premium Materials</li>
+                <li>✓ Extended Warranty</li>
+                <li>✓ 100% Satisfaction</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       {/* Contact Call-to-Action */}
@@ -365,7 +416,7 @@ const Home = () => {
       </section>
 
       {/* Scroll To Top Button */}
-      <button 
+      <button
         className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         aria-label="Scroll to top"
