@@ -3318,7 +3318,7 @@ body {
 
 .why-choose-section-new {
   padding: clamp(80px, 12vw, 140px) clamp(20px, 4vw, 40px);
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: #1a1a1a;
   position: relative;
   overflow: hidden;
 }
