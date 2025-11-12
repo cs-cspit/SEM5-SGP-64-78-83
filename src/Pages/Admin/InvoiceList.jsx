@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
+import Pagination from '../../Components/Pagination.jsx';
 import { viewInvoice, printInvoice, downloadInvoiceHTML } from '../../utils/invoiceGenerator.js';
 import axios from 'axios';
 import './InvoiceList.css';
@@ -14,6 +15,8 @@ const InvoiceList = () => {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All Status');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Redirect if not admin
   React.useEffect(() => {
@@ -99,8 +102,8 @@ const InvoiceList = () => {
         sgst: product.sgst,
         amount: product.total
       })) : [],
-      workDescription: invoice.products && invoice.products.length > 0 ? 
-        invoice.products.map(p => p.productName).join(', ') : 
+      workDescription: invoice.products && invoice.products.length > 0 ?
+        invoice.products.map(p => p.productName).join(', ') :
         'Electrical Services'
     };
 
@@ -130,8 +133,8 @@ const InvoiceList = () => {
         sgst: product.sgst,
         amount: product.total
       })) : [],
-      workDescription: invoice.products && invoice.products.length > 0 ? 
-        invoice.products.map(p => p.productName).join(', ') : 
+      workDescription: invoice.products && invoice.products.length > 0 ?
+        invoice.products.map(p => p.productName).join(', ') :
         'Electrical Services'
     };
 
@@ -223,6 +226,26 @@ const InvoiceList = () => {
     }).format(amount);
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredInvoices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentInvoices = filteredInvoices.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
+
   if (!isAdmin()) {
     return null;
   }
@@ -310,8 +333,8 @@ const InvoiceList = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredInvoices.length > 0 ? (
-                  filteredInvoices.map(invoice => {
+                {currentInvoices.length > 0 ? (
+                  currentInvoices.map(invoice => {
                     // Use actual status from database, fallback to intelligent status for older bills
                     const actualStatus = invoice.status || getInvoiceStatus(invoice);
                     // Use the actual paymentDueDate from the bill, or calculate if not available (for backward compatibility)
@@ -417,6 +440,18 @@ const InvoiceList = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {filteredInvoices.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredInvoices.length}
+              onItemsPerPageChange={handleItemsPerPageChange}
+            />
+          )}
         </div>
       </div>
     </AdminLayout>

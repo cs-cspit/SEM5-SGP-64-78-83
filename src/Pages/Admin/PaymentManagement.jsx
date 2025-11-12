@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
+import Pagination from '../../Components/Pagination.jsx';
 import { getAllBills, updateBillStatus } from '../../services/api.js';
 import './PaymentManagement.css';
 
@@ -13,6 +14,8 @@ const PaymentManagement = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [paymentStats, setPaymentStats] = useState({
         totalPaid: 0,
         pendingPayments: 0,
@@ -197,6 +200,26 @@ const PaymentManagement = () => {
         URL.revokeObjectURL(url);
     };
 
+    // Pagination calculations
+    const totalPages = Math.ceil(filteredBills.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentBills = filteredBills.slice(startIndex, endIndex);
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, statusFilter]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1);
+    };
+
     if (!isAdmin()) {
         return null;
     }
@@ -305,7 +328,7 @@ const PaymentManagement = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredBills.length === 0 ? (
+                                    {currentBills.length === 0 ? (
                                         <tr>
                                             <td colSpan="9" className="no-data">
                                                 {searchTerm || statusFilter !== 'all'
@@ -314,7 +337,7 @@ const PaymentManagement = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        filteredBills.map((bill, index) => (
+                                        currentBills.map((bill, index) => (
                                             <tr key={bill._id}>
                                                 <td>{formatPaymentId(bill.invoiceNo, index)}</td>
                                                 <td>{formatInvoiceNumber(bill.invoiceNo)}</td>
@@ -352,6 +375,18 @@ const PaymentManagement = () => {
                             </table>
                         )}
                     </div>
+
+                    {/* Pagination */}
+                    {filteredBills.length > 0 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={filteredBills.length}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
+                    )}
                 </div>
             </div>
         </AdminLayout>

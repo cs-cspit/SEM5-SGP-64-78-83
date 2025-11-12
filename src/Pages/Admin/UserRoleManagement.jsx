@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import axios from 'axios';
 import AdminLayout from '../../Components/AdminLayout.jsx';
+import Pagination from '../../Components/Pagination.jsx';
 import './UserRoleManagement.css';
 
 const UserRoleManagement = () => {
@@ -12,6 +13,8 @@ const UserRoleManagement = () => {
   const [selectedClientDetails, setSelectedClientDetails] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -68,8 +71,8 @@ const UserRoleManagement = () => {
     try {
       setError('');
       setSuccessMessage('');
-      
-      await axios.patch('http://localhost:5000/api/users/role', 
+
+      await axios.patch('http://localhost:5000/api/users/role',
         { userId, role: newRole },
         {
           headers: {
@@ -77,12 +80,12 @@ const UserRoleManagement = () => {
           }
         }
       );
-      
+
       // Update local state
-      setUsers(users.map(user => 
+      setUsers(users.map(user =>
         user._id === userId ? { ...user, role: newRole } : user
       ));
-      
+
       setSuccessMessage('Role updated successfully');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update role');
@@ -114,6 +117,21 @@ const UserRoleManagement = () => {
     setSelectedClientDetails(null);
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentUsers = users.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
+
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -128,7 +146,7 @@ const UserRoleManagement = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
+
             {loadingDetails ? (
               <div className="modal-loading">
                 <div className="spinner"></div>
@@ -222,33 +240,33 @@ const UserRoleManagement = () => {
             <h1>Client Management</h1>
             <p>Manage clients and user permissions across the system</p>
           </div>
-          <button 
+          <button
             type="button"
             onClick={(e) => {
               e.preventDefault();
               navigate('/admin/add-client');
-            }} 
+            }}
             className="add-client-button"
           >
             <span className="button-icon">+</span>
             Add New User
           </button>
         </div>
-        
+
         {successMessage && (
           <div className="alert alert-success">
             <span className="alert-icon">✓</span>
             {successMessage}
           </div>
         )}
-        
+
         {error && (
           <div className="alert alert-error">
             <span className="alert-icon"><i className="fas fa-exclamation-triangle"></i></span>
             {error}
           </div>
         )}
-        
+
         <div className="users-table-container">
           <div className="table-header">
             <h3>All Users</h3>
@@ -256,7 +274,7 @@ const UserRoleManagement = () => {
               <span>{users.length} total users</span>
             </div>
           </div>
-          
+
           <div className="users-table">
             <table>
               <thead>
@@ -268,7 +286,7 @@ const UserRoleManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map(user => (
+                {currentUsers.map(user => (
                   <tr key={user._id}>
                     <td>
                       <div className="user-info">
@@ -328,6 +346,18 @@ const UserRoleManagement = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {users.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
+              totalItems={users.length}
+              onItemsPerPageChange={handleItemsPerPageChange}
+            />
+          )}
         </div>
       </div>
     </AdminLayout>
