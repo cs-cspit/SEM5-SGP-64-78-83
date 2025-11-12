@@ -1,16 +1,32 @@
 /* Works.css */
 .works-container {
   padding: 80px 20px;
-  padding-top: calc(60px + 20px);
-  background: linear-gradient(to bottom, #000000 0%, #000000 60px, #1a1a1a 60px, #1a1a1a 100%);
+  padding-top: 120px;
+  background: #1a1a1a;
   min-height: 100vh;
   color: #ffffff;
+  position: relative;
+}
+
+/* Hero gradient overlay at top for header area */
+.works-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(26, 26, 26, 0.7) 70%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .works-header {
   text-align: center;
-  margin: 80px;
+  margin: 40px auto 80px;
   padding: 0 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .works-header h1 {
@@ -51,6 +67,8 @@
   flex-direction: column;
   gap: 40px;
   padding: 15px;
+  position: relative;
+  z-index: 2;
 }
 
 .work-card {
@@ -286,8 +304,16 @@
 @media (max-width: 768px) {
   .works-container {
     padding: 60px 15px;
-    padding-top: calc(50px + 15px);
-    background: linear-gradient(to bottom, #000000 0%, #000000 50px, #1a1a1a 50px, #1a1a1a 100%);
+    padding-top: 100px;
+    background: #1a1a1a;
+  }
+
+  .works-container::before {
+    height: 80px;
+  }
+
+  .works-header {
+    margin: 20px auto 60px;
   }
 
   .works-header h1 {

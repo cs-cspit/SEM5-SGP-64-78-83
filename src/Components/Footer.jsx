@@ -55,7 +55,7 @@ const Footer = () => {
                 <span className="contact-icon"><i className="fas fa-map-marker-alt"></i></span>
                 <div>
                   <strong>Address</strong>
-                  <p>43, Junajin Hanuman Tekri Opp ramji temple rander surat</p>
+                  <p>43, Junajin Hanuman Tekri Opp ramji temple rander surat</p>
                 </div>
               </div>
               <div className="contact-item">

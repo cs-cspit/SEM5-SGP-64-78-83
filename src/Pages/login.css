@@ -6,16 +6,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    to bottom,
-    #000000 0%,
-    #000000 60px,
-    #f8f9fa 60px,
-    #f8f9fa 100%
-  );
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 50%, #1a202c 100%);
   padding: 1rem;
-  padding-top: calc(60px + 0.5rem);
+  padding-top: 120px;
   font-family: "Inter", sans-serif;
+  position: relative;
+}
+
+/* Animated background pattern */
+.login-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 140, 0, 0.08) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Main card container */
@@ -27,6 +37,8 @@
   max-width: 40%;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 2;
 }
 
 .login-card:hover {
@@ -693,14 +705,8 @@
 @media (max-width: 640px) {
   .login-container {
     padding: 1rem;
-    padding-top: calc(50px + 0.5rem);
-    background: linear-gradient(
-      to bottom,
-      #000000 0%,
-      #000000 50px,
-      #f8f9fa 50px,
-      #f8f9fa 100%
-    );
+    padding-top: 100px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 50%, #1a202c 100%);
   }
 
   .login-card {

@@ -76,7 +76,6 @@ a {
   margin: 0;
   max-width: 280px;
 }
-
 .footer-social {
   display: flex;
   gap: 10px;
@@ -155,7 +154,6 @@ a {
   background: rgba(255, 153, 51, 0.1);
   transform: translateX(5px);
 }
-
 .footer-contact {
   background: rgba(255, 153, 51, 0.05);
   border-radius: 15px;
@@ -241,11 +239,15 @@ a {
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
   }
+
+  .footer-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
   .modern-footer {
-    padding: 25px 0 10px;
+    padding: 30px 0 15px;
   }
 
   .footer-brand h3 {
@@ -254,25 +256,35 @@ a {
 
   .footer-links {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 25px;
   }
 
   .contact-info {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 15px;
+  }
+
+  .footer-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .footer-bottom {
     flex-direction: column;
     text-align: center;
-    gap: 8px;
+    gap: 15px;
+  }
+
+  .footer-credits {
+    align-items: center;
   }
 
   .footer-contact {
-    padding: 15px;
+    padding: 20px;
   }
 }
 
+/* Further adjustments for very small screens */
 @media (max-width: 480px) {
   .modern-footer .container {
     padding: 0 15px;
