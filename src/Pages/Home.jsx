@@ -164,9 +164,9 @@ const Home = () => {
             <div className="cube-wrapper">
               <div className="cube">
                 <div className="cube-face cube-front">Jay Jalaram Electricals</div>
-                <div className="cube-face cube-top">જય જલારામ ઇલેક્ટ્રિકલ્સ</div>
+                <div className="cube-face cube-top">જય જલારામ ઇલેક્ટ્રિકલસ</div>
                 <div className="cube-face cube-back">Jay Jalaram Electricals</div>
-                <div className="cube-face cube-bottom">જય જલારામ ઇલેક્ટ્રિકલ્સ</div>
+                <div className="cube-face cube-bottom">જય જલારામ ઇલેક્ટ્રિકલસ</div>
               </div>
             </div>
           </div>
