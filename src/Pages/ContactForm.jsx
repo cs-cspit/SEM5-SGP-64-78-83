@@ -156,11 +156,11 @@ const ContactForm = () => {
   return (
     <div className="contact-page">
       {/* Hero Section */}
-      <section className="contact-hero">
-        <div className="hero-overlay">
-          <div className="hero-content">
-            <h1 className="hero-title">Contact Us</h1>
-            <p className="hero-subtitle">
+      <section className="contact-page-hero">
+        <div className="contact-hero-overlay">
+          <div className="contact-hero-content">
+            <h1 className="contact-hero-title">Contact Us</h1>
+            <p className="contact-hero-subtitle">
               Reach out to us for expert guidance and premium electrical solutions
             </p>
           </div>
@@ -168,14 +168,14 @@ const ContactForm = () => {
       </section>
 
       {/* Main Content */}
-      <section className="contact-main">
-        <div className="contact-container">
-          <div className="contact-content">
+      <section className="contact-page-main">
+        <div className="contact-page-container">
+          <div className="contact-page-content">
             
             {/* Get in Touch Section */}
-            <div className="get-in-touch">
-              <h2 className="section-title">Get in touch</h2>
-              <p className="section-description">
+            <div className="contact-get-in-touch">
+              <h2 className="contact-section-title">Get in touch</h2>
+              <p className="contact-section-description">
                 Are you ready to take the next step? Get in touch with us today and find out on all of your electrical needs. Whether you're looking for another service provider, electrical installation, maintenance, services, or just have a question about any of our specialized team, we'll be ready to provide the support you need.
               </p>
               
@@ -214,13 +214,13 @@ const ContactForm = () => {
             {/* Contact Form */}
             <div className="contact-form-section">
               {!isAuthenticated() && (
-                <div className="login-prompt">
-                  <div className="login-prompt-content">
+                <div className="contact-login-prompt">
+                  <div className="contact-login-prompt-content">
                     <h4><i className="fas fa-lock"></i> Login Required</h4>
                     <p>Please login to submit a contact form and track your inquiries.</p>
                     <button 
                       type="button" 
-                      className="login-prompt-button"
+                      className="contact-login-prompt-button"
                       onClick={() => navigate('/login')}
                     >
                       Login Now
@@ -229,97 +229,97 @@ const ContactForm = () => {
                 </div>
               )}
               
-              <h3 className="form-title">Have a question or need assistance?</h3>
-              <p className="form-subtitle">Send us a message, and our team will be happy to help!</p>
+              <h3 className="contact-form-title">Have a question or need assistance?</h3>
+              <p className="contact-form-subtitle">Send us a message, and our team will be happy to help!</p>
               
               <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-row">
-                  <div className="form-group">
+                <div className="contact-form-row">
+                  <div className="contact-form-group">
                     <input
                       name="name"
                       type="text"
                       value={form.name}
                       onChange={handleChange}
                       placeholder="Name *"
-                      className={`form-input ${errors.name ? 'error' : ''}`}
+                      className={`contact-form-input ${errors.name ? 'error' : ''}`}
                       required
                       disabled={!isAuthenticated()}
                     />
-                    {errors.name && <div className="field-error">{errors.name}</div>}
+                    {errors.name && <div className="contact-field-error">{errors.name}</div>}
                   </div>
-                  <div className="form-group">
+                  <div className="contact-form-group">
                     <input
                       name="company"
                       type="text"
                       value={form.company}
                       onChange={handleChange}
                       placeholder="Company"
-                      className="form-input"
+                      className="contact-form-input"
                       disabled={!isAuthenticated()}
                     />
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
+                <div className="contact-form-row">
+                  <div className="contact-form-group">
                     <input
                       name="phone"
                       type="tel"
                       value={form.phone}
                       onChange={handleChange}
                       placeholder="Phone"
-                      className={`form-input ${errors.phone ? 'error' : ''}`}
+                      className={`contact-form-input ${errors.phone ? 'error' : ''}`}
                       disabled={!isAuthenticated()}
                     />
-                    {errors.phone && <div className="field-error">{errors.phone}</div>}
+                    {errors.phone && <div className="contact-field-error">{errors.phone}</div>}
                   </div>
-                  <div className="form-group">
+                  <div className="contact-form-group">
                     <input
                       name="email"
                       type="email"
                       value={form.email}
                       onChange={handleChange}
                       placeholder="Email *"
-                      className={`form-input ${errors.email ? 'error' : ''}`}
+                      className={`contact-form-input ${errors.email ? 'error' : ''}`}
                       required
                       disabled={!isAuthenticated()}
                     />
-                    {errors.email && <div className="field-error">{errors.email}</div>}
+                    {errors.email && <div className="contact-field-error">{errors.email}</div>}
                   </div>
                 </div>
 
-                <div className="form-group full-width">
+                <div className="contact-form-group contact-full-width">
                   <input
                     name="subject"
                     type="text"
                     value={form.subject}
                     onChange={handleChange}
                     placeholder="Subject"
-                    className={`form-input ${errors.subject ? 'error' : ''}`}
+                    className={`contact-form-input ${errors.subject ? 'error' : ''}`}
                     disabled={!isAuthenticated()}
                   />
-                  {errors.subject && <div className="field-error">{errors.subject}</div>}
+                  {errors.subject && <div className="contact-field-error">{errors.subject}</div>}
                 </div>
 
-                <div className="form-group full-width">
+                <div className="contact-form-group contact-full-width">
                   <textarea
                     name="message"
                     value={form.message}
                     onChange={handleChange}
                     placeholder="Write your message here... *"
-                    className={`form-input form-textarea ${errors.message ? 'error' : ''}`}
+                    className={`contact-form-input contact-form-textarea ${errors.message ? 'error' : ''}`}
                     required
                     disabled={!isAuthenticated()}
                   ></textarea>
-                  {errors.message && <div className="field-error">{errors.message}</div>}
+                  {errors.message && <div className="contact-field-error">{errors.message}</div>}
                 </div>
 
-                {generalError && <div className="error-message">{generalError}</div>}
-                {success && <div className="success-message">{success}</div>}
+                {generalError && <div className="contact-error-message">{generalError}</div>}
+                {success && <div className="contact-success-message">{success}</div>}
                 
                 <button 
                   type="submit" 
-                  className="submit-button" 
+                  className="contact-submit-button" 
                   disabled={loading || !isAuthenticated()}
                 >
                   {loading ? 'Sending...' : 'SEND MESSAGE'}
@@ -329,8 +329,8 @@ const ContactForm = () => {
           </div>
 
           {/* Map Section */}
-          <div className="map-section">
-            <div className="map-container">
+          <div className="contact-map-section">
+            <div className="contact-map-container">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119066.54586572747!2d72.73988506031004!3d21.159180203945482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04d5778fd2de1%3A0x22037e438b45359!2sHanuman%20Temple!5e0!3m2!1sen!2sin!4v1756658375660!5m2!1sen!2sin"
                 width="100%"
@@ -346,29 +346,29 @@ const ContactForm = () => {
         </div>
 
         {/* Social Media Section */}
-        <div className="social-section">
-          <h3 className="social-title">Follow our social media</h3>
-          <div className="social-icons">
-            <a href="#" className="social-icon facebook" aria-label="Facebook">
+        <div className="contact-social-section">
+          <h3 className="contact-social-title">Follow our social media</h3>
+          <div className="contact-social-icons">
+            <a href="#" className="contact-social-icon facebook" aria-label="Facebook">
               <span>f</span>
             </a>
-            <a href="#" className="social-icon google" aria-label="Google">
+            <a href="#" className="contact-social-icon google" aria-label="Google">
               <span>G</span>
             </a>
-            <a href="#" className="social-icon linkedin" aria-label="LinkedIn">
+            <a href="#" className="contact-social-icon linkedin" aria-label="LinkedIn">
               <span>in</span>
             </a>
-            <a href="#" className="social-icon youtube" aria-label="YouTube">
+            <a href="#" className="contact-social-icon youtube" aria-label="YouTube">
               <span><i className="fab fa-youtube"></i></span>
             </a>
           </div>
         </div>
 
         {/* Bottom CTA */}
-        {/* <div className="bottom-cta">
-          <div className="cta-content">
+        {/* <div className="contact-bottom-cta">
+          <div className="contact-cta-content">
             <h3>Contact us today to discover premium electrical solutions tailored to your needs!</h3>
-            <button className="cta-button">CONTACT OUR SALES</button>
+            <button className="contact-cta-button">CONTACT OUR SALES</button>
           </div>
         </div> */}
       </section>
