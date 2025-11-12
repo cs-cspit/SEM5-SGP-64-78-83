@@ -9,6 +9,9 @@ const UserRoleManagement = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [selectedClientDetails, setSelectedClientDetails] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(false);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -86,10 +89,133 @@ const UserRoleManagement = () => {
     }
   };
 
+  const handleViewClientDetails = async (userId) => {
+    setLoadingDetails(true);
+    setShowDetailsModal(true);
+    try {
+      const token = localStorage.getItem('userToken');
+      const response = await axios.get(`http://localhost:5000/api/clients/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setSelectedClientDetails(response.data);
+    } catch (err) {
+      console.error('Error fetching client details:', err);
+      setError('Failed to fetch client details');
+      setShowDetailsModal(false);
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
+  const closeDetailsModal = () => {
+    setShowDetailsModal(false);
+    setSelectedClientDetails(null);
+  };
+
   if (error) return <div className="error">{error}</div>;
 
   return (
     <AdminLayout>
+      {/* Client Details Modal */}
+      {showDetailsModal && (
+        <div className="client-details-modal-overlay" onClick={closeDetailsModal}>
+          <div className="client-details-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2><i className="fas fa-user-circle"></i> Client Details</h2>
+              <button className="modal-close-btn" onClick={closeDetailsModal}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            {loadingDetails ? (
+              <div className="modal-loading">
+                <div className="spinner"></div>
+                <p>Loading client details...</p>
+              </div>
+            ) : selectedClientDetails ? (
+              <div className="modal-content">
+                <div className="detail-section">
+                  <h3><i className="fas fa-building"></i> Company Information</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Company Name:</label>
+                      <span>{selectedClientDetails.companyName || 'N/A'}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Contact Person:</label>
+                      <span>{selectedClientDetails.contactPerson || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="detail-section">
+                  <h3><i className="fas fa-address-card"></i> Contact Details</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Email:</label>
+                      <span>{selectedClientDetails.email || 'N/A'}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Phone:</label>
+                      <span>{selectedClientDetails.phone || 'N/A'}</span>
+                    </div>
+                    <div className="detail-item full-width">
+                      <label>Address:</label>
+                      <span>{selectedClientDetails.address || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="detail-section">
+                  <h3><i className="fas fa-file-invoice"></i> Tax Information</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>GST Number:</label>
+                      <span>{selectedClientDetails.gstNumber || 'N/A'}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>PAN Number:</label>
+                      <span>{selectedClientDetails.panNumber || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedClientDetails.bankDetails && (
+                  <div className="detail-section">
+                    <h3><i className="fas fa-university"></i> Bank Details</h3>
+                    <div className="detail-grid">
+                      <div className="detail-item">
+                        <label>Bank Name:</label>
+                        <span>{selectedClientDetails.bankDetails.bankName || 'N/A'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>Account Number:</label>
+                        <span>{selectedClientDetails.bankDetails.accountNumber || 'N/A'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>IFSC Code:</label>
+                        <span>{selectedClientDetails.bankDetails.ifscCode || 'N/A'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>Branch:</label>
+                        <span>{selectedClientDetails.bankDetails.branch || 'N/A'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="modal-error">
+                <i className="fas fa-exclamation-circle"></i>
+                <p>No client details found for this user.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="user-role-management">
         <div className="page-header">
           <div className="header-content">
@@ -174,6 +300,16 @@ const UserRoleManagement = () => {
                           <option value="client">Client</option>
                           <option value="admin">Admin</option>
                         </select>
+                        {user.role === 'client' && (
+                          <button
+                            type="button"
+                            onClick={() => handleViewClientDetails(user._id)}
+                            className="view-details-button"
+                            title={`View ${user.name}'s details`}
+                          >
+                            <i className="fas fa-eye"></i>
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={(e) => {

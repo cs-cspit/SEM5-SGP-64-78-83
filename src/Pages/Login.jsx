@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { login as apiLogin } from '../services/api';
 import { useAuth } from '../context/auth-context.jsx';
 import { FormValidator, APIErrorHandler } from '../utils/errorHandler';
@@ -7,12 +7,23 @@ import './login.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Check for success message from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the message from location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +40,11 @@ const Login = () => {
     // Clear general error when user starts typing
     if (generalError) {
       setGeneralError("");
+    }
+    
+    // Clear success message when user starts typing
+    if (successMessage) {
+      setSuccessMessage("");
     }
   };
 
@@ -98,6 +114,8 @@ const Login = () => {
         setErrors(prev => ({ ...prev, password: 'Incorrect password. Please try again' }));
       } else if (errorMessage.includes('verify') || errorMessage.includes('verification')) {
         setGeneralError('Please verify your email address before logging in. Check your email for verification link.');
+        // Store email for resend verification link
+        localStorage.setItem('pendingVerificationEmail', form.email);
       } else if (errorMessage.includes('session') || errorMessage.includes('expired')) {
         setGeneralError('Your session has expired. Please try logging in again.');
       } else {
@@ -119,6 +137,14 @@ const Login = () => {
         <div className="login-form-container">
           <h2 className="login-form-title">Login In</h2>
           <p className="login-description">Enter your credentials to access system</p>
+
+          {/* Success Message Display */}
+          {successMessage && (
+            <div className="success-banner">
+              <i className="fas fa-check-circle"></i>
+              <span>{successMessage}</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="login-input-group">
@@ -161,7 +187,18 @@ const Login = () => {
               {errors.password && <div className="field-error">{errors.password}</div>}
             </div>
 
-            {generalError && <div className="login-error">{generalError}</div>}
+            {generalError && (
+              <div className="login-error">
+                {generalError}
+                {generalError.includes('verify') && (
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <Link to="/resend-verification" className="resend-link">
+                      <i className="fas fa-paper-plane"></i> Resend Verification Email
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="form-options">
               <Link to="/forgot-password" className="forgot-password-link">

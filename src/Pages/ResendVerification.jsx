@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { resendVerificationEmail } from '../services/api';
 import './login.css';
@@ -8,6 +8,16 @@ const ResendVerification = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+
+    // Auto-populate email if stored from login attempt
+    useEffect(() => {
+        const pendingEmail = localStorage.getItem('pendingVerificationEmail');
+        if (pendingEmail) {
+            setEmail(pendingEmail);
+            // Clear it after using
+            localStorage.removeItem('pendingVerificationEmail');
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

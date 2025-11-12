@@ -19,6 +19,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [registrationEmail, setRegistrationEmail] = useState("");
 
   // Handles changes to input fields and updates the form state
   const handleChange = (e) => {
@@ -92,18 +94,11 @@ const Register = () => {
       });
       console.log('Registration successful:', userData);
       
-      // Store user data in localStorage if needed
-      if (userData.token) {
-        localStorage.setItem('userToken', userData.token);
-      }
-      
-      // Show success message and redirect
+      // Show success modal instead of immediately redirecting
+      setRegistrationEmail(form.email);
+      setShowSuccessModal(true);
       setGeneralError("");
-      navigate('/login', { 
-        state: { 
-          message: 'Registration successful! Please check your email to verify your account before logging in.' 
-        } 
-      });
+      
     } catch (err) {
       console.error('Registration error:', err);
       const errorMessage = APIErrorHandler.parseError(err);
@@ -127,6 +122,87 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      {/* Compact Success Modal for Email Verification */}
+      {showSuccessModal && (
+        <div className="verification-modal-overlay" onClick={(e) => {
+          if (e.target.className === 'verification-modal-overlay') {
+            setShowSuccessModal(false);
+            navigate('/login', { 
+              state: { 
+                message: 'Please verify your email before logging in. Check your inbox!' 
+              } 
+            });
+          }
+        }}>
+          <div className="verification-modal">
+            <button 
+              className="modal-close-btn"
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/login', { 
+                  state: { 
+                    message: 'Please verify your email before logging in. Check your inbox!' 
+                  } 
+                });
+              }}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            
+            <div className="modal-icon-circle">
+              <i className="fas fa-envelope"></i>
+            </div>
+            
+            <h3 className="modal-title">Verify Your Email</h3>
+            
+            <p className="modal-text">
+              We've sent a verification link to
+            </p>
+            
+            <div className="modal-email-box">
+              <i className="fas fa-at"></i>
+              <span>{registrationEmail}</span>
+            </div>
+            
+            <p className="modal-instruction">
+              Click the link in your email to activate your account
+            </p>
+            
+            <div className="modal-buttons">
+              <button 
+                className="modal-btn-primary"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate('/login', { 
+                    state: { 
+                      message: 'Please verify your email before logging in. Check your inbox!' 
+                    } 
+                  });
+                }}
+              >
+                <i className="fas fa-sign-in-alt"></i>
+                Go to Login
+              </button>
+              <button 
+                className="modal-btn-secondary"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate('/resend-verification');
+                }}
+              >
+                <i className="fas fa-redo"></i>
+                Resend Email
+              </button>
+            </div>
+            
+            <div className="modal-footer-note">
+              <i className="fas fa-clock"></i>
+              <span>Link expires in 24 hours</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="register-card">
         <div className="register-header">
           <h1 className="register-main-title">Welcome to JJE</h1>
