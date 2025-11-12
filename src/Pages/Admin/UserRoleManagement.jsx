@@ -15,6 +15,8 @@ const UserRoleManagement = () => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('All Roles');
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -117,11 +119,31 @@ const UserRoleManagement = () => {
     setSelectedClientDetails(null);
   };
 
+  // Filter and search users
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = searchTerm === '' ||
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user._id?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (roleFilter === 'All Roles') {
+      return matchesSearch;
+    }
+
+    const matchesRole = user.role?.toLowerCase() === roleFilter.toLowerCase();
+    return matchesSearch && matchesRole;
+  });
+
   // Pagination calculations
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentUsers = users.slice(startIndex, endIndex);
+  const currentUsers = filteredUsers.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roleFilter]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -269,9 +291,27 @@ const UserRoleManagement = () => {
 
         <div className="users-table-container">
           <div className="table-header">
-            <h3>All Users</h3>
-            <div className="table-stats">
-              <span>{users.length} total users</span>
+            <h3>User Management</h3>
+            <div className="header-controls">
+              <div className="search-box">
+                <span className="search-icon"><i className="fas fa-search"></i></span>
+                <input
+                  type="text"
+                  placeholder="Search users by name, email, or ID..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="status-filter"
+              >
+                <option value="All Roles">All Roles</option>
+                <option value="Admin">Admin</option>
+                <option value="Client">Client</option>
+                <option value="User">User</option>
+              </select>
             </div>
           </div>
 
@@ -286,75 +326,92 @@ const UserRoleManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentUsers.map(user => (
-                  <tr key={user._id}>
-                    <td>
-                      <div className="user-info">
-                        <div className="user-avatar">
-                          {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                {currentUsers.length > 0 ? (
+                  currentUsers.map(user => (
+                    <tr key={user._id}>
+                      <td>
+                        <div className="user-info">
+                          <div className="user-avatar">
+                            {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                          </div>
+                          <div className="user-details">
+                            <div className="user-name">{user.name}</div>
+                            <div className="user-id">ID: {user._id?.slice(-8)}</div>
+                          </div>
                         </div>
-                        <div className="user-details">
-                          <div className="user-name">{user.name}</div>
-                          <div className="user-id">ID: {user._id?.slice(-8)}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="email-cell">{user.email}</div>
-                    </td>
-                    <td>
-                      <span className={`role-badge role-${user.role}`}>
-                        {user.role?.charAt(0)?.toUpperCase() + user.role?.slice(1)}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-buttons">
-                        <select
-                          value={user.role}
-                          onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                          className="role-select"
-                        >
-                          <option value="user">User</option>
-                          <option value="client">Client</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                        {user.role === 'client' && (
+                      </td>
+                      <td>
+                        <div className="email-cell">{user.email}</div>
+                      </td>
+                      <td>
+                        <span className={`role-badge role-${user.role}`}>
+                          {user.role?.charAt(0)?.toUpperCase() + user.role?.slice(1)}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="action-buttons">
+                          <select
+                            value={user.role}
+                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                            className="role-select"
+                          >
+                            <option value="user">User</option>
+                            <option value="client">Client</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                          {user.role === 'client' && (
+                            <button
+                              type="button"
+                              onClick={() => handleViewClientDetails(user._id)}
+                              className="view-details-button"
+                              title={`View ${user.name}'s details`}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          )}
                           <button
                             type="button"
-                            onClick={() => handleViewClientDetails(user._id)}
-                            className="view-details-button"
-                            title={`View ${user.name}'s details`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDeleteUser(user._id, user.name);
+                            }}
+                            className="delete-button"
+                            title={`Delete ${user.name}`}
                           >
-                            <i className="fas fa-eye"></i>
+                            <i className="fas fa-trash"></i>
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteUser(user._id, user.name);
-                          }}
-                          className="delete-button"
-                          title={`Delete ${user.name}`}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="no-data">
+                      <div className="no-users">
+                        <div className="no-users-icon"><i className="fas fa-users"></i></div>
+                        <h3>No users found</h3>
+                        <p>
+                          {searchTerm || roleFilter !== 'All Roles'
+                            ? 'No users match your search criteria'
+                            : 'No users in the system yet'
+                          }
+                        </p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Pagination */}
-          {users.length > 0 && (
+          {filteredUsers.length > 0 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
               itemsPerPage={itemsPerPage}
-              totalItems={users.length}
+              totalItems={filteredUsers.length}
               onItemsPerPageChange={handleItemsPerPageChange}
             />
           )}
