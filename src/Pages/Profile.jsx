@@ -110,13 +110,13 @@ const Profile = () => {
 
           {/* Business Details - Main Content */}
           {isClient() && (
-            <div className="content-card">
-              <div className="card-header">
+            <div className="profile-content-card">
+              <div className="profile-card-header">
                 <h2><i className="fas fa-building"></i> Business Information</h2>
                 <p>Your company details and business information</p>
 
                 {updateSuccess && (
-                  <div className="success-message">
+                  <div className="profile-success-message">
                     <i className="fas fa-check-circle"></i>
                     {updateSuccess}
                   </div>
@@ -124,24 +124,24 @@ const Profile = () => {
               </div>
 
               {loading && (
-                <div className="loading-section">
-                  <div className="loading-spinner"></div>
+                <div className="profile-loading-section">
+                  <div className="profile-loading-spinner"></div>
                   <p>Loading business details...</p>
                 </div>
               )}
 
               {error && (
-                <div className="error-section">
+                <div className="profile-error-section">
                   <i className="fas fa-exclamation-triangle"></i>
                   <p>{error}</p>
-                  <button onClick={() => window.location.reload()} className="retry-btn">
+                  <button onClick={() => window.location.reload()} className="profile-retry-btn">
                     <i className="fas fa-redo"></i> Retry
                   </button>
                 </div>
               )}
 
               {!loading && !error && !clientDetails && isClient() && (
-                <div className="no-data-section">
+                <div className="profile-no-data-section">
                   <i className="fas fa-info-circle"></i>
                   <p>No client details found. This might be because:</p>
                   <ul>
@@ -149,35 +149,35 @@ const Profile = () => {
                     <li>There's an issue with your account</li>
                     <li>The data hasn't been synchronized</li>
                   </ul>
-                  <button onClick={() => window.location.reload()} className="retry-btn">
+                  <button onClick={() => window.location.reload()} className="profile-retry-btn">
                     <i className="fas fa-redo"></i> Refresh Page
                   </button>
                 </div>
               )}
 
               {clientDetails && !isEditing && (
-                <div className="business-layout">
+                <div className="profile-business-layout">
                   {/* Left Side - Client Summary Card */}
-                  <div className="client-summary-card">
-                    <div className="client-avatar">
-                      <div className="company-initial">
+                  <div className="profile-client-summary-card">
+                    <div className="profile-client-avatar">
+                      <div className="profile-company-initial">
                         {clientDetails.companyName ? clientDetails.companyName.charAt(0).toUpperCase() : 'C'}
                       </div>
                     </div>
-                    <div className="client-summary-info">
-                      <h3 className="company-title">{clientDetails.companyName || 'Company Name'}</h3>
-                      <p className="client-role">Business Client</p>
-                      <div className="client-meta">
-                        <div className="meta-item">
+                    <div className="profile-client-summary-info">
+                      <h3 className="profile-company-title">{clientDetails.companyName || 'Company Name'}</h3>
+                      <p className="profile-client-role">Business Client</p>
+                      <div className="profile-client-meta">
+                        <div className="profile-meta-item">
                           <i className="fas fa-calendar"></i>
                           <span>Since {formatDate(clientDetails.createdAt || new Date()).split(',')[1]}</span>
                         </div>
-                        <div className="meta-item">
+                        <div className="profile-meta-item">
                           <i className="fas fa-shield-check"></i>
                           <span>GST Verified</span>
                         </div>
                       </div>
-                      <button onClick={handleEdit} className="edit-profile-btn">
+                      <button onClick={handleEdit} className="profile-edit-profile-btn">
                         <i className="fas fa-edit"></i>
                         Edit Details
                       </button>
@@ -185,41 +185,41 @@ const Profile = () => {
                   </div>
 
                   {/* Right Side - Detailed Information */}
-                  <div className="client-details-section">
-                    <div className="details-grid">
-                      <div className="detail-group">
+                  <div className="profile-client-details-section">
+                    <div className="profile-details-grid">
+                      <div className="profile-detail-group">
                         <h4><i className="fas fa-building"></i> Company Information</h4>
-                        <div className="detail-items">
-                          <div className="detail-item">
+                        <div className="profile-detail-items">
+                          <div className="profile-detail-item">
                             <label>Company Name</label>
-                            <span className="company-name">{clientDetails.companyName || 'Not provided'}</span>
+                            <span className="profile-company-name">{clientDetails.companyName || 'Not provided'}</span>
                           </div>
-                          <div className="detail-item">
+                          <div className="profile-detail-item">
                             <label>GST Number</label>
-                            <span className="gst-number">{clientDetails.gstNumber || 'Not provided'}</span>
+                            <span className="profile-gst-number">{clientDetails.gstNumber || 'Not provided'}</span>
                           </div>
                           {clientDetails.panNumber && (
-                            <div className="detail-item">
+                            <div className="profile-detail-item">
                               <label>PAN Number</label>
-                              <span className="pan-number">{maskSensitiveData(clientDetails.panNumber, 6)}</span>
+                              <span className="profile-pan-number">{maskSensitiveData(clientDetails.panNumber, 6)}</span>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div className="detail-group">
+                      <div className="profile-detail-group">
                         <h4><i className="fas fa-address-book"></i> Contact Information</h4>
-                        <div className="detail-items">
-                          <div className="detail-item">
+                        <div className="profile-detail-items">
+                          <div className="profile-detail-item">
                             <label>Business Email</label>
                             <span>{clientDetails.email || 'Not provided'}</span>
                           </div>
-                          <div className="detail-item">
+                          <div className="profile-detail-item">
                             <label>Phone Number</label>
                             <span>{clientDetails.phone || 'Not provided'}</span>
                           </div>
                           {clientDetails.contactPerson && (
-                            <div className="detail-item">
+                            <div className="profile-detail-item">
                               <label>Contact Person</label>
                               <span>{clientDetails.contactPerson}</span>
                             </div>
@@ -227,21 +227,21 @@ const Profile = () => {
                         </div>
                       </div>
 
-                      <div className="detail-group full-width">
+                      <div className="profile-detail-group profile-full-width">
                         <h4><i className="fas fa-map-marker-alt"></i> Business Address</h4>
-                        <div className="detail-items">
-                          <div className="detail-item">
-                            <span className="address-text">{clientDetails.address || 'Not provided'}</span>
+                        <div className="profile-detail-items">
+                          <div className="profile-detail-item">
+                            <span className="profile-address-text">{clientDetails.address || 'Not provided'}</span>
                           </div>
                         </div>
                       </div>
 
                       {clientDetails.bankDetails && (
-                        <div className="detail-group full-width">
+                        <div className="profile-detail-group profile-full-width">
                           <h4><i className="fas fa-university"></i> Banking Information</h4>
-                          <div className="detail-items">
-                            <div className="detail-item">
-                              <span className="bank-details">{clientDetails.bankDetails}</span>
+                          <div className="profile-detail-items">
+                            <div className="profile-detail-item">
+                              <span className="profile-bank-details">{clientDetails.bankDetails}</span>
                             </div>
                           </div>
                         </div>
@@ -252,9 +252,9 @@ const Profile = () => {
               )}
 
               {isEditing && (
-                <div className="edit-form">
-                  <div className="form-grid">
-                    <div className="form-group full-width">
+                <div className="profile-edit-form">
+                  <div className="profile-form-grid">
+                    <div className="profile-form-group profile-full-width">
                       <label>
                         <i className="fas fa-building"></i>
                         Company Name *
@@ -269,7 +269,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className="profile-form-group">
                       <label>
                         <i className="fas fa-file-invoice"></i>
                         GST Number *
@@ -284,7 +284,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className="profile-form-group">
                       <label>
                         <i className="fas fa-id-card"></i>
                         PAN Number
@@ -298,7 +298,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className="profile-form-group">
                       <label>
                         <i className="fas fa-envelope-open"></i>
                         Business Email *
@@ -313,7 +313,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className="profile-form-group">
                       <label>
                         <i className="fas fa-phone"></i>
                         Phone Number *
@@ -328,7 +328,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className="profile-form-group">
                       <label>
                         <i className="fas fa-user-tie"></i>
                         Contact Person
@@ -342,7 +342,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group full-width">
+                    <div className="profile-form-group profile-full-width">
                       <label>
                         <i className="fas fa-map-marker-alt"></i>
                         Business Address *
@@ -357,7 +357,7 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="form-group full-width">
+                    <div className="profile-form-group profile-full-width">
                       <label>
                         <i className="fas fa-university"></i>
                         Bank Details
@@ -372,10 +372,10 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className="form-actions">
+                  <div className="profile-form-actions">
                     <button
                       onClick={handleCancelEdit}
-                      className="cancel-btn"
+                      className="profile-cancel-btn"
                       disabled={updateLoading}
                     >
                       <i className="fas fa-times"></i>
@@ -383,12 +383,12 @@ const Profile = () => {
                     </button>
                     <button
                       onClick={handleSaveChanges}
-                      className="save-btn"
+                      className="profile-save-btn"
                       disabled={updateLoading}
                     >
                       {updateLoading ? (
                         <>
-                          <div className="mini-spinner"></div>
+                          <div className="profile-mini-spinner"></div>
                           Saving...
                         </>
                       ) : (
@@ -406,40 +406,40 @@ const Profile = () => {
 
           {/* Non-Client Users */}
           {!isClient() && (
-            <div className="content-card">
-              <div className="card-header">
+            <div className="profile-content-card">
+              <div className="profile-card-header">
                 <h2><i className="fas fa-user-circle"></i> Profile Information</h2>
                 <p>Your account details and information</p>
               </div>
 
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="info-icon">
+              <div className="profile-info-grid">
+                <div className="profile-info-item">
+                  <div className="profile-info-icon">
                     <i className="fas fa-signature"></i>
                   </div>
-                  <div className="info-content">
+                  <div className="profile-info-content">
                     <label>Full Name</label>
                     <span>{user.name || 'Not provided'}</span>
                   </div>
                 </div>
 
-                <div className="info-item">
-                  <div className="info-icon">
+                <div className="profile-info-item">
+                  <div className="profile-info-icon">
                     <i className="fas fa-envelope"></i>
                   </div>
-                  <div className="info-content">
+                  <div className="profile-info-content">
                     <label>Email Address</label>
                     <span>{user.email || 'Not provided'}</span>
                   </div>
                 </div>
 
-                <div className="info-item">
-                  <div className="info-icon">
+                <div className="profile-info-item">
+                  <div className="profile-info-icon">
                     <i className="fas fa-user-tag"></i>
                   </div>
-                  <div className="info-content">
+                  <div className="profile-info-content">
                     <label>Account Type</label>
-                    <span className={`role-badge ${user.role}`}>
+                    <span className={`profile-role-badge ${user.role}`}>
                       {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Unknown'}
                     </span>
                   </div>

@@ -18,7 +18,7 @@
   background: #1a1a1a;
 }
 
-.loading-spinner {
+.profile-loading-spinner {
   width: 40px;
   height: 40px;
   border: 4px solid #333;
@@ -46,7 +46,7 @@
 /* Removed profile header and cover sections */
 
 /* Role Badges */
-.role-badge {
+.profile-role-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -58,17 +58,17 @@
   letter-spacing: 0.5px;
 }
 
-.role-badge.admin {
+.profile-role-badge.admin {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
 
-.role-badge.client {
+.profile-role-badge.client {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   color: white;
 }
 
-.role-badge.user {
+.profile-role-badge.user {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
 }
@@ -82,7 +82,7 @@
   gap: 2rem;
 }
 
-.content-card {
+.profile-content-card {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.1);
@@ -90,18 +90,18 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.content-card:hover {
+.profile-content-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 0, 0.2),
     0 0 30px rgba(255, 107, 0, 0.15);
 }
 
-.card-header {
+.profile-card-header {
   padding: 2rem 2rem 1rem;
   border-bottom: 1px solid rgba(255, 107, 0, 0.1);
 }
 
-.card-header h2 {
+.profile-card-header h2 {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -115,26 +115,26 @@
   -webkit-text-fill-color: transparent;
 }
 
-.card-header h2 i {
+.profile-card-header h2 i {
   color: #ff6b00;
   font-size: 1.25rem;
 }
 
-.card-header p {
+.profile-card-header p {
   color: #999;
   margin: 0;
   font-size: 0.95rem;
 }
 
 /* Information Grid */
-.info-grid {
+.profile-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   padding: 2rem;
 }
 
-.info-item {
+.profile-info-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -145,17 +145,17 @@
   transition: all 0.3s ease;
 }
 
-.info-item:hover {
+.profile-info-item:hover {
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.1);
   transform: translateY(-2px);
 }
 
-.info-item.full-width {
+.profile-info-item.profile-full-width {
   grid-column: 1 / -1;
 }
 
-.info-icon {
+.profile-info-icon {
   width: 40px;
   height: 40px;
   background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
@@ -168,12 +168,12 @@
   flex-shrink: 0;
 }
 
-.info-content {
+.profile-info-content {
   flex: 1;
   min-width: 0;
 }
 
-.info-content label {
+.profile-info-content label {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
@@ -183,7 +183,7 @@
   margin-bottom: 0.5rem;
 }
 
-.info-content span {
+.profile-info-content span {
   display: block;
   font-size: 1rem;
   color: #ffffff;
@@ -191,14 +191,14 @@
   word-break: break-word;
 }
 
-.company-name {
+.profile-company-name {
   font-size: 1.1rem !important;
   font-weight: 700 !important;
   color: #ff6b00 !important;
 }
 
-.gst-number,
-.pan-number {
+.profile-gst-number,
+.profile-pan-number {
   font-family: "Courier New", monospace !important;
   background: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
@@ -207,14 +207,14 @@
   font-size: 0.9rem !important;
 }
 
-.address-text,
-.bank-details {
+.profile-address-text,
+.profile-bank-details {
   line-height: 1.6 !important;
   color: #cccccc !important;
 }
 
 /* Loading and Error States */
-.loading-section {
+.profile-loading-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -223,12 +223,12 @@
   gap: 1rem;
 }
 
-.loading-section p {
+.profile-loading-section p {
   color: #999;
   font-style: italic;
 }
 
-.error-section {
+.profile-error-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -238,17 +238,17 @@
   text-align: center;
 }
 
-.error-section i {
+.profile-error-section i {
   font-size: 2rem;
   color: #ef4444;
 }
 
-.error-section p {
+.profile-error-section p {
   color: #999;
   margin: 0;
 }
 
-.no-data-section {
+.profile-no-data-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -259,17 +259,17 @@
   color: #999;
 }
 
-.no-data-section i {
+.profile-no-data-section i {
   font-size: 2rem;
   color: #f59e0b;
 }
 
-.no-data-section ul {
+.profile-no-data-section ul {
   text-align: left;
   margin: 1rem 0;
 }
 
-.no-data-section p {
+.profile-no-data-section p {
   margin: 0.5rem 0;
   font-size: 0.9rem;
   background: rgba(255, 255, 255, 0.05);
@@ -279,7 +279,7 @@
   white-space: pre-wrap;
 }
 
-.retry-btn {
+.profile-retry-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -293,20 +293,20 @@
   transition: all 0.3s ease;
 }
 
-.retry-btn:hover {
+.profile-retry-btn:hover {
   background: #e55a00;
   transform: translateY(-1px);
 }
 
 /* Security Section */
-.security-section {
+.profile-security-section {
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.security-item {
+.profile-security-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -317,12 +317,12 @@
   transition: all 0.3s ease;
 }
 
-.security-item:hover {
+.profile-security-item:hover {
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.1);
 }
 
-.security-info h3 {
+.profile-security-info h3 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -332,17 +332,17 @@
   margin: 0 0 0.25rem;
 }
 
-.security-info h3 i {
+.profile-security-info h3 i {
   color: #ff6b00;
 }
 
-.security-info p {
+.profile-security-info p {
   color: #999;
   margin: 0;
   font-size: 0.9rem;
 }
 
-.security-btn {
+.profile-security-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -356,29 +356,29 @@
   transition: all 0.3s ease;
 }
 
-.security-btn:hover {
+.profile-security-btn:hover {
   border-color: #d1d5db;
   color: #374151;
   transform: translateY(-1px);
 }
 
-.security-btn.primary {
+.profile-security-btn.primary {
   background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
   border-color: #ff6b00;
   color: white;
 }
 
-.security-btn.primary:hover {
+.profile-security-btn.primary:hover {
   background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
   border-color: #e55a00;
 }
 
-.security-btn.danger {
+.profile-security-btn.danger {
   border-color: #ef4444;
   color: #ef4444;
 }
 
-.security-btn.danger:hover {
+.profile-security-btn.danger:hover {
   background: #ef4444;
   color: white;
 }
@@ -389,39 +389,39 @@
     padding: 80px 1rem 1rem;
   }
 
-  .info-grid {
+  .profile-info-grid {
     grid-template-columns: 1fr;
     padding: 1.5rem;
     gap: 1rem;
   }
 
-  .info-item {
+  .profile-info-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
     padding: 1rem;
   }
 
-  .security-item {
+  .profile-security-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .security-btn {
+  .profile-security-btn {
     width: 100%;
     justify-content: center;
   }
 
-  .card-header {
+  .profile-card-header {
     padding: 1.5rem 1.5rem 1rem;
   }
 
-  .card-header h2 {
+  .profile-card-header h2 {
     font-size: 1.25rem;
   }
 
-  .security-section {
+  .profile-security-section {
     padding: 1.5rem;
   }
 }
@@ -431,28 +431,28 @@
     padding: 80px 0.5rem 0.5rem;
   }
 
-  .info-grid {
+  .profile-info-grid {
     padding: 1rem;
   }
 
-  .card-header {
+  .profile-card-header {
     padding: 1rem;
   }
 
-  .security-section {
+  .profile-security-section {
     padding: 1rem;
   }
 }
 
 /* Edit Form Styles */
-.card-header-content {
+.profile-card-header-content {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
 }
 
-.edit-btn {
+.profile-edit-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -468,13 +468,13 @@
   font-size: 0.9rem;
 }
 
-.edit-btn:hover {
+.profile-edit-btn:hover {
   background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
 }
 
-.success-message {
+.profile-success-message {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -487,28 +487,28 @@
   font-weight: 500;
 }
 
-.edit-form {
+.profile-edit-form {
   padding: 2.5rem;
 }
 
-.form-grid {
+.profile-form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
-.form-group {
+.profile-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.form-group.full-width {
+.profile-form-group.profile-full-width {
   grid-column: 1 / -1;
 }
 
-.form-group label {
+.profile-form-group label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -519,13 +519,13 @@
   letter-spacing: 0.5px;
 }
 
-.form-group label i {
+.profile-form-group label i {
   color: #ff6b00;
   width: 16px;
 }
 
-.form-group input,
-.form-group textarea {
+.profile-form-group input,
+.profile-form-group textarea {
   padding: 1rem;
   border: 2px solid rgba(255, 107, 0, 0.1);
   border-radius: 12px;
@@ -536,20 +536,20 @@
   resize: vertical;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.profile-form-group input:focus,
+.profile-form-group textarea:focus {
   outline: none;
   border-color: #ff6b00;
   box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
   background: rgba(255, 107, 0, 0.08);
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
+.profile-form-group input::placeholder,
+.profile-form-group textarea::placeholder {
   color: #999;
 }
 
-.form-actions {
+.profile-form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -557,8 +557,8 @@
   border-top: 1px solid rgba(255, 107, 0, 0.1);
 }
 
-.cancel-btn,
-.save-btn {
+.profile-cancel-btn,
+.profile-save-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -571,38 +571,38 @@
   font-size: 0.95rem;
 }
 
-.cancel-btn {
+.profile-cancel-btn {
   background: #f3f4f6;
   color: #6b7280;
   border: 2px solid #e5e7eb;
 }
 
-.cancel-btn:hover {
+.profile-cancel-btn:hover {
   background: #e5e7eb;
   color: #374151;
   transform: translateY(-1px);
 }
 
-.save-btn {
+.profile-save-btn {
   background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
   color: white;
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
 }
 
-.save-btn:hover {
+.profile-save-btn:hover {
   background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
 }
 
-.save-btn:disabled,
-.cancel-btn:disabled {
+.profile-save-btn:disabled,
+.profile-cancel-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
-.mini-spinner {
+.profile-mini-spinner {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -612,7 +612,7 @@
 }
 
 /* Business Layout Styles */
-.business-layout {
+.profile-business-layout {
   display: grid;
   grid-template-columns: 350px 1fr;
   gap: 2rem;
@@ -620,7 +620,7 @@
   min-height: 400px;
 }
 
-.client-summary-card {
+.profile-client-summary-card {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   padding: 2rem;
@@ -635,13 +635,13 @@
   transition: all 0.3s ease;
 }
 
-.client-summary-card:hover {
+.profile-client-summary-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 107, 0, 0.15);
   border-color: rgba(255, 107, 0, 0.3);
 }
 
-.client-avatar {
+.profile-client-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -653,18 +653,18 @@
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
 }
 
-.company-initial {
+.profile-company-initial {
   font-size: 2rem;
   font-weight: 700;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.client-summary-info {
+.profile-client-summary-info {
   width: 100%;
 }
 
-.company-title {
+.profile-company-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #ffffff;
@@ -672,7 +672,7 @@
   line-height: 1.3;
 }
 
-.client-role {
+.profile-client-role {
   color: #ff6b00;
   font-size: 0.9rem;
   font-weight: 600;
@@ -681,14 +681,14 @@
   margin: 0 0 1.5rem;
 }
 
-.client-meta {
+.profile-client-meta {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
-.meta-item {
+.profile-meta-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -696,13 +696,13 @@
   color: #cccccc;
 }
 
-.meta-item i {
+.profile-meta-item i {
   color: #ff6b00;
   width: 16px;
   text-align: center;
 }
 
-.edit-profile-btn {
+.profile-edit-profile-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -720,36 +720,36 @@
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
 }
 
-.edit-profile-btn:hover {
+.profile-edit-profile-btn:hover {
   background: linear-gradient(135deg, #e55a00 0%, #e67600 100%);
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
 }
 
-.client-details-section {
+.profile-client-details-section {
   background: rgba(255, 255, 255, 0.02);
   border-radius: 16px;
   padding: 2rem;
   border: 1px solid rgba(255, 107, 0, 0.1);
 }
 
-.details-grid {
+.profile-details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
-.detail-group {
+.profile-detail-group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.detail-group.full-width {
+.profile-detail-group.profile-full-width {
   grid-column: 1 / -1;
 }
 
-.detail-group h4 {
+.profile-detail-group h4 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -761,17 +761,17 @@
   border-bottom: 1px solid rgba(255, 107, 0, 0.2);
 }
 
-.detail-group h4 i {
+.profile-detail-group h4 i {
   font-size: 0.9rem;
 }
 
-.detail-items {
+.profile-detail-items {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.detail-item {
+.profile-detail-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -782,22 +782,22 @@
   transition: all 0.3s ease;
 }
 
-.detail-item:hover {
+.profile-detail-item:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 107, 0, 0.15);
   transform: translateY(-1px);
 }
 
-.detail-item.featured {
+.profile-detail-item.profile-featured {
   border-color: rgba(255, 107, 0, 0.3);
   background: rgba(255, 107, 0, 0.05);
 }
 
-.detail-item.address-item {
+.profile-detail-item.profile-address-item {
   align-items: flex-start;
 }
 
-.detail-icon {
+.profile-detail-icon {
   width: 40px;
   height: 40px;
   background: rgba(255, 107, 0, 0.1);
@@ -810,14 +810,14 @@
   flex-shrink: 0;
 }
 
-.detail-content {
+.profile-detail-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.detail-content label {
+.profile-detail-content label {
   font-size: 0.8rem;
   font-weight: 600;
   color: #999;
@@ -825,14 +825,14 @@
   letter-spacing: 0.5px;
 }
 
-.detail-content span {
+.profile-detail-content span {
   font-size: 0.95rem;
   color: #ffffff;
   font-weight: 500;
   line-height: 1.4;
 }
 
-.verification-badge {
+.profile-verification-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -845,7 +845,7 @@
   width: fit-content;
 }
 
-.contact-action {
+.profile-contact-action {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -862,20 +862,20 @@
   width: fit-content;
 }
 
-.contact-action:hover {
+.profile-contact-action:hover {
   background: rgba(255, 107, 0, 0.2);
   border-color: rgba(255, 107, 0, 0.4);
   transform: translateY(-1px);
 }
 
-.detail-item .company-name {
+.profile-detail-item .profile-company-name {
   font-size: 1.1rem !important;
   font-weight: 700 !important;
   color: #ff6b00 !important;
 }
 
-.detail-item .gst-number,
-.detail-item .pan-number {
+.profile-detail-item .profile-gst-number,
+.profile-detail-item .profile-pan-number {
   font-family: "Courier New", monospace !important;
   background: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
@@ -885,8 +885,8 @@
   display: inline-block;
 }
 
-.detail-item .address-text,
-.detail-item .bank-details {
+.profile-detail-item .profile-address-text,
+.profile-detail-item .profile-bank-details {
   background: rgba(255, 255, 255, 0.05);
   padding: 0.75rem;
   border-radius: 8px;
@@ -897,90 +897,90 @@
 
 /* Responsive Design for Business Layout */
 @media (max-width: 1024px) {
-  .business-layout {
+  .profile-business-layout {
     grid-template-columns: 320px 1fr;
     gap: 1.5rem;
   }
 
-  .client-summary-card {
+  .profile-client-summary-card {
     padding: 1.5rem;
   }
 
-  .client-details-section {
+  .profile-client-details-section {
     padding: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .business-layout {
+  .profile-business-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 1.5rem;
   }
 
-  .client-summary-card {
+  .profile-client-summary-card {
     position: static;
     padding: 1.5rem;
   }
 
-  .details-grid {
+  .profile-details-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .client-details-section {
+  .profile-client-details-section {
     padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .business-layout {
+  .profile-business-layout {
     padding: 1rem;
   }
 
-  .client-summary-card {
+  .profile-client-summary-card {
     padding: 1rem;
   }
 
-  .client-details-section {
+  .profile-client-details-section {
     padding: 1rem;
   }
 
-  .details-grid {
+  .profile-details-grid {
     gap: 1rem;
   }
 
-  .detail-group {
+  .profile-detail-group {
     gap: 0.75rem;
   }
 
-  .detail-items {
+  .profile-detail-items {
     gap: 0.75rem;
   }
 }
 
 /* Responsive Design for Edit Form */
 @media (max-width: 768px) {
-  .card-header-content {
+  .profile-card-header-content {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .edit-btn {
+  .profile-edit-btn {
     align-self: flex-start;
   }
 
-  .form-grid {
+  .profile-form-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .form-actions {
+  .profile-form-actions {
     flex-direction: column;
   }
 
-  .cancel-btn,
-  .save-btn {
+  .profile-cancel-btn,
+  .profile-save-btn {
     width: 100%;
     justify-content: center;
   }
