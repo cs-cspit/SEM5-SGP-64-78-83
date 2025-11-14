@@ -5,8 +5,8 @@ const User = require('../models/User');
 // Get admin dashboard stats
 exports.getAdminDashboardStats = async (req, res) => {
     try {
-        // Get total clients (users with role 'user')
-        const totalClients = await User.countDocuments({ role: 'user' });
+        // Get total clients (users with role 'client')
+        const totalClients = await User.countDocuments({ role: 'client' });
         
         // Get total invoices
         const totalInvoices = await Bill.countDocuments();

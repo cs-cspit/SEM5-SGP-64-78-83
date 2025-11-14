@@ -17,7 +17,7 @@ const Header = () => {
       const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
 
-      setIsScrolled(scrollTop > 50);
+      setIsScrolled(scrollTop > 10);
       setScrollProgress(scrollPercent);
     };
 
@@ -77,9 +77,6 @@ const Header = () => {
           <div className="logo-container">
             <img src="/Images/logo_1.png" alt="Jay Jalaram Electricals Logo" className="company-logo" />
             <h1>Jay Jalaram Electricals</h1>
-            {isScrolled && (
-              <span className="tagline">Powering Excellence</span>
-            )}
           </div>
 
           {/* Hamburger Menu Toggle Button */}
