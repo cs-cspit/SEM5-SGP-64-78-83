@@ -74,6 +74,22 @@ const UserRoleManagement = () => {
       setError('');
       setSuccessMessage('');
 
+      // If changing to client role, navigate to AddClient form with user data
+      if (newRole === 'client') {
+        const user = users.find(u => u._id === userId);
+        if (user) {
+          navigate('/admin/add-client', {
+            state: {
+              userId: user._id,
+              userName: user.name,
+              userEmail: user.email,
+              fromRoleChange: true
+            }
+          });
+          return;
+        }
+      }
+
       await axios.patch('http://localhost:5000/api/users/role',
         { userId, role: newRole },
         {

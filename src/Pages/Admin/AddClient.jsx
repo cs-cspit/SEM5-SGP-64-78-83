@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import AdminLayout from '../../Components/AdminLayout';
 import { FormValidator, APIErrorHandler } from '../../utils/errorHandler';
@@ -7,6 +7,8 @@ import './AddClient.css';
 
 const AddClient = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [userId, setUserId] = useState(null);
   const [formData, setFormData] = useState({
     companyName: '',
     gstNumber: '',
@@ -21,13 +23,25 @@ const AddClient = () => {
   const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Auto-populate form when coming from role change
+  useEffect(() => {
+    if (location.state?.fromRoleChange) {
+      setUserId(location.state.userId);
+      setFormData(prev => ({
+        ...prev,
+        contactPerson: location.state.userName || '',
+        email: location.state.userEmail || ''
+      }));
+    }
+  }, [location.state]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
     });
-    
+
     // Clear field-specific error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -35,7 +49,7 @@ const AddClient = () => {
         [name]: ''
       }));
     }
-    
+
     // Clear general error when user starts typing
     if (generalError) {
       setGeneralError('');
@@ -44,7 +58,7 @@ const AddClient = () => {
 
   const validateForm = () => {
     const validator = new FormValidator();
-    
+
     // Validate required fields
     validator.validateRequired(formData.companyName, 'companyName', 'Company name is required');
     validator.validateRequired(formData.gstNumber, 'gstNumber', 'GST number is required');
@@ -87,7 +101,7 @@ const AddClient = () => {
     Object.keys(validator.errors).forEach(field => {
       fieldErrors[field] = validator.getFieldErrors(field)[0]; // Get first error for each field
     });
-    
+
     setErrors(fieldErrors);
     return !validator.hasErrors();
   };
@@ -113,9 +127,12 @@ const AddClient = () => {
         return;
       }
 
+      // Include userId if converting existing user to client
+      const requestData = userId ? { ...formData, userId } : formData;
+
       const response = await axios.post(
         'http://localhost:5000/api/clients',
-        formData,
+        requestData,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -125,15 +142,16 @@ const AddClient = () => {
       );
 
       console.log('Client created successfully:', response.data);
-      navigate('/admin/user-roles', { 
-        state: { 
-          message: `Client "${formData.companyName}" created successfully!` 
-        } 
+
+      navigate('/admin/user-roles', {
+        state: {
+          message: `Client "${formData.companyName}" created successfully!`
+        }
       });
     } catch (err) {
       console.error('Error creating client:', err);
       const errorMessage = APIErrorHandler.parseError(err);
-      
+
       // Handle specific client creation errors
       if (errorMessage.includes('GST') && errorMessage.includes('exists')) {
         setErrors(prev => ({ ...prev, gstNumber: 'A client with this GST number already exists' }));
@@ -164,8 +182,8 @@ const AddClient = () => {
               <i className="fas fa-arrow-left"></i>
             </button>
             <div className="header-text">
-              <h1>Add New Client</h1>
-              <p>Create a new client profile</p>
+              <h1>{location.state?.fromRoleChange ? 'Convert User to Client' : 'Add New Client'}</h1>
+              <p>{location.state?.fromRoleChange ? 'Complete client information to convert user to client' : 'Create a new client profile'}</p>
             </div>
           </div>
         </div>
@@ -174,7 +192,7 @@ const AddClient = () => {
           <div className="form-card">
             <div className="form-section">
               <h2>Client Information</h2>
-              
+
               <form onSubmit={handleSubmit} className="add-client-form">
                 <div className="form-row">
                   <div className="form-group">

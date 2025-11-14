@@ -14,6 +14,7 @@ exports.createClient = async (req, res) => {
       panNumber,
       address,
       bankDetails,
+      userId, // Optional: if converting existing user to client
     } = req.body;
 
     // Validate required fields
@@ -24,55 +25,83 @@ exports.createClient = async (req, res) => {
       });
     }
 
-    // Check if email already exists
-    const emailExists = await ClientDetails.findOne({ email });
-    if (emailExists) {
-      return res.status(400).json({ message: "Email already registered" });
-    }
-
     // Check if GST number already exists
     const gstExists = await ClientDetails.findOne({ gstNumber });
     if (gstExists) {
       return res.status(400).json({ message: "GST number already registered" });
     }
 
-    // Generate default password: companyname@pan_last_4_digits
-    let defaultPassword = "temp@123"; // fallback password
-    if (companyName && panNumber && panNumber.length >= 4) {
-      // Remove spaces and special characters from company name, convert to lowercase
-      const cleanCompanyName = companyName
-        .replace(/[^a-zA-Z0-9]/g, "")
-        .toLowerCase();
-      const panLast4 = panNumber.slice(-4);
-      defaultPassword = `${cleanCompanyName}@${panLast4}`;
-    } else if (companyName) {
-      // If no PAN number, use company name with @123
-      const cleanCompanyName = companyName
-        .replace(/[^a-zA-Z0-9]/g, "")
-        .toLowerCase();
-      defaultPassword = `${cleanCompanyName}@123`;
-    }
-
-    // Create a basic user account for the client
     let user;
-    try {
-      user = await User.create({
-        name: contactPerson || companyName,
-        email,
-        password: defaultPassword, // Generated password based on company name and PAN
-        role: "client",
-        isEmailVerified: true, // Admin-created clients are automatically verified
-      });
-      console.log("Client user created:", {
+    let defaultPassword = null; // Will be set only for new clients
+
+    // If userId is provided, we're converting an existing user to a client
+    if (userId) {
+      user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if user already has client details
+      const existingClientDetails = await ClientDetails.findOne({ userId });
+      if (existingClientDetails) {
+        return res
+          .status(400)
+          .json({ message: "User already has client details" });
+      }
+
+      // Update user role to client
+      user.role = "client";
+      await user.save();
+
+      console.log("Converted existing user to client:", {
         id: user._id,
         email: user.email,
         role: user.role,
-        isEmailVerified: user.isEmailVerified,
-        defaultPassword: defaultPassword, // Log the generated password for admin reference
       });
-    } catch (error) {
-      console.error("Error creating client user:", error);
-      return res.status(400).json({ message: "Error creating client user" });
+    } else {
+      // Check if email already exists for new client creation
+      const emailExists = await ClientDetails.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({ message: "Email already registered" });
+      }
+
+      // Generate default password: companyname@pan_last_4_digits
+      defaultPassword = "temp@123"; // fallback password
+      if (companyName && panNumber && panNumber.length >= 4) {
+        // Remove spaces and special characters from company name, convert to lowercase
+        const cleanCompanyName = companyName
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase();
+        const panLast4 = panNumber.slice(-4);
+        defaultPassword = `${cleanCompanyName}@${panLast4}`;
+      } else if (companyName) {
+        // If no PAN number, use company name with @123
+        const cleanCompanyName = companyName
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase();
+        defaultPassword = `${cleanCompanyName}@123`;
+      }
+
+      // Create a basic user account for the client
+      try {
+        user = await User.create({
+          name: contactPerson || companyName,
+          email,
+          password: defaultPassword, // Generated password based on company name and PAN
+          role: "client",
+          isEmailVerified: true, // Admin-created clients are automatically verified
+        });
+        console.log("Client user created:", {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+          isEmailVerified: user.isEmailVerified,
+          defaultPassword: defaultPassword, // Log the generated password for admin reference
+        });
+      } catch (error) {
+        console.error("Error creating client user:", error);
+        return res.status(400).json({ message: "Error creating client user" });
+      }
     }
 
     // Create client details
@@ -88,8 +117,10 @@ exports.createClient = async (req, res) => {
       bankDetails,
     });
 
-    res.status(201).json({
-      message: "Client created successfully",
+    const responseData = {
+      message: userId
+        ? "User converted to client successfully"
+        : "Client created successfully",
       user: {
         id: user._id,
         name: user.name,
@@ -98,9 +129,16 @@ exports.createClient = async (req, res) => {
         isEmailVerified: user.isEmailVerified,
         clientDetails: clientDetails,
       },
-      generatedPassword: defaultPassword, // Include the generated password for admin reference
-      note: "Client account is automatically verified and ready to use",
-    });
+    };
+
+    // Only include generated password for new clients
+    if (!userId) {
+      responseData.generatedPassword = defaultPassword;
+      responseData.note =
+        "Client account is automatically verified and ready to use";
+    }
+
+    res.status(201).json(responseData);
   } catch (error) {
     if (error.code === 11000) {
       // Duplicate key error

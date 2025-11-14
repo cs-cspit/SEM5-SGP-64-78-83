@@ -1,39 +1,39 @@
-const Contact = require('../models/Contact');
-const { sendReplyEmail } = require('../services/emailService');
+const Contact = require("../models/Contact");
+const { sendReplyEmail } = require("../services/emailService");
 
 // Submit contact form
 exports.submitContact = async (req, res) => {
   try {
     const { name, email, phone, company, subject, message } = req.body;
-    
+
     // Validate required fields
     if (!name || !email || !message) {
-      return res.status(400).json({ 
-        message: "Name, email, and message are required fields" 
+      return res.status(400).json({
+        message: "Name, email, and message are required fields",
       });
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        message: "Please provide a valid email address" 
+      return res.status(400).json({
+        message: "Please provide a valid email address",
       });
     }
 
     // Create contact with user ID from auth middleware
-    const contact = await Contact.create({ 
+    const contact = await Contact.create({
       userId: req.user._id,
-      name, 
-      email, 
-      phone: phone || '', 
-      company: company || '',
-      subject: subject || '',
-      message 
+      name,
+      email,
+      phone: phone || "",
+      company: company || "",
+      subject: subject || "",
+      message,
     });
 
     // Populate user details for response
-    await contact.populate('userId', 'name email role');
+    await contact.populate("userId", "name email role");
 
     res.status(201).json({
       message: "Contact form submitted successfully",
@@ -50,13 +50,13 @@ exports.submitContact = async (req, res) => {
           id: contact.userId._id,
           name: contact.userId.name,
           email: contact.userId.email,
-          role: contact.userId.role
+          role: contact.userId.role,
         },
-        createdAt: contact.createdAt
-      }
+        createdAt: contact.createdAt,
+      },
     });
   } catch (error) {
-    console.error('Contact form submission error:', error);
+    console.error("Contact form submission error:", error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -65,13 +65,13 @@ exports.submitContact = async (req, res) => {
 exports.getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find()
-      .populate('userId', 'name email role')
+      .populate("userId", "name email role")
       .sort({ createdAt: -1 });
-    
+
     res.json({
       message: "Contacts retrieved successfully",
       count: contacts.length,
-      contacts: contacts.map(contact => ({
+      contacts: contacts.map((contact) => ({
         id: contact._id,
         name: contact.name,
         email: contact.email,
@@ -84,14 +84,14 @@ exports.getAllContacts = async (req, res) => {
           id: contact.userId._id,
           name: contact.userId.name,
           email: contact.userId.email,
-          role: contact.userId.role
+          role: contact.userId.role,
         },
         createdAt: contact.createdAt,
-        updatedAt: contact.updatedAt
-      }))
+        updatedAt: contact.updatedAt,
+      })),
     });
   } catch (error) {
-    console.error('Error fetching contacts:', error);
+    console.error("Error fetching contacts:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -102,17 +102,17 @@ exports.updateContactStatus = async (req, res) => {
     const { contactId } = req.params;
     const { status } = req.body;
 
-    if (!['pending', 'read', 'replied', 'resolved'].includes(status)) {
-      return res.status(400).json({ 
-        message: "Invalid status. Must be: pending, read, replied, or resolved" 
+    if (!["pending", "read", "replied", "resolved"].includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status. Must be: pending, read, replied, or resolved",
       });
     }
 
     const contact = await Contact.findByIdAndUpdate(
-      contactId, 
-      { status }, 
+      contactId,
+      { status },
       { new: true }
-    ).populate('userId', 'name email role');
+    ).populate("userId", "name email role");
 
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
@@ -123,11 +123,11 @@ exports.updateContactStatus = async (req, res) => {
       contact: {
         id: contact._id,
         status: contact.status,
-        updatedAt: contact.updatedAt
-      }
+        updatedAt: contact.updatedAt,
+      },
     });
   } catch (error) {
-    console.error('Error updating contact status:', error);
+    console.error("Error updating contact status:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -135,13 +135,14 @@ exports.updateContactStatus = async (req, res) => {
 // Get user's own contact submissions
 exports.getUserContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find({ userId: req.user._id })
-      .sort({ createdAt: -1 });
-    
+    const contacts = await Contact.find({ userId: req.user._id }).sort({
+      createdAt: -1,
+    });
+
     res.json({
       message: "Your contact submissions retrieved successfully",
       count: contacts.length,
-      contacts: contacts.map(contact => ({
+      contacts: contacts.map((contact) => ({
         id: contact._id,
         name: contact.name,
         email: contact.email,
@@ -151,11 +152,11 @@ exports.getUserContacts = async (req, res) => {
         message: contact.message,
         status: contact.status,
         createdAt: contact.createdAt,
-        updatedAt: contact.updatedAt
-      }))
+        updatedAt: contact.updatedAt,
+      })),
     });
   } catch (error) {
-    console.error('Error fetching user contacts:', error);
+    console.error("Error fetching user contacts:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -164,25 +165,27 @@ exports.getUserContacts = async (req, res) => {
 exports.replyToContact = async (req, res) => {
   try {
     const { contactId } = req.params;
-    const { subject, message, priority = 'normal' } = req.body;
+    const { subject, message, priority = "normal" } = req.body;
 
     // Validate required fields
     if (!subject || !message) {
-      return res.status(400).json({ 
-        message: "Subject and message are required" 
+      return res.status(400).json({
+        message: "Subject and message are required",
       });
     }
 
     // Validate priority
-    if (!['low', 'normal', 'high', 'urgent'].includes(priority)) {
-      return res.status(400).json({ 
-        message: "Invalid priority. Must be: low, normal, high, or urgent" 
+    if (!["low", "normal", "high", "urgent"].includes(priority)) {
+      return res.status(400).json({
+        message: "Invalid priority. Must be: low, normal, high, or urgent",
       });
     }
 
     // Find the contact
-    const contact = await Contact.findById(contactId)
-      .populate('userId', 'name email role');
+    const contact = await Contact.findById(contactId).populate(
+      "userId",
+      "name email role"
+    );
 
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
@@ -196,11 +199,11 @@ exports.replyToContact = async (req, res) => {
       message: message.trim(),
       priority,
       clientName: contact.name,
-      clientEmail: contact.email
+      clientEmail: contact.email,
     };
 
     // Send email
-    console.log('Sending reply email to:', contact.email);
+    console.log("Sending reply email to:", contact.email);
     const emailResult = await sendReplyEmail(replyData);
 
     // Create reply object for database
@@ -212,15 +215,15 @@ exports.replyToContact = async (req, res) => {
       priority,
       emailSent: emailResult.success,
       emailSentAt: emailResult.success ? new Date() : undefined,
-      emailError: emailResult.success ? undefined : emailResult.error
+      emailError: emailResult.success ? undefined : emailResult.error,
     };
 
     // Add reply to contact
     contact.replies.push(replyObject);
-    
+
     // Update status to 'replied' if email was sent successfully
     if (emailResult.success) {
-      contact.status = 'replied';
+      contact.status = "replied";
     }
 
     await contact.save();
@@ -229,9 +232,9 @@ exports.replyToContact = async (req, res) => {
     const newReply = contact.replies[contact.replies.length - 1];
 
     res.status(201).json({
-      message: emailResult.success ? 
-        "Reply sent successfully and saved to database" : 
-        "Reply saved to database but email failed to send",
+      message: emailResult.success
+        ? "Reply sent successfully and saved to database"
+        : "Reply saved to database but email failed to send",
       reply: {
         id: newReply._id,
         adminName: newReply.adminName,
@@ -241,21 +244,20 @@ exports.replyToContact = async (req, res) => {
         emailSent: newReply.emailSent,
         emailSentAt: newReply.emailSentAt,
         emailError: newReply.emailError,
-        createdAt: newReply.createdAt
+        createdAt: newReply.createdAt,
       },
       emailResult: {
         success: emailResult.success,
         messageId: emailResult.messageId,
-        error: emailResult.error
+        error: emailResult.error,
       },
-      contactStatus: contact.status
+      contactStatus: contact.status,
     });
-
   } catch (error) {
-    console.error('Error sending reply:', error);
-    res.status(500).json({ 
+    console.error("Error sending reply:", error);
+    res.status(500).json({
       message: "Failed to send reply",
-      error: error.message 
+      error: error.message,
     });
   }
 };
@@ -266,8 +268,8 @@ exports.getContactWithReplies = async (req, res) => {
     const { contactId } = req.params;
 
     const contact = await Contact.findById(contactId)
-      .populate('userId', 'name email role')
-      .populate('replies.adminId', 'name email role');
+      .populate("userId", "name email role")
+      .populate("replies.adminId", "name email role");
 
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
@@ -288,9 +290,9 @@ exports.getContactWithReplies = async (req, res) => {
           id: contact.userId._id,
           name: contact.userId.name,
           email: contact.userId.email,
-          role: contact.userId.role
+          role: contact.userId.role,
         },
-        replies: contact.replies.map(reply => ({
+        replies: contact.replies.map((reply) => ({
           id: reply._id,
           adminId: reply.adminId._id,
           adminName: reply.adminName,
@@ -301,15 +303,14 @@ exports.getContactWithReplies = async (req, res) => {
           emailSentAt: reply.emailSentAt,
           emailError: reply.emailError,
           createdAt: reply.createdAt,
-          updatedAt: reply.updatedAt
+          updatedAt: reply.updatedAt,
         })),
         createdAt: contact.createdAt,
-        updatedAt: contact.updatedAt
-      }
+        updatedAt: contact.updatedAt,
+      },
     });
-
   } catch (error) {
-    console.error('Error fetching contact with replies:', error);
+    console.error("Error fetching contact with replies:", error);
     res.status(500).json({ message: error.message });
   }
 };
