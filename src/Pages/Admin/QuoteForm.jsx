@@ -19,6 +19,13 @@ const QuoteForm = () => {
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showReplyModal, setShowReplyModal] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationData, setNotificationData] = useState({
+        type: 'success', // 'success' or 'error'
+        title: '',
+        message: '',
+        details: ''
+    });
     const [replyData, setReplyData] = useState({
         subject: '',
         message: '',
@@ -131,15 +138,33 @@ const QuoteForm = () => {
 
             // Show success message based on email result
             if (response.emailResult?.success) {
-                alert(`✅ Reply sent successfully!\n\n📧 Email delivered to: ${selectedQuote.email}\n📨 Message ID: ${response.emailResult.messageId}`);
+                setNotificationData({
+                    type: 'success',
+                    title: 'Reply Sent Successfully!',
+                    message: `Your reply has been sent to ${selectedQuote.email}`,
+                    details: `Message ID: ${response.emailResult.messageId || 'N/A'}`
+                });
+                setShowNotification(true);
             } else {
-                alert(`⚠️ Reply saved but email failed to send.\n\n❌ Email error: ${response.emailResult?.error}\n\nThe reply has been saved to the database. You may need to contact the client through alternative means.`);
+                setNotificationData({
+                    type: 'warning',
+                    title: 'Reply Saved with Warning',
+                    message: 'The reply has been saved to the database, but email delivery failed.',
+                    details: response.emailResult?.error || 'You may need to contact the client through alternative means.'
+                });
+                setShowNotification(true);
             }
 
         } catch (error) {
             console.error('Error sending reply:', error);
             setError(`Failed to send reply: ${error}`);
-            alert(`❌ Failed to send reply: ${error}\n\nPlease check your internet connection and try again.`);
+            setNotificationData({
+                type: 'error',
+                title: 'Failed to Send Reply',
+                message: 'An error occurred while sending your reply.',
+                details: 'Please check your internet connection and try again.'
+            });
+            setShowNotification(true);
         } finally {
             setLoading(false);
         }
@@ -590,6 +615,36 @@ const QuoteForm = () => {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Success/Error Notification Modal */}
+                {showNotification && (
+                    <div className="notification-overlay" onClick={() => setShowNotification(false)}>
+                        <div className="notification-modal" onClick={(e) => e.stopPropagation()}>
+                            <div className={`notification-header ${notificationData.type}`}>
+                                <div className="notification-icon">
+                                    {notificationData.type === 'success' && <i className="fas fa-check-circle"></i>}
+                                    {notificationData.type === 'warning' && <i className="fas fa-exclamation-triangle"></i>}
+                                    {notificationData.type === 'error' && <i className="fas fa-times-circle"></i>}
+                                </div>
+                                <h3>{notificationData.title}</h3>
+                            </div>
+                            <div className="notification-body">
+                                <p className="notification-message">{notificationData.message}</p>
+                                {notificationData.details && (
+                                    <p className="notification-details">{notificationData.details}</p>
+                                )}
+                            </div>
+                            <div className="notification-footer">
+                                <button
+                                    className="notification-close-btn"
+                                    onClick={() => setShowNotification(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
