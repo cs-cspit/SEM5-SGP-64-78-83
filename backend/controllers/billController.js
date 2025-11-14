@@ -5,6 +5,9 @@ const User = require('../models/User');
 // Get admin dashboard stats
 exports.getAdminDashboardStats = async (req, res) => {
     try {
+        // Update overdue bills first
+        await updateOverdueBills();
+        
         // Get total clients (users with role 'client')
         const totalClients = await User.countDocuments({ role: 'client' });
         
@@ -92,9 +95,37 @@ exports.createBill = async (req, res) => {
     }
 };
 
+// Helper function to update overdue bills
+const updateOverdueBills = async () => {
+    try {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set to start of day for comparison
+        
+        // Find bills that are overdue but not marked as such
+        const overdueBills = await Bill.find({
+            paymentDueDate: { $lt: currentDate },
+            status: { $in: ['pending', 'sent', 'viewed'] }
+        });
+        
+        // Update each overdue bill
+        for (const bill of overdueBills) {
+            bill.status = 'overdue';
+            await bill.save();
+        }
+        
+        return overdueBills.length;
+    } catch (error) {
+        console.error('Error updating overdue bills:', error);
+        return 0;
+    }
+};
+
 // Get all bills
 exports.getAllBills = async (req, res) => {
     try {
+        // Update overdue bills before fetching
+        await updateOverdueBills();
+        
         const bills = await Bill.find().sort({ createdAt: -1 });
         res.status(200).json({ success: true, data: bills });
     } catch (error) {
@@ -142,15 +173,37 @@ exports.updateBill = async (req, res) => {
             }
         }
 
-        const bill = await Bill.findByIdAndUpdate(
-            id, 
-            req.body, 
-            { new: true, runValidators: true }
-        );
-
+        const bill = await Bill.findById(id);
         if (!bill) {
             return res.status(404).json({ success: false, error: 'Bill not found' });
         }
+
+        // Update the bill with new data
+        Object.assign(bill, req.body);
+
+        // Check if due date has changed and recalculate status
+        if (req.body.paymentDueDate) {
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            const dueDate = new Date(req.body.paymentDueDate);
+            dueDate.setHours(0, 0, 0, 0);
+            
+            // If due date is now in the past and status is pending/sent/viewed, mark as overdue
+            if (dueDate < currentDate && ['pending', 'sent', 'viewed'].includes(bill.status)) {
+                bill.status = 'overdue';
+            }
+            // If due date is moved to future and currently overdue, revert to pending
+            else if (dueDate >= currentDate && bill.status === 'overdue') {
+                bill.status = 'pending';
+            }
+        }
+
+        // If status is being explicitly set to paid/cancelled/refunded, allow it regardless of date
+        if (req.body.status && ['paid', 'partially_paid', 'cancelled', 'refunded', 'draft'].includes(req.body.status)) {
+            bill.status = req.body.status;
+        }
+
+        await bill.save();
 
         res.status(200).json({ success: true, data: bill });
     } catch (error) {
@@ -173,15 +226,30 @@ exports.updateBillStatus = async (req, res) => {
             });
         }
 
-        const bill = await Bill.findByIdAndUpdate(
-            id, 
-            { status }, 
-            { new: true, runValidators: true }
-        );
-
+        const bill = await Bill.findById(id);
         if (!bill) {
             return res.status(404).json({ success: false, error: 'Bill not found' });
         }
+
+        // Check if bill should be overdue based on due date
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const dueDate = new Date(bill.paymentDueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        
+        // If trying to change to pending/sent/viewed when past due date, prevent it
+        if (dueDate < currentDate && ['pending', 'sent', 'viewed'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Cannot change status to ' + status + ' for an invoice that is past the due date. Please update the due date first or mark as paid/cancelled.'
+            });
+        }
+
+        // Allow changing to paid, partially_paid, cancelled, refunded, or draft regardless of date
+        // Allow changing to overdue explicitly
+        // Allow changing to pending/sent/viewed only if due date is in future
+        bill.status = status;
+        await bill.save();
 
         res.status(200).json({ success: true, data: bill });
     } catch (error) {
@@ -192,6 +260,9 @@ exports.updateBillStatus = async (req, res) => {
 // Get client's own bills
 exports.getMyBills = async (req, res) => {
     try {
+        // Update overdue bills first
+        await updateOverdueBills();
+        
         const userId = req.user._id;
         
         // Get client details to find the company name
@@ -259,6 +330,9 @@ exports.getMyBill = async (req, res) => {
 // Get client dashboard stats
 exports.getClientDashboardStats = async (req, res) => {
     try {
+        // Update overdue bills first
+        await updateOverdueBills();
+        
         const userId = req.user._id;
         
         // Get client details
