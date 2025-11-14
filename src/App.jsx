@@ -49,6 +49,11 @@ import WorkDetail from './Pages/WorkDetail';
 import QuoteForm from './Pages/Admin/QuoteForm';
 import Profile from './Pages/Profile';
 import ClientDashboard from './Pages/ClientDashboard';
+import Projects from './Pages/Company/Projects';
+import Clientele from './Pages/Company/Clientele';
+import Careers from './Pages/Company/Careers';
+import FAQ from './Pages/Company/FAQ';
+import Terms from './Pages/Company/Terms';
 
 function App() {
   return (
@@ -72,6 +77,11 @@ function App() {
           <Route path="/services/maintenance" element={<ProactiveMaintenancePage />} />
           <Route path="/services/havells" element={<HavellsServiceCenterPage />} />
           <Route path="/services/industrial" element={<IndustrialSetupPage />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/clientele" element={<Clientele />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/terms" element={<Terms />} />
           <Route
             path="/admin"
             element={
