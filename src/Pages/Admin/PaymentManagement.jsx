@@ -15,7 +15,7 @@ const PaymentManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [paymentStats, setPaymentStats] = useState({
         totalPaid: 0,
         pendingPayments: 0,

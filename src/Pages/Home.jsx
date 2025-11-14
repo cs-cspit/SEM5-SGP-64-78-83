@@ -172,7 +172,7 @@ const Home = () => {
           </div>
           <p className="hero-tagline fade-in">We provide Quality Service</p>
           <div className="hero-buttons slide-up">
-            <a href="/contact" className="btn big-btn">Get a Quote</a>
+            <Link to="/contact" className="btn big-btn">Get a Quote</Link>
             <a href="#services" className="btn-secondary big-btn">Our Services</a>
           </div>
         </div>

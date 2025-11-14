@@ -15,7 +15,7 @@ const QuoteForm = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All Status');
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showReplyModal, setShowReplyModal] = useState(false);

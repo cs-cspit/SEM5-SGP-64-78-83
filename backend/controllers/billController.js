@@ -46,7 +46,7 @@ exports.getAdminDashboardStats = async (req, res) => {
         // Recent invoices (last 10)
         const recentInvoices = bills
             .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .slice(0, 10)
+            .slice(0, 5)
             .map(bill => ({
                 id: `INV-${String(bill.invoiceNo).padStart(3, '0')}`,
                 _id: bill._id,
