@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context.jsx';
 import AdminLayout from '../../Components/AdminLayout.jsx';
+import Pagination from '../../Components/Pagination.jsx';
 import { getAllContactSubmissions, replyToContact, getContactWithReplies } from '../../services/api.js';
 import './QuoteForm.css';
 
@@ -13,6 +14,8 @@ const QuoteForm = () => {
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All Status');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showReplyModal, setShowReplyModal] = useState(false);
@@ -52,11 +55,11 @@ const QuoteForm = () => {
         try {
             setLoading(true);
             console.log('Fetching quote details with replies...');
-            
+
             // Fetch complete quote details with replies
             const response = await getContactWithReplies(quote._id || quote.id);
             console.log('Quote with replies:', response);
-            
+
             setSelectedQuote(response.contact);
             setShowModal(true);
         } catch (error) {
@@ -97,7 +100,7 @@ const QuoteForm = () => {
 
     const handleReplySubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!replyData.subject.trim() || !replyData.message.trim()) {
             setError('Please fill in both subject and message fields.');
             return;
@@ -106,7 +109,7 @@ const QuoteForm = () => {
         try {
             setLoading(true);
             console.log('Sending reply via API...');
-            
+
             const response = await replyToContact(selectedQuote._id || selectedQuote.id, {
                 subject: replyData.subject,
                 message: replyData.message,
@@ -125,14 +128,14 @@ const QuoteForm = () => {
 
             // Close the reply modal
             closeReplyModal();
-            
+
             // Show success message based on email result
             if (response.emailResult?.success) {
                 alert(`✅ Reply sent successfully!\n\n📧 Email delivered to: ${selectedQuote.email}\n📨 Message ID: ${response.emailResult.messageId}`);
             } else {
                 alert(`⚠️ Reply saved but email failed to send.\n\n❌ Email error: ${response.emailResult?.error}\n\nThe reply has been saved to the database. You may need to contact the client through alternative means.`);
             }
-            
+
         } catch (error) {
             console.error('Error sending reply:', error);
             setError(`Failed to send reply: ${error}`);
@@ -155,6 +158,26 @@ const QuoteForm = () => {
 
         return matchesSearch && quote.status.toLowerCase() === statusFilter.toLowerCase();
     });
+
+    // Pagination calculations
+    const totalPages = Math.ceil(filteredQuotes.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentQuotes = filteredQuotes.slice(startIndex, endIndex);
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, statusFilter]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1);
+    };
 
     const getStatusBadge = (status) => {
         const statusClasses = {
@@ -266,7 +289,7 @@ const QuoteForm = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredQuotes.length === 0 ? (
+                                {currentQuotes.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="no-data">
                                             <div className="no-data-content">
@@ -277,7 +300,7 @@ const QuoteForm = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredQuotes.map((quote) => (
+                                    currentQuotes.map((quote) => (
                                         <tr key={quote._id || quote.id}>
                                             <td>
                                                 <span className="quote-id">QT-{String(quote._id || quote.id).slice(-6).toUpperCase()}</span>
@@ -325,6 +348,18 @@ const QuoteForm = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Pagination */}
+                    {filteredQuotes.length > 0 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={filteredQuotes.length}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
+                    )}
                 </div>
 
                 {/* Quote Details Modal */}
@@ -449,7 +484,7 @@ const QuoteForm = () => {
                                 )}
 
                                 <div className="modal-actions">
-                                    <button 
+                                    <button
                                         className="action-btn reply-btn"
                                         onClick={() => handleReplyClick(selectedQuote)}
                                     >
@@ -496,7 +531,7 @@ const QuoteForm = () => {
                                             id="replySubject"
                                             type="text"
                                             value={replyData.subject}
-                                            onChange={(e) => setReplyData({...replyData, subject: e.target.value})}
+                                            onChange={(e) => setReplyData({ ...replyData, subject: e.target.value })}
                                             placeholder="Enter email subject"
                                             required
                                         />
@@ -507,7 +542,7 @@ const QuoteForm = () => {
                                         <select
                                             id="replyPriority"
                                             value={replyData.priority}
-                                            onChange={(e) => setReplyData({...replyData, priority: e.target.value})}
+                                            onChange={(e) => setReplyData({ ...replyData, priority: e.target.value })}
                                         >
                                             <option value="low">Low Priority</option>
                                             <option value="normal">Normal Priority</option>
@@ -521,7 +556,7 @@ const QuoteForm = () => {
                                         <textarea
                                             id="replyMessage"
                                             value={replyData.message}
-                                            onChange={(e) => setReplyData({...replyData, message: e.target.value})}
+                                            onChange={(e) => setReplyData({ ...replyData, message: e.target.value })}
                                             placeholder="Type your reply message here..."
                                             rows="8"
                                             required

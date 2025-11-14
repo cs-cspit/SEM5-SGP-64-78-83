@@ -104,7 +104,7 @@
 
 .stat-number {
   display: block;
-  font-size: 1.60rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--primary-dark);
   line-height: 1;
@@ -222,12 +222,24 @@
 .table-container {
   overflow-x: auto;
   border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.table-container::-webkit-scrollbar {
+  display: none;
 }
 
 .quote-table {
   width: 100%;
   border-collapse: collapse;
   background: #ffffff;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.quote-table::-webkit-scrollbar {
+  display: none;
 }
 
 .quote-table th {
@@ -261,7 +273,7 @@
 
 .quote-table tbody tr:hover {
   background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
-  transform: scale(1.001);
+  transform: scale(1.0005);
 }
 
 /* Quote ID */
@@ -661,13 +673,17 @@
 }
 
 .reply-item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -8px;
   top: 20px;
   width: 4px;
   height: calc(100% - 40px);
-  background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--secondary-dark) 0%,
+    var(--primary-dark) 100%
+  );
   border-radius: 2px;
 }
 
